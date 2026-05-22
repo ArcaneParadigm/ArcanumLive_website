@@ -1,0 +1,65 @@
+import type { Film } from '@/types'
+
+export const featuredFilms: Partial<Film>[] = [
+  {
+    id: '1',
+    title: 'Aeon',
+    slug: 'aeon',
+    short_description: 'A cosmic 360 journey through the eternal cycles of creation and destruction.',
+    poster_url: '/images/placeholder-film-aeon.jpg',
+    is_360: true,
+    is_dome_available: true,
+    is_public: true,
+  },
+  {
+    id: '2',
+    title: 'Gaia Heart Shard',
+    slug: 'gaia-heart-shard',
+    short_description: 'Descend into the living crystal heart of the Earth goddess.',
+    poster_url: '/images/placeholder-film-gaia.jpg',
+    is_360: true,
+    is_dome_available: true,
+    is_public: true,
+  },
+  {
+    id: '3',
+    title: 'Atlantis Nexus',
+    slug: 'atlantis-nexus',
+    short_description: 'Immerse in the ancient-tech temples of the sunken civilization.',
+    poster_url: '/images/placeholder-film-atlantis.jpg',
+    is_360: true,
+    is_dome_available: true,
+    is_public: true,
+  },
+  {
+    id: '4',
+    title: 'SoulBlade: The Awakening',
+    slug: 'soulblade-awakening',
+    short_description: 'Enter the battlefield between stars where the SoulBlade was forged.',
+    poster_url: '/images/placeholder-film-soulblade.jpg',
+    is_360: true,
+    is_dome_available: false,
+    is_public: true,
+  },
+  {
+    id: '5',
+    title: 'Aether Transmission',
+    slug: 'aether-transmission',
+    short_description: 'Receive the transmission from the edge of the known universe.',
+    poster_url: '/images/placeholder-film-aether.jpg',
+    is_360: true,
+    is_dome_available: true,
+    is_public: true,
+  },
+]
+
+export const archiveCategories = [
+  { title: 'AI Films', slug: 'ai-films', description: 'Experimental AI cinema from the MythMachine.' },
+  { title: 'Concept Worlds', slug: 'concept-worlds', description: 'Unreleased visual worlds and IP concepts.' },
+  { title: 'Character Files', slug: 'character-files', description: 'Character art, lore, and dimensional profiles.' },
+  { title: 'Dome Visuals', slug: 'dome-visuals', description: 'Fulldome-specific visual content and assets.' },
+  { title: '360 Film Stills', slug: '360-film-stills', description: 'Stills and frames from 360 film productions.' },
+  { title: 'Music Lore', slug: 'music-lore', description: 'Song origins, lyrics, and sonic universe maps.' },
+  { title: 'Sacred Geometry', slug: 'sacred-geometry', description: 'Geometric pattern systems and visual codes.' },
+  { title: 'Behind the MythMachine', slug: 'behind-the-mythmachine', description: 'Process, prompts, and creation logs.' },
+]

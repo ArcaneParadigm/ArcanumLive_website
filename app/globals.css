@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #08060e;
+    color: #ffffff;
+    font-family: var(--font-raleway, 'Helvetica Neue', sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cinzel, 'Trajan Pro', serif);
+    letter-spacing: 0.08em;
+  }
+
+  ::selection {
+    background-color: rgba(201, 151, 58, 0.3);
+    color: #f5d06e;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #08060e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(201, 151, 58, 0.2);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 151, 58, 0.45);
+  }
+}
+
+@layer components {
+
+  /* ─── Glass Button (primary) — gold swirl ──────────────────── */
+  .arcanum-btn-glass {
+    @apply relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl overflow-hidden text-sm tracking-[0.18em] uppercase font-medium transition-all duration-500;
+    color: #e8b84b;
+  }
+
+  .arcanum-btn-glass::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl;
+    background: rgba(8, 5, 2, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(201, 151, 58, 0.3);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .arcanum-btn-glass:hover::before {
+    border-color: rgba(201, 151, 58, 0.6);
+    box-shadow: 0 0 24px rgba(201, 151, 58, 0.15), inset 0 0 24px rgba(201, 151, 58, 0.06);
+  }
+
+  .arcanum-btn-glass:hover {
+    color: #f5d06e;
+  }
+
+  /* ─── Glass Button silver variant ─────────────────────────── */
+  .arcanum-btn-glass-silver {
+    @apply relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl overflow-hidden text-sm tracking-[0.18em] uppercase font-medium transition-all duration-500;
+    color: #c0c8d0;
+  }
+
+  .arcanum-btn-glass-silver::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl;
+    background: rgba(8, 5, 2, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(192, 200, 208, 0.2);
+    transition: border-color 0.4s ease;
+  }
+
+  .arcanum-btn-glass-silver:hover::before {
+    border-color: rgba(192, 200, 208, 0.45);
+    box-shadow: 0 0 20px rgba(192, 200, 208, 0.1);
+  }
+
+  .arcanum-btn-glass-silver:hover {
+    color: #e8edf2;
+  }
+
+  /* ─── Legacy button (kept for compatibility) ───────────────── */
+  .arcanum-btn-primary {
+    @apply relative inline-flex items-center gap-2 px-6 py-3 text-sm tracking-wider uppercase font-medium transition-all duration-300 rounded-lg;
+    background: linear-gradient(135deg, rgba(201,151,58,0.12) 0%, rgba(201,151,58,0.04) 100%);
+    border: 1px solid rgba(201, 151, 58, 0.35);
+    color: #e8b84b;
+  }
+
+  .arcanum-btn-primary:hover {
+    background: linear-gradient(135deg, rgba(201,151,58,0.22) 0%, rgba(201,151,58,0.08) 100%);
+    border-color: rgba(201, 151, 58, 0.65);
+    color: #f5d06e;
+    box-shadow: 0 0 24px rgba(201, 151, 58, 0.18);
+  }
+
+  .arcanum-btn-cyan {
+    @apply relative inline-flex items-center gap-2 px-6 py-3 text-sm tracking-wider uppercase font-medium transition-all duration-300 rounded-lg;
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    color: #00e5ff;
+  }
+
+  .arcanum-btn-cyan:hover {
+    background: rgba(0, 229, 255, 0.12);
+    border-color: rgba(0, 229, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+  }
+
+  .arcanum-btn-ghost {
+    @apply relative inline-flex items-center gap-2 px-6 py-3 text-sm tracking-wider uppercase font-medium transition-all duration-300 rounded-lg;
+    border: 1px solid rgba(192, 200, 208, 0.12);
+    color: rgba(192, 200, 208, 0.45);
+  }
+
+  .arcanum-btn-ghost:hover {
+    border-color: rgba(192, 200, 208, 0.28);
+    color: rgba(192, 200, 208, 0.75);
+    background: rgba(192, 200, 208, 0.03);
+  }
+
+  /* ─── Glass card panel ─────────────────────────────────────── */
+  .arcanum-glass {
+    @apply backdrop-blur-md;
+    background: rgba(8, 6, 14, 0.6);
+    border: 1px solid rgba(201, 151, 58, 0.12);
+  }
+
+  .arcanum-glass-silver {
+    @apply backdrop-blur-md;
+    background: rgba(8, 6, 14, 0.55);
+    border: 1px solid rgba(192, 200, 208, 0.1);
+  }
+
+  /* ─── Section divider — gold thread ───────────────────────── */
+  .arcanum-divider {
+    @apply w-full h-px;
+    background: linear-gradient(90deg, transparent, rgba(201,151,58,0.2), rgba(192,200,208,0.1), rgba(201,151,58,0.2), transparent);
+  }
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #8a6520 0%, #f5d06e 50%, #8a6520 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-silver-gradient {
+    background: linear-gradient(135deg, #4a5a6a 0%, #e8edf2 50%, #4a5a6a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gold-silver {
+    background: linear-gradient(135deg, #f5d06e 0%, #c0c8d0 50%, #f5d06e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glow-gold {
+    filter: drop-shadow(0 0 16px rgba(201, 151, 58, 0.7)) drop-shadow(0 0 40px rgba(201, 151, 58, 0.3));
+  }
+
+  .glow-silver {
+    filter: drop-shadow(0 0 16px rgba(192, 200, 208, 0.5)) drop-shadow(0 0 40px rgba(192, 200, 208, 0.2));
+  }
+
+  .glow-cyan {
+    filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.7)) drop-shadow(0 0 40px rgba(0, 229, 255, 0.3));
+  }
+}
+
+/* ─── Ambient orb animations ─────────────────────────────────── */
+@keyframes ambient-float {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--orb-opacity, 0.15); }
+  33%       { transform: translateY(-30px) translateX(15px) scale(1.05); opacity: calc(var(--orb-opacity, 0.15) * 1.4); }
+  66%       { transform: translateY(15px) translateX(-20px) scale(0.97); opacity: calc(var(--orb-opacity, 0.15) * 0.8); }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { opacity: var(--orb-opacity, 0.12); transform: scale(1); }
+  50%       { opacity: calc(var(--orb-opacity, 0.12) * 2); transform: scale(1.08); }
+}
+
+.section-orb {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(80px);
+  animation: ambient-float var(--orb-duration, 12s) ease-in-out infinite;
+  animation-delay: var(--orb-delay, 0s);
+}
+
+.section-orb-pulse {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(60px);
+  animation: orb-pulse var(--orb-duration, 8s) ease-in-out infinite;
+  animation-delay: var(--orb-delay, 0s);
+}

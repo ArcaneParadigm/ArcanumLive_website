@@ -1,0 +1,86 @@
+import type { GatewayButton, HeroHotspot } from '@/types'
+
+export const gatewayButtons: GatewayButton[] = [
+  {
+    label: 'Watch Dome Shows',
+    href: '/dome-shows',
+    description: 'Fulldome films and immersive venue experiences.',
+    icon: 'dome',
+  },
+  {
+    label: 'Watch Films & Music',
+    href: '/watch',
+    description: 'Films, trailers, music videos — all embedded on one page.',
+    icon: 'vr',
+  },
+  {
+    label: 'Ascension Chamber',
+    href: '/screensaver',
+    description: 'Open the living visualizer and ambient MythMachine.',
+    icon: 'sparkles',
+  },
+  {
+    label: 'Explore the Worlds',
+    href: '/worlds',
+    description: 'Enter the mythic IP universes of The Arcanum.',
+    icon: 'portal',
+  },
+]
+
+export const heroHotspots: HeroHotspot[] = [
+  {
+    id: 'portal',
+    label: 'Ascension Chamber',
+    href: '/screensaver',
+    x: 50,
+    y: 45,
+    width: 18,
+    height: 24,
+    description: 'Launch the living MythMachine visualizer.',
+    visualEffect: 'portal-pulse',
+  },
+  {
+    id: 'dome-shows',
+    label: 'Watch the Dome Shows',
+    href: '/dome-shows',
+    x: 12,
+    y: 56,
+    width: 22,
+    height: 30,
+    description: 'Fulldome films and immersive venue experiences.',
+    visualEffect: 'dome-light-sweep',
+  },
+  {
+    id: 'worlds',
+    label: 'Explore the Worlds',
+    href: '/worlds',
+    x: 66,
+    y: 38,
+    width: 25,
+    height: 46,
+    description: 'Enter the mythic IP universes of The Arcanum.',
+    visualEffect: 'guardian-glow',
+  },
+  {
+    id: 'archive',
+    label: 'Enter the Archive',
+    href: '/archive',
+    x: 36,
+    y: 30,
+    width: 18,
+    height: 35,
+    description: 'Browse films, lore, relics, and dimensional media.',
+    visualEffect: 'glyph-orbit',
+  },
+  {
+    id: 'store',
+    label: 'Visit the Store',
+    href: '/store',
+    x: 76,
+    y: 73,
+    width: 20,
+    height: 18,
+    description: 'Sacred products, TV art, and visual artifacts.',
+    visualEffect: 'gold-sparks',
+  },
+]
