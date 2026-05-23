@@ -18,12 +18,12 @@ function FooterLink({ link, hoverClass = 'hover:text-white/90' }: { link: Footer
 
 const footerLinks: Record<string, FooterLinkItem[]> = {
   explore: [
-    { label: 'Worlds', href: '/worlds' },
+    { label: 'Realms', href: '/worlds' },
     { label: 'Dome Shows', href: '/dome-shows' },
-    { label: '360 Movies', href: '/films' },
+    { label: 'Watch', href: '/watch' },
     { label: 'Music', href: '/music' },
+    { label: 'Ascension Chamber', href: '/screensaver' },
     { label: 'Archive', href: '/archive' },
-    { label: 'Screensaver', href: '/screensaver' },
   ],
   work: [
     { label: 'Licensing', href: '/contact' },
@@ -43,12 +43,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <div className="mb-4">
-              <span className="text-2xl font-bold tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-gold-dim via-gold-bright to-gold-dim">
+            <div className="mb-4 flex items-baseline gap-2">
+              <span className="font-cinzel text-xl font-bold tracking-[0.2em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-gold-dim via-gold-bright to-gold-dim">
                 Arcanum
               </span>
-              <span className="text-gold/40 text-2xl"> · </span>
-              <span className="text-2xl font-light tracking-widest uppercase text-cyan-arcanum/60">
+              <span className="text-gold/30 font-cinzel">·</span>
+              <span
+                className="font-cinzel text-lg italic tracking-[0.2em] uppercase"
+                style={{ color: '#00d4ff', textShadow: '0 0 10px rgba(0,212,255,0.6), 0 0 24px rgba(0,212,255,0.25)' }}
+              >
                 Live
               </span>
             </div>
