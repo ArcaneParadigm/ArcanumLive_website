@@ -268,9 +268,10 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
           }} />
           {[...Array(14)].map((_, i) => (
             <motion.div key={i} className="absolute w-0.5 h-0.5 rounded-full bg-white/50"
-              style={{ left: `${22 + Math.sin(i * 1.5) * 36}%`, top: `${20 + Math.cos(i * 1.2) * 38}%` }}
+              style={{ left: `${+(22 + Math.sin(i * 1.5) * 36).toFixed(3)}%`, top: `${+(20 + Math.cos(i * 1.2) * 38).toFixed(3)}%` }}
               animate={{ opacity: [0.1, 0.6, 0.1] }}
               transition={{ duration: 2.5 + i * 0.25, repeat: Infinity, delay: i * 0.15 }}
+              suppressHydrationWarning
             />
           ))}
         </div>
