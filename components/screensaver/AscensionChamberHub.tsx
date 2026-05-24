@@ -6,13 +6,14 @@ import Link from 'next/link'
 import RealmsPlayer from '@/components/realms/RealmsPlayer'
 import { screensaverModes, featuredScreensaverPresets } from '@/lib/data/screensaver'
 import { featuredWorlds } from '@/lib/data/worlds'
+import { musicCategories, featuredAlbums } from '@/lib/data/music'
 import type { DiscoveredTrack } from '@/components/realms/RealmsPlayer'
 
 interface AscensionChamberHubProps {
   audioMap?: Record<string, DiscoveredTrack[]>
 }
 
-// ── Visual mode config ────────────────────────────────────────────────────
+// ── Mode config ───────────────────────────────────────────────────────────
 const modeAccent: Record<string, string> = {
   'gallery-drift': '#c9973a',
   'video-temple': '#7c3aed',
@@ -20,8 +21,17 @@ const modeAccent: Record<string, string> = {
   'fluid-oracle': '#06b6d4',
   'mythmachine-shuffle': '#a78bfa',
 }
+const modeIcons: Record<string, string> = {
+  gallery_drift: '◈', video_temple: '⬡', music_reactor: '◉',
+  fluid_oracle: '⌘', mythmachine_shuffle: '⧉',
+}
+const modeLabel: Record<string, string> = {
+  gallery_drift: 'Gallery Drift', video_temple: 'Video Temple',
+  music_reactor: 'Music Reactor', fluid_oracle: 'Fluid Oracle',
+  mythmachine_shuffle: 'MythMachine',
+}
 
-// ── Realm preset generator ────────────────────────────────────────────────
+// ── Realm presets ─────────────────────────────────────────────────────────
 const realmModes = ['gallery_drift', 'video_temple', 'music_reactor', 'fluid_oracle', 'mythmachine_shuffle'] as const
 
 function getRealmPresets() {
@@ -33,105 +43,195 @@ function getRealmPresets() {
     visual_mode: realmModes[i % realmModes.length],
     color: w.color_primary ?? '#c9973a',
     is_featured: w.is_featured ?? false,
-    realmSlug: w.slug,
+    default_intensity: 5 + (i % 5),
+    audio_reactive: i % 3 !== 0,
   }))
 }
 
-// ── Preset card — uniform size ─────────────────────────────────────────────
-const modeIcons: Record<string, string> = {
-  gallery_drift: '◈',
-  video_temple: '⬡',
-  music_reactor: '◉',
-  fluid_oracle: '⌘',
-  mythmachine_shuffle: '⧉',
-}
-const modeLabel: Record<string, string> = {
-  gallery_drift: 'Gallery Drift',
-  video_temple: 'Video Temple',
-  music_reactor: 'Music Reactor',
-  fluid_oracle: 'Fluid Oracle',
-  mythmachine_shuffle: 'MythMachine',
+// ── Interpolate purple→gold across N presets ──────────────────────────────
+function gradientColor(index: number, total: number): string {
+  // purple #7c3aed → violet #a855f7 → magenta #d946ef → orange #f97316 → gold #c9973a
+  const stops = ['#7c3aed', '#a855f7', '#d946ef', '#f97316', '#c9973a']
+  const t = index / Math.max(total - 1, 1)
+  const seg = (stops.length - 1) * t
+  const i = Math.min(Math.floor(seg), stops.length - 2)
+  const f = seg - i
+  const hex = (s: string) => [parseInt(s.slice(1, 3), 16), parseInt(s.slice(3, 5), 16), parseInt(s.slice(5, 7), 16)]
+  const a = hex(stops[i]), b = hex(stops[i + 1])
+  const r = Math.round(a[0] + (b[0] - a[0]) * f)
+  const g = Math.round(a[1] + (b[1] - a[1]) * f)
+  const bl = Math.round(a[2] + (b[2] - a[2]) * f)
+  return `rgb(${r},${g},${bl})`
 }
 
-function PresetCard({ preset }: {
-  preset: {
-    id: string; title: string; slug?: string; description?: string
-    visual_mode?: string; color?: string; is_featured?: boolean
-    default_intensity?: number; audio_reactive?: boolean; realmSlug?: string
-  }
+// ── Thin preset row ───────────────────────────────────────────────────────
+function PresetRow({ preset, index, total }: {
+  preset: { id: string; title: string; slug?: string; description?: string; visual_mode?: string; color?: string; default_intensity?: number; audio_reactive?: boolean }
+  index: number; total: number
 }) {
   const mode = preset.visual_mode ?? 'gallery_drift'
-  const color = preset.color ?? '#c9973a'
   const icon = modeIcons[mode] ?? '◈'
+  const label = modeLabel[mode] ?? mode
+  const rowColor = gradientColor(index, total)
   const href = `/screensaver?preset=${preset.slug ?? preset.id}`
 
   return (
-    <Link href={href} className="group block h-full">
-      <motion.div
-        whileHover={{ y: -3 }}
-        transition={{ duration: 0.2 }}
-        className="relative rounded-xl overflow-hidden border h-full flex flex-col"
+    <Link href={href} className="group block">
+      <div
+        className="flex items-center gap-3 px-3 py-2 rounded-lg border transition-all duration-200 group-hover:scale-[1.01]"
         style={{
-          background: `linear-gradient(140deg, ${color}14 0%, #07050f 100%)`,
-          borderColor: `${color}22`,
-          minHeight: 160,
+          borderColor: `${rowColor}30`,
+          background: `linear-gradient(90deg, ${rowColor}18 0%, #07050f 100%)`,
         }}
       >
-        {/* Top strip: mode label */}
-        <div className="px-4 pt-3 pb-0 flex items-center justify-between">
-          <span className="text-[9px] tracking-[0.3em] uppercase" style={{ color: `${color}80` }}>
-            {modeLabel[mode] ?? mode}
-          </span>
-          {preset.audio_reactive && (
-            <span className="text-[8px] tracking-widest uppercase" style={{ color: `${color}70` }}>Audio ⟳</span>
-          )}
+        {/* Symbol */}
+        <div
+          className="shrink-0 w-7 h-7 rounded flex items-center justify-center text-sm font-bold"
+          style={{ color: rowColor, background: `${rowColor}20`, border: `1px solid ${rowColor}40` }}
+        >
+          {icon}
         </div>
 
-        {/* Icon + title */}
-        <div className="px-4 py-3 flex-1 flex flex-col justify-center">
-          <span className="text-2xl mb-2 block" style={{ color }}>{icon}</span>
-          <h3 className="text-white text-sm font-cinzel font-semibold leading-snug tracking-wide mb-1.5">
+        {/* 3 lines */}
+        <div className="flex-1 min-w-0">
+          <p
+            className="text-[11px] font-cinzel font-bold tracking-wide leading-none mb-0.5 truncate"
+            style={{
+              color: '#000',
+              WebkitTextStroke: `0.5px ${rowColor}`,
+              textShadow: `0 0 8px ${rowColor}`,
+              filter: `drop-shadow(0 0 4px ${rowColor})`,
+            }}
+          >
             {preset.title}
-          </h3>
-          {preset.description && (
-            <p className="text-white/35 text-[11px] leading-relaxed line-clamp-2">{preset.description}</p>
-          )}
+          </p>
+          <p className="text-[9px] tracking-widest uppercase leading-none mb-0.5" style={{ color: `${rowColor}80` }}>
+            {label}{preset.audio_reactive ? ' · Audio' : ''}
+          </p>
+          <p className="text-[9px] text-white/30 leading-none truncate">{preset.description}</p>
         </div>
 
         {/* Intensity bar */}
-        {preset.default_intensity && (
-          <div className="px-4 pb-3 mt-auto">
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-0.5 bg-white/8 rounded-full overflow-hidden">
-                <div className="h-full rounded-full" style={{ width: `${(preset.default_intensity / 10) * 100}%`, background: color }} />
-              </div>
-              <span className="text-[9px]" style={{ color: `${color}60` }}>{preset.default_intensity}/10</span>
-            </div>
+        <div className="shrink-0 w-12 hidden sm:block">
+          <div className="h-0.5 bg-white/8 rounded-full overflow-hidden">
+            <div className="h-full rounded-full" style={{ width: `${((preset.default_intensity ?? 5) / 10) * 100}%`, background: rowColor }} />
           </div>
-        )}
-
-        {/* Hover: launch label */}
-        <div className="absolute inset-0 flex items-end justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-          <span className="text-[10px] tracking-widest uppercase font-medium" style={{ color }}>Launch →</span>
+          <p className="text-[8px] text-right mt-0.5" style={{ color: `${rowColor}60` }}>{preset.default_intensity ?? 5}/10</p>
         </div>
 
-        {/* Hover border glow */}
+        {/* Hover glow */}
         <div
-          className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
-          style={{ boxShadow: `inset 0 0 0 1px ${color}55` }}
+          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          style={{ boxShadow: `inset 0 0 0 1px ${rowColor}50` }}
         />
-      </motion.div>
+      </div>
     </Link>
   )
 }
 
-// ── Main component ─────────────────────────────────────────────────────────
+// ── Music player panel ────────────────────────────────────────────────────
+function MusicPanel({ activeAlbum, onSelect }: { activeAlbum: string | null; onSelect: (slug: string) => void }) {
+  const allTitles = [
+    ...featuredAlbums.map((a) => ({ slug: a.slug ?? '', title: a.title ?? '', energy: a.energy_level ?? 5, desc: a.description ?? '' })),
+    ...musicCategories
+      .filter((c) => !featuredAlbums.find((a) => a.title === c))
+      .map((c, i) => ({ slug: c.toLowerCase().replace(/[^a-z0-9]+/g, '-'), title: c, energy: 4 + (i % 6), desc: '' })),
+  ]
+
+  return (
+    <div className="flex flex-col h-full" style={{ background: 'rgba(7,5,15,0.8)' }}>
+      {/* Header */}
+      <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(201,151,58,0.15)' }}>
+        <p className="text-[8px] tracking-[0.4em] uppercase text-white/30 mb-0.5">Soundtrack</p>
+        <h3
+          className="font-cinzel text-sm font-bold tracking-widest italic"
+          style={{ color: '#f97316', textShadow: '0 0 12px rgba(249,115,22,0.5)' }}
+        >
+          Music Library
+        </h3>
+        <p className="text-white/30 text-[10px] mt-0.5">Override realm soundtrack</p>
+      </div>
+
+      {/* Album list */}
+      <div className="flex-1 overflow-y-auto py-2 px-2 space-y-1 scrollbar-none">
+        {allTitles.map((album, i) => {
+          const isActive = activeAlbum === album.slug
+          const col = gradientColor(i, allTitles.length)
+          return (
+            <button
+              key={album.slug}
+              onClick={() => onSelect(album.slug)}
+              className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left transition-all duration-150 group"
+              style={{ background: isActive ? `${col}18` : 'transparent' }}
+            >
+              {/* Energy pip */}
+              <div className="shrink-0 w-1.5 h-6 rounded-full" style={{ background: isActive ? col : `${col}40` }} />
+              <div className="flex-1 min-w-0">
+                <p
+                  className="text-[11px] font-medium leading-none mb-0.5 truncate transition-colors"
+                  style={{ color: isActive ? col : 'rgba(255,255,255,0.65)' }}
+                >
+                  {album.title}
+                </p>
+                {album.desc && (
+                  <p className="text-[9px] text-white/25 leading-none truncate">{album.desc}</p>
+                )}
+              </div>
+              {/* Energy dots */}
+              <div className="shrink-0 flex gap-0.5">
+                {[...Array(5)].map((_, d) => (
+                  <div key={d} className="w-1 h-1 rounded-full" style={{ background: d < Math.round(album.energy / 2) ? col : 'rgba(255,255,255,0.1)' }} />
+                ))}
+              </div>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Now playing */}
+      {activeAlbum && (
+        <div className="px-4 py-2 border-t" style={{ borderColor: 'rgba(201,151,58,0.1)' }}>
+          <p className="text-[9px] tracking-widest uppercase text-white/25">Now overriding →</p>
+          <p className="text-gold text-xs font-cinzel truncate">
+            {allTitles.find((a) => a.slug === activeAlbum)?.title}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Section title helper ──────────────────────────────────────────────────
+function SectionTitle({ children, variant = 'gold' }: { children: React.ReactNode; variant?: 'gold' | 'white' | 'orange' | 'neon' }) {
+  const styles: Record<string, React.CSSProperties> = {
+    gold: {
+      background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 40%, #f5d06e 60%, #c9973a 80%, #6b4411 100%)',
+      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+    },
+    white: { color: '#fff' },
+    orange: { color: '#f97316', fontStyle: 'italic', textShadow: '0 0 12px rgba(249,115,22,0.5)' },
+    neon: { color: '#000', WebkitTextStroke: '1px #a855f7', textShadow: '0 0 10px #a855f7, 0 0 24px #a855f780' },
+  }
+  return (
+    <h2 className="font-cinzel text-base font-bold tracking-widest" style={styles[variant]}>
+      {children}
+    </h2>
+  )
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────
 export default function AscensionChamberHub({ audioMap }: AscensionChamberHubProps) {
   const [activeMode, setActiveMode] = useState<string | null>(null)
+  const [activeAlbum, setActiveAlbum] = useState<string | null>(null)
 
   const realmPresets = getRealmPresets()
-  // Featured curated first, then featured realms, then rest sorted by title
-  const curatedPresets = featuredScreensaverPresets
+  const curatedPresets = featuredScreensaverPresets.map((p) => ({
+    ...p,
+    color: p.visual_mode
+      ? ({ gallery_drift: '#c9973a', video_temple: '#7c3aed', music_reactor: '#00e5ff', fluid_oracle: '#06b6d4', mythmachine_shuffle: '#a78bfa' }[p.visual_mode] ?? '#c9973a')
+      : '#c9973a',
+  }))
+
   const allPresets = [
     ...curatedPresets.filter((p) => p.is_featured),
     ...realmPresets.filter((p) => p.is_featured),
@@ -139,157 +239,132 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
     ...realmPresets.filter((p) => !p.is_featured),
   ]
 
-  const hoveredMode = activeMode
-    ? screensaverModes.find((m) => m.href.includes(activeMode))
-    : null
+  const hoveredMode = activeMode ? screensaverModes.find((m) => m.href.includes(activeMode)) : null
 
   return (
     <div className="min-h-screen" style={{ background: '#07050f' }}>
 
-      {/* ══════════════════════════════════════════
-          PORTAL HERO
-      ══════════════════════════════════════════ */}
-      <div className="relative w-full overflow-hidden flex flex-col items-center justify-center text-center"
-        style={{ minHeight: '62vh', background: 'radial-gradient(ellipse at 50% 60%, #1a0a2e 0%, #07050f 65%)' }}
+      {/* ── PORTAL HEADER ── */}
+      <div
+        className="relative w-full overflow-hidden flex flex-col items-center justify-center text-center"
+        style={{ minHeight: '38vh', background: 'radial-gradient(ellipse at 50% 70%, #1a0a2e 0%, #07050f 65%)' }}
       >
-        {/* Animated portal rings */}
+        {/* Rings */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {[1, 2, 3, 4].map((ring) => (
-            <motion.div
-              key={ring}
-              className="absolute rounded-full border"
+          {[1, 2, 3].map((ring) => (
+            <motion.div key={ring} className="absolute rounded-full border"
               style={{
-                width: `${ring * 18 + 20}vw`,
-                height: `${ring * 10 + 12}vw`,
-                borderColor: `rgba(139,92,246,${0.25 - ring * 0.05})`,
-                boxShadow: ring === 1
-                  ? '0 0 40px 8px rgba(139,92,246,0.18), inset 0 0 60px rgba(139,92,246,0.08)'
-                  : undefined,
+                width: `${ring * 20 + 16}vw`, height: `${ring * 11 + 10}vw`,
+                borderColor: `rgba(139,92,246,${0.22 - ring * 0.05})`,
+                boxShadow: ring === 1 ? '0 0 30px 4px rgba(139,92,246,0.15)' : undefined,
               }}
-              animate={{ rotate: ring % 2 === 0 ? 360 : -360, scale: [1, 1.012, 1] }}
-              transition={{
-                rotate: { duration: ring * 22 + 30, repeat: Infinity, ease: 'linear' },
-                scale: { duration: 4 + ring, repeat: Infinity, ease: 'easeInOut' },
-              }}
+              animate={{ rotate: ring % 2 === 0 ? 360 : -360 }}
+              transition={{ duration: ring * 25 + 28, repeat: Infinity, ease: 'linear' }}
             />
           ))}
-          {/* Central glow */}
           <div className="absolute rounded-full" style={{
-            width: '22vw', height: '13vw',
-            background: 'radial-gradient(ellipse, rgba(139,92,246,0.28) 0%, rgba(88,28,135,0.12) 50%, transparent 70%)',
+            width: '18vw', height: '10vw',
+            background: 'radial-gradient(ellipse, rgba(139,92,246,0.22) 0%, transparent 70%)',
           }} />
-          {/* Star particles */}
-          {[...Array(18)].map((_, i) => (
+          {[...Array(14)].map((_, i) => (
             <motion.div key={i} className="absolute w-0.5 h-0.5 rounded-full bg-white/50"
-              style={{
-                left: `${20 + Math.sin(i * 1.4) * 38}%`,
-                top: `${20 + Math.cos(i * 1.1) * 40}%`,
-              }}
-              animate={{ opacity: [0.15, 0.7, 0.15], scale: [0.8, 1.4, 0.8] }}
-              transition={{ duration: 2.5 + i * 0.3, repeat: Infinity, delay: i * 0.18 }}
+              style={{ left: `${22 + Math.sin(i * 1.5) * 36}%`, top: `${20 + Math.cos(i * 1.2) * 38}%` }}
+              animate={{ opacity: [0.1, 0.6, 0.1] }}
+              transition={{ duration: 2.5 + i * 0.25, repeat: Infinity, delay: i * 0.15 }}
             />
           ))}
         </div>
 
-        {/* Content overlay */}
-        <div className="relative z-10 px-6 pt-20 pb-10">
-          <span className="inline-block text-[8px] font-medium tracking-[0.4em] uppercase px-2 py-0.5 rounded mb-4"
+        <div className="relative z-10 px-6 pt-16 pb-4">
+          <span className="inline-block text-[8px] font-medium tracking-[0.4em] uppercase px-2 py-0.5 rounded mb-3"
             style={{ background: '#000', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)' }}
-          >
-            Living Visualizer
-          </span>
+          >Living Visualizer</span>
           <h1
-            className="font-cinzel text-3xl md:text-5xl font-bold tracking-widest mb-4 leading-tight"
-            style={{ color: '#a855f7', textShadow: '0 0 30px rgba(168,85,247,0.6), 0 0 80px rgba(139,92,246,0.3)' }}
+            className="font-cinzel text-3xl md:text-4xl font-bold tracking-widest leading-tight mb-2"
+            style={{ color: '#a855f7', textShadow: '0 0 28px rgba(168,85,247,0.6), 0 0 70px rgba(139,92,246,0.25)' }}
           >
             The Ascension Chamber
           </h1>
-          <p className="text-white/45 text-sm leading-relaxed max-w-lg mx-auto">
-            Choose a realm, select a soundtrack, and pass through the portal into a fullscreen living world of cinematic art, music-reactive visuals, and ambient motion.
+          <p className="text-white/35 text-xs leading-relaxed max-w-md mx-auto">
+            Pass through the portal into a fullscreen living world of cinematic art, music-reactive visuals, and ambient motion.
           </p>
         </div>
-
-        {/* Bottom fade into modes */}
-        <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #07050f, transparent)' }}
-        />
+        <div className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #07050f, transparent)' }} />
       </div>
 
-      {/* ══════════════════════════════════════════
-          VISUAL MODES STRIP
-      ══════════════════════════════════════════ */}
-      <div className="px-6 pb-6" style={{ background: '#07050f' }}>
-        {/* Description bar — shows hovered mode desc, or generic prompt */}
-        <div className="text-center mb-3 h-5">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={hoveredMode?.title ?? 'default'}
-              initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="text-white text-[11px] tracking-widest"
-            >
-              {hoveredMode?.description ?? 'Select a visual mode to enter the chamber'}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-
-        <div className="flex gap-2 justify-center flex-wrap">
-          {screensaverModes.map((mode) => {
-            const modeKey = mode.href.split('mode=')[1] ?? ''
-            const accent = modeAccent[modeKey] ?? '#a855f7'
-            const isActive = activeMode === modeKey
-            return (
-              <Link
-                key={mode.href}
-                href={mode.href}
-                onMouseEnter={() => setActiveMode(modeKey)}
-                onMouseLeave={() => setActiveMode(null)}
-                className="relative px-5 py-2 rounded-full border transition-all duration-200 text-center"
-                style={{
-                  borderColor: isActive ? `${accent}60` : 'rgba(255,255,255,0.18)',
-                  background: isActive ? `${accent}18` : 'transparent',
-                  color: 'rgba(255,255,255,0.92)',
-                }}
-              >
-                <span className="text-xs font-medium tracking-widest uppercase">{mode.title}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="mode-underline"
-                    className="absolute inset-0 rounded-full pointer-events-none"
-                    style={{ boxShadow: `0 0 14px ${accent}40, inset 0 0 0 1px ${accent}50` }}
-                  />
-                )}
-              </Link>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════
-          FULL-WIDTH REALMS PLAYER (autoplay)
-      ══════════════════════════════════════════ */}
+      {/* ── REALMS PLAYER (viewing panel) ── */}
       <RealmsPlayer audioMap={audioMap} />
 
-      {/* ══════════════════════════════════════════
-          PRESET LIBRARY
-      ══════════════════════════════════════════ */}
-      <div className="px-6 py-8 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <p className="text-[9px] tracking-[0.4em] uppercase text-white/30 mb-1">Enter the Portal</p>
-            <h2 className="font-cinzel text-lg font-bold tracking-widest"
-              style={{ color: '#a855f7', textShadow: '0 0 16px rgba(168,85,247,0.4)' }}
-            >
-              Preset Library
-            </h2>
+      {/* ── VISUAL MODES ── */}
+      <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(168,85,247,0.12)', background: '#07050f' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-3">
+            <SectionTitle variant="white">Select Visual Mode</SectionTitle>
+            <AnimatePresence mode="wait">
+              <motion.p key={hoveredMode?.title ?? 'x'}
+                initial={{ opacity: 0, x: 6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }}
+                transition={{ duration: 0.15 }}
+                className="text-white/45 text-[11px] tracking-wide"
+              >
+                {hoveredMode?.description ?? ''}
+              </motion.p>
+            </AnimatePresence>
           </div>
-          <p className="text-white/25 text-xs">{allPresets.length} presets · curated + all realms</p>
+          <div className="flex gap-2 flex-wrap">
+            {screensaverModes.map((mode) => {
+              const key = mode.href.split('mode=')[1] ?? ''
+              const accent = modeAccent[key] ?? '#a855f7'
+              const isActive = activeMode === key
+              return (
+                <Link key={mode.href} href={mode.href}
+                  onMouseEnter={() => setActiveMode(key)}
+                  onMouseLeave={() => setActiveMode(null)}
+                  className="px-4 py-1.5 rounded-full border text-xs font-medium tracking-widest uppercase transition-all duration-150"
+                  style={{
+                    borderColor: isActive ? `${accent}70` : 'rgba(255,255,255,0.2)',
+                    color: isActive ? accent : 'rgba(255,255,255,0.88)',
+                    background: isActive ? `${accent}18` : 'transparent',
+                    boxShadow: isActive ? `0 0 10px ${accent}30` : 'none',
+                  }}
+                >
+                  {mode.title}
+                </Link>
+              )
+            })}
+          </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-          {allPresets.map((preset) => (
-            <PresetCard key={preset.id} preset={preset as Parameters<typeof PresetCard>[0]['preset']} />
-          ))}
+      {/* ── PRESET LIBRARY + MUSIC PLAYER ── */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="flex gap-5" style={{ minHeight: 520 }}>
+
+          {/* LEFT: Preset library — half width */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between mb-3">
+              <SectionTitle variant="neon">Preset Library</SectionTitle>
+              <p className="text-white/20 text-[10px]">{allPresets.length} presets</p>
+            </div>
+            <div className="space-y-1 overflow-y-auto pr-1" style={{ maxHeight: 480 }}>
+              {allPresets.map((preset, i) => (
+                <PresetRow
+                  key={preset.id}
+                  preset={preset as Parameters<typeof PresetRow>[0]['preset']}
+                  index={i}
+                  total={allPresets.length}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: Music player — fixed width */}
+          <div
+            className="w-72 shrink-0 rounded-xl overflow-hidden border"
+            style={{ borderColor: 'rgba(201,151,58,0.15)', background: 'rgba(7,5,15,0.9)' }}
+          >
+            <MusicPanel activeAlbum={activeAlbum} onSelect={setActiveAlbum} />
+          </div>
         </div>
       </div>
 
