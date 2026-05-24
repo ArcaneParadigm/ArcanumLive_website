@@ -13,6 +13,7 @@ export interface DiscoveredTrack {
 
 interface RealmsPlayerProps {
   audioMap?: Record<string, DiscoveredTrack[]>
+  compact?: boolean
 }
 
 function buildPlaceholderTracks(title: string) {
@@ -39,7 +40,7 @@ function buildPlaylists(audioMap: Record<string, DiscoveredTrack[]> = {}) {
 
 const BG_CYCLE_MS = 4200
 
-export default function RealmsPlayer({ audioMap }: RealmsPlayerProps) {
+export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PLAYLISTS = useMemo(() => buildPlaylists(audioMap), [])
 
@@ -157,19 +158,22 @@ export default function RealmsPlayer({ audioMap }: RealmsPlayerProps) {
       />
 
       {/* ── HEADER — centered, like DomeShows ── */}
-      <div className="relative z-10 pt-8 pb-5 text-center px-6">
-        {/* Back link top-left */}
-        <div className="absolute left-6 top-8">
-          <Link href="/" className="text-[9px] tracking-widest uppercase text-white/25 hover:text-white/55 transition-colors">← Home</Link>
-        </div>
-        {/* Ascension Chamber top-right */}
-        <div className="absolute right-6 top-8">
-          <Link href="/screensaver" className="text-[9px] tracking-widest uppercase text-white/25 hover:text-white/55 transition-colors">Ascension Chamber</Link>
-        </div>
-
-        <p className="text-[9px] tracking-[0.5em] uppercase mb-2" style={{ color: `${accent}70` }}>The Arcanum</p>
+      <div className={`relative z-10 ${compact ? 'pt-3 pb-3' : 'pt-8 pb-5'} text-center px-6`}>
+        {!compact && (
+          <>
+            {/* Back link top-left */}
+            <div className="absolute left-6 top-8">
+              <Link href="/" className="text-[9px] tracking-widest uppercase text-white/50 hover:text-white/80 transition-colors">← Home</Link>
+            </div>
+            {/* Ascension Chamber top-right */}
+            <div className="absolute right-6 top-8">
+              <Link href="/screensaver" className="text-[9px] tracking-widest uppercase text-white/50 hover:text-white/80 transition-colors">Ascension Chamber</Link>
+            </div>
+            <p className="text-[9px] tracking-[0.5em] uppercase mb-2" style={{ color: `${accent}90` }}>The Arcanum</p>
+          </>
+        )}
         <h1
-          className="font-cinzel text-3xl md:text-4xl font-bold tracking-widest leading-none mb-2"
+          className={`font-cinzel font-bold tracking-widest leading-none ${compact ? 'text-2xl mb-1' : 'text-3xl md:text-4xl mb-2'}`}
           style={{
             background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 22%, #f5d06e 50%, #c9973a 78%, #6b4411 100%)',
             WebkitBackgroundClip: 'text',
@@ -179,7 +183,7 @@ export default function RealmsPlayer({ audioMap }: RealmsPlayerProps) {
         >
           Realms
         </h1>
-        <p className="text-silver-mid/40 text-xs">
+        <p className="text-white/70 text-xs">
           Choose a realm · Music plays continuously across all worlds
         </p>
       </div>

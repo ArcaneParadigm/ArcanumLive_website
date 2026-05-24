@@ -137,14 +137,14 @@ function MusicPanel({ activeAlbum, onSelect }: { activeAlbum: string | null; onS
     <div className="flex flex-col" style={{ background: 'rgba(7,5,15,0.8)' }}>
       {/* Header */}
       <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(201,151,58,0.15)' }}>
-        <p className="text-[8px] tracking-[0.4em] uppercase text-white/30 mb-0.5">Soundtrack</p>
+        <p className="text-[8px] tracking-[0.4em] uppercase text-white/60 mb-0.5">Soundtrack</p>
         <h3
           className="font-cinzel text-sm font-bold tracking-widest italic"
           style={{ color: '#f97316', textShadow: '0 0 12px rgba(249,115,22,0.5)' }}
         >
           Music Library
         </h3>
-        <p className="text-white/30 text-[10px] mt-0.5">Override realm soundtrack</p>
+        <p className="text-white/70 text-[10px] mt-0.5">Override realm soundtrack</p>
       </div>
 
       {/* Album list */}
@@ -169,7 +169,7 @@ function MusicPanel({ activeAlbum, onSelect }: { activeAlbum: string | null; onS
                   {album.title}
                 </p>
                 {album.desc && (
-                  <p className="text-[9px] text-white/25 leading-none truncate">{album.desc}</p>
+                  <p className="text-[9px] text-white/60 leading-none truncate">{album.desc}</p>
                 )}
               </div>
               {/* Energy dots */}
@@ -186,7 +186,7 @@ function MusicPanel({ activeAlbum, onSelect }: { activeAlbum: string | null; onS
       {/* Now playing */}
       {activeAlbum && (
         <div className="px-4 py-2 border-t" style={{ borderColor: 'rgba(201,151,58,0.1)' }}>
-          <p className="text-[9px] tracking-widest uppercase text-white/25">Now overriding →</p>
+          <p className="text-[9px] tracking-widest uppercase text-white/60">Now overriding →</p>
           <p className="text-gold text-xs font-cinzel truncate">
             {allTitles.find((a) => a.slug === activeAlbum)?.title}
           </p>
@@ -239,58 +239,25 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
   return (
     <div className="min-h-screen" style={{ background: '#07050f' }}>
 
-      {/* ── PORTAL HEADER ── */}
-      <div
-        className="relative w-full overflow-hidden flex flex-col items-center justify-center text-center"
-        style={{ minHeight: '38vh', background: 'radial-gradient(ellipse at 50% 70%, #1a0a2e 0%, #07050f 65%)' }}
-      >
-        {/* Rings */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {[1, 2, 3].map((ring) => (
-            <motion.div key={ring} className="absolute rounded-full border"
-              style={{
-                width: `${ring * 20 + 16}vw`, height: `${ring * 11 + 10}vw`,
-                borderColor: `rgba(139,92,246,${0.22 - ring * 0.05})`,
-                boxShadow: ring === 1 ? '0 0 30px 4px rgba(139,92,246,0.15)' : undefined,
-              }}
-              animate={{ rotate: ring % 2 === 0 ? 360 : -360 }}
-              transition={{ duration: ring * 25 + 28, repeat: Infinity, ease: 'linear' }}
-            />
-          ))}
-          <div className="absolute rounded-full" style={{
-            width: '18vw', height: '10vw',
-            background: 'radial-gradient(ellipse, rgba(139,92,246,0.22) 0%, transparent 70%)',
-          }} />
-          {[...Array(14)].map((_, i) => (
-            <motion.div key={i} className="absolute w-0.5 h-0.5 rounded-full bg-white/50"
-              style={{ left: `${+(22 + Math.sin(i * 1.5) * 36).toFixed(3)}%`, top: `${+(20 + Math.cos(i * 1.2) * 38).toFixed(3)}%` }}
-              animate={{ opacity: [0.1, 0.6, 0.1] }}
-              transition={{ duration: 2.5 + i * 0.25, repeat: Infinity, delay: i * 0.15 }}
-              suppressHydrationWarning
-            />
-          ))}
-        </div>
-
-        <div className="relative z-10 px-6 pt-16 pb-4">
-          <span className="inline-block text-[8px] font-medium tracking-[0.4em] uppercase px-2 py-0.5 rounded mb-3"
-            style={{ background: '#000', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)' }}
-          >Living Visualizer</span>
-          <h1
-            className="font-cinzel text-3xl md:text-4xl font-bold tracking-widest leading-tight mb-2"
-            style={{ color: '#a855f7', textShadow: '0 0 28px rgba(168,85,247,0.6), 0 0 70px rgba(139,92,246,0.25)' }}
-          >
-            The Ascension Chamber
-          </h1>
-          <p className="text-white/35 text-xs leading-relaxed max-w-md mx-auto">
-            Pass through the portal into a fullscreen living world of cinematic art, music-reactive visuals, and ambient motion.
-          </p>
-        </div>
-        <div className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #07050f, transparent)' }} />
+      {/* ── SLIM TOP HEADER ── */}
+      <div className="flex items-center justify-between px-6 pt-3 pb-1">
+        <Link href="/" className="text-[9px] tracking-widest uppercase text-white/60 hover:text-white/90 transition-colors">← Home</Link>
+        <h1
+          className="font-cinzel text-lg font-bold tracking-[0.25em]"
+          style={{
+            background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 30%, #f5d06e 50%, #c9973a 70%, #6b4411 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
+        >
+          The Ascension Chamber
+        </h1>
+        <span className="text-[9px] tracking-[0.3em] uppercase text-white/60">Living Visualizer</span>
       </div>
 
       {/* ── REALMS PLAYER (viewing panel) ── */}
-      <RealmsPlayer audioMap={audioMap} />
+      <RealmsPlayer audioMap={audioMap} compact />
 
       {/* ── VISUAL MODES ── */}
       <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(168,85,247,0.12)', background: '#07050f' }}>
@@ -301,7 +268,7 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
               <motion.p key={hoveredMode?.title ?? 'x'}
                 initial={{ opacity: 0, x: 6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }}
                 transition={{ duration: 0.15 }}
-                className="text-white/45 text-[11px] tracking-wide"
+                className="text-white/80 text-[11px] tracking-wide"
               >
                 {hoveredMode?.description ?? ''}
               </motion.p>
@@ -334,13 +301,17 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
 
       {/* ── PRESET LIBRARY + MUSIC PLAYER ── */}
       <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="mb-4">
+          <SectionTitle variant="gold">Choose Realm</SectionTitle>
+          <p className="text-white/70 text-xs mt-1">Select a realm preset to enter its visual world</p>
+        </div>
         <div className="flex gap-5 items-start">
 
           {/* LEFT: Preset library — half width */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-3">
               <SectionTitle variant="gold">Preset Library</SectionTitle>
-              <p className="text-white/20 text-[10px]">{allPresets.length} presets</p>
+              <p className="text-white/60 text-[10px]">{allPresets.length} presets</p>
             </div>
             <div className="space-y-1 pr-1">
               {allPresets.map((preset, i) => (
