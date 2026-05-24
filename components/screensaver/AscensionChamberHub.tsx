@@ -96,19 +96,14 @@ function PresetRow({ preset, index, total }: {
         <div className="flex-1 min-w-0">
           <p
             className="text-[11px] font-cinzel font-bold tracking-wide leading-none mb-0.5 truncate"
-            style={{
-              color: '#000',
-              WebkitTextStroke: `0.5px ${rowColor}`,
-              textShadow: `0 0 8px ${rowColor}`,
-              filter: `drop-shadow(0 0 4px ${rowColor})`,
-            }}
+            style={{ color: rowColor }}
           >
             {preset.title}
           </p>
-          <p className="text-[9px] tracking-widest uppercase leading-none mb-0.5" style={{ color: `${rowColor}80` }}>
+          <p className="text-[9px] tracking-widest uppercase leading-none mb-0.5" style={{ color: `${rowColor}90` }}>
             {label}{preset.audio_reactive ? ' · Audio' : ''}
           </p>
-          <p className="text-[9px] text-white/30 leading-none truncate">{preset.description}</p>
+          <p className="text-[9px] text-white/80 leading-none truncate">{preset.description}</p>
         </div>
 
         {/* Intensity bar */}
@@ -139,7 +134,7 @@ function MusicPanel({ activeAlbum, onSelect }: { activeAlbum: string | null; onS
   ]
 
   return (
-    <div className="flex flex-col h-full" style={{ background: 'rgba(7,5,15,0.8)' }}>
+    <div className="flex flex-col" style={{ background: 'rgba(7,5,15,0.8)' }}>
       {/* Header */}
       <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(201,151,58,0.15)' }}>
         <p className="text-[8px] tracking-[0.4em] uppercase text-white/30 mb-0.5">Soundtrack</p>
@@ -153,7 +148,7 @@ function MusicPanel({ activeAlbum, onSelect }: { activeAlbum: string | null; onS
       </div>
 
       {/* Album list */}
-      <div className="flex-1 overflow-y-auto py-2 px-2 space-y-1 scrollbar-none">
+      <div className="py-2 px-2 space-y-1 scrollbar-none">
         {allTitles.map((album, i) => {
           const isActive = activeAlbum === album.slug
           const col = gradientColor(i, allTitles.length)
@@ -339,15 +334,15 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
 
       {/* ── PRESET LIBRARY + MUSIC PLAYER ── */}
       <div className="max-w-7xl mx-auto px-6 py-6">
-        <div className="flex gap-5" style={{ minHeight: 520 }}>
+        <div className="flex gap-5 items-start">
 
           {/* LEFT: Preset library — half width */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-3">
-              <SectionTitle variant="neon">Preset Library</SectionTitle>
+              <SectionTitle variant="gold">Preset Library</SectionTitle>
               <p className="text-white/20 text-[10px]">{allPresets.length} presets</p>
             </div>
-            <div className="space-y-1 overflow-y-auto pr-1" style={{ maxHeight: 480 }}>
+            <div className="space-y-1 pr-1">
               {allPresets.map((preset, i) => (
                 <PresetRow
                   key={preset.id}
@@ -361,7 +356,7 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
 
           {/* RIGHT: Music player — fixed width */}
           <div
-            className="w-72 shrink-0 rounded-xl overflow-hidden border"
+            className="w-72 shrink-0 rounded-xl overflow-hidden border self-stretch"
             style={{ borderColor: 'rgba(201,151,58,0.15)', background: 'rgba(7,5,15,0.9)' }}
           >
             <MusicPanel activeAlbum={activeAlbum} onSelect={setActiveAlbum} />
