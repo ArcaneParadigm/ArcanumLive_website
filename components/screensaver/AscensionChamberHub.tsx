@@ -65,60 +65,72 @@ function gradientColor(index: number, total: number): string {
 }
 
 // ── Thin preset row ───────────────────────────────────────────────────────
-function PresetRow({ preset, index, total }: {
+function PresetRow({ preset, index, total, isActive, onClick }: {
   preset: { id: string; title: string; slug?: string; description?: string; visual_mode?: string; color?: string; default_intensity?: number; audio_reactive?: boolean }
-  index: number; total: number
+  index: number; total: number; isActive?: boolean; onClick?: () => void
 }) {
   const mode = preset.visual_mode ?? 'gallery_drift'
   const icon = modeIcons[mode] ?? '◈'
   const label = modeLabel[mode] ?? mode
   const rowColor = gradientColor(index, total)
   const href = `/screensaver?preset=${preset.slug ?? preset.id}`
+  const typeTag = `${label}${preset.audio_reactive ? ' · Audio' : ''}`
 
   return (
-    <Link href={href} className="group block">
+    <Link href={href} className="group block" onClick={onClick}>
       <div
-        className="flex items-center gap-3 px-3 py-2 rounded-lg border transition-all duration-200 group-hover:scale-[1.01]"
+        className="relative flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all duration-300 group-hover:scale-[1.01]"
         style={{
-          borderColor: `${rowColor}30`,
-          background: `linear-gradient(90deg, ${rowColor}18 0%, #07050f 100%)`,
+          borderColor: isActive ? `${rowColor}70` : `${rowColor}30`,
+          background: isActive
+            ? `linear-gradient(90deg, ${rowColor}28 0%, ${rowColor}10 60%, #07050f 100%)`
+            : `linear-gradient(90deg, ${rowColor}12 0%, #07050f 100%)`,
+          boxShadow: isActive ? `0 0 18px ${rowColor}22, inset 0 0 0 1px ${rowColor}40` : 'none',
         }}
       >
-        {/* Symbol */}
-        <div
-          className="shrink-0 w-7 h-7 rounded flex items-center justify-center text-sm font-bold"
-          style={{ color: rowColor, background: `${rowColor}20`, border: `1px solid ${rowColor}40` }}
+        {/* Active sweep overlay */}
+        {isActive && (
+          <motion.div
+            className="absolute inset-0 rounded-lg pointer-events-none"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: [0.4, 0.7, 0.4], x: 0 }}
+            transition={{ opacity: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' }, x: { duration: 0.4 } }}
+            style={{ background: `linear-gradient(90deg, ${rowColor}18 0%, transparent 70%)` }}
+          />
+        )}
+
+        {/* Symbol — pulses when active */}
+        <motion.div
+          className="shrink-0 w-8 h-8 rounded flex items-center justify-center text-base font-bold"
+          style={{ color: rowColor, background: `${rowColor}25`, border: `1px solid ${rowColor}${isActive ? '80' : '40'}` }}
+          animate={isActive ? { scale: [1, 1.18, 1] } : { scale: 1 }}
+          transition={{ duration: 1.8, repeat: isActive ? Infinity : 0, ease: 'easeInOut' }}
         >
           {icon}
-        </div>
+        </motion.div>
 
-        {/* 3 lines */}
+        {/* 2 lines: title + type tag / description */}
         <div className="flex-1 min-w-0">
-          <p
-            className="text-[11px] font-cinzel font-bold tracking-wide leading-none mb-0.5 truncate"
-            style={{ color: rowColor }}
-          >
-            {preset.title}
+          {/* Line 1: title · type */}
+          <p className="leading-snug mb-0.5 truncate">
+            <span className="font-cinzel font-bold tracking-wide text-[13px]" style={{ color: rowColor }}>
+              {preset.title}
+            </span>
+            <span className="text-[11px] tracking-widest uppercase ml-2" style={{ color: `${rowColor}90` }}>
+              · {typeTag}
+            </span>
           </p>
-          <p className="text-[9px] tracking-widest uppercase leading-none mb-0.5" style={{ color: `${rowColor}90` }}>
-            {label}{preset.audio_reactive ? ' · Audio' : ''}
-          </p>
-          <p className="text-[9px] text-white/80 leading-none truncate">{preset.description}</p>
+          {/* Line 2: description */}
+          <p className="text-[10px] text-white/80 leading-none truncate">{preset.description}</p>
         </div>
 
         {/* Intensity bar */}
         <div className="shrink-0 w-12 hidden sm:block">
-          <div className="h-0.5 bg-white/8 rounded-full overflow-hidden">
+          <div className="h-0.5 bg-white/10 rounded-full overflow-hidden">
             <div className="h-full rounded-full" style={{ width: `${((preset.default_intensity ?? 5) / 10) * 100}%`, background: rowColor }} />
           </div>
-          <p className="text-[8px] text-right mt-0.5" style={{ color: `${rowColor}60` }}>{preset.default_intensity ?? 5}/10</p>
+          <p className="text-[9px] text-right mt-0.5" style={{ color: `${rowColor}70` }}>{preset.default_intensity ?? 5}/10</p>
         </div>
-
-        {/* Hover glow */}
-        <div
-          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-          style={{ boxShadow: `inset 0 0 0 1px ${rowColor}50` }}
-        />
       </div>
     </Link>
   )
@@ -218,6 +230,7 @@ function SectionTitle({ children, variant = 'gold' }: { children: React.ReactNod
 export default function AscensionChamberHub({ audioMap }: AscensionChamberHubProps) {
   const [activeMode, setActiveMode] = useState<string | null>(null)
   const [activeAlbum, setActiveAlbum] = useState<string | null>(null)
+  const [activePreset, setActivePreset] = useState<string>('1')
 
   const realmPresets = getRealmPresets()
   const curatedPresets = featuredScreensaverPresets.map((p) => ({
@@ -320,6 +333,8 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
                   preset={preset as Parameters<typeof PresetRow>[0]['preset']}
                   index={i}
                   total={allPresets.length}
+                  isActive={activePreset === preset.id}
+                  onClick={() => setActivePreset(preset.id)}
                 />
               ))}
             </div>
