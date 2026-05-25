@@ -2,9 +2,98 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import type { GatewayButton, HeroHotspot } from '@/types'
+
+// Accent color per visualEffect
+const EFFECT_COLOR: Record<string, string> = {
+  'portal-pulse':      '#00e5ff',
+  'dome-light-sweep':  '#c9973a',
+  'guardian-glow':     '#a855f7',
+  'glyph-orbit':       '#00d4ff',
+  'gold-sparks':       '#f5d06e',
+}
+
+function GlowHotspot({ spot, onEnter, onLeave }: {
+  spot: HeroHotspot
+  onEnter: () => void
+  onLeave: () => void
+}) {
+  const color = EFFECT_COLOR[spot.visualEffect ?? ''] ?? '#c9973a'
+  const [ripples, setRipples] = useState<number[]>([])
+  const [hovered, setHovered] = useState(false)
+
+  const addRipple = useCallback(() => {
+    const id = Date.now()
+    setRipples((r) => [...r, id])
+    setTimeout(() => setRipples((r) => r.filter((x) => x !== id)), 900)
+  }, [])
+
+  return (
+    <Link
+      href={spot.href}
+      className="absolute cursor-pointer"
+      style={{
+        left: `${spot.x}%`,
+        top: `${spot.y}%`,
+        width: `${spot.width}%`,
+        height: `${spot.height}%`,
+        transform: 'translate(-50%, -50%)',
+      }}
+      onMouseEnter={() => { setHovered(true); onEnter() }}
+      onMouseLeave={() => { setHovered(false); onLeave() }}
+      onClick={addRipple}
+    >
+      {/* Resting glow */}
+      <motion.div
+        className="absolute inset-0 rounded-full pointer-events-none"
+        animate={{ opacity: hovered ? 0.65 : 0.22 }}
+        transition={{ duration: 0.35 }}
+        style={{
+          background: `radial-gradient(ellipse at 50% 50%, ${color}55 0%, ${color}22 40%, transparent 70%)`,
+          boxShadow: hovered ? `0 0 40px 8px ${color}30` : 'none',
+        }}
+      />
+
+      {/* Breathing pulse ring */}
+      <motion.div
+        className="absolute inset-0 rounded-full pointer-events-none border"
+        style={{ borderColor: `${color}40` }}
+        animate={{ scale: [1, 1.06, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Click ripples */}
+      {ripples.map((id) => (
+        <motion.div
+          key={id}
+          className="absolute inset-0 rounded-full pointer-events-none border-2"
+          style={{ borderColor: `${color}80` }}
+          initial={{ scale: 0.6, opacity: 0.8 }}
+          animate={{ scale: 2.2, opacity: 0 }}
+          transition={{ duration: 0.85, ease: 'easeOut' }}
+        />
+      ))}
+
+      {/* Hover label — small, bottom edge */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.span
+            className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.3em] uppercase font-cinzel whitespace-nowrap pointer-events-none"
+            style={{ color, textShadow: `0 0 8px ${color}` }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.2 }}
+          >
+            {spot.label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </Link>
+  )
+}
 
 interface ArcanumPortalHeroProps {
   buttons: GatewayButton[]
@@ -191,42 +280,41 @@ export default function ArcanumPortalHero({ buttons, hotspots, heroImages }: Arc
 
       {mounted && !prefersReducedMotion && <PortalParticles />}
 
-      <div className="absolute inset-0">
+      {/* Glow hotspots — transparent click zones with radial glow over baked-in art */}
+      <div className="absolute inset-0 z-10">
         {hotspots.map((spot) => (
-          <Link
+          <GlowHotspot
             key={spot.id}
-            href={spot.href}
-            className="absolute cursor-pointer"
-            style={{
-              left: `${spot.x}%`,
-              top: `${spot.y}%`,
-              width: `${spot.width}%`,
-              height: `${spot.height}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-            onMouseEnter={() => setActiveHotspot(spot.id)}
-            onMouseLeave={() => setActiveHotspot(null)}
+            spot={spot}
+            onEnter={() => setActiveHotspot(spot.id)}
+            onLeave={() => setActiveHotspot(null)}
           />
         ))}
       </div>
 
-      {/* Single fixed info panel — bottom-left, above buttons */}
-      <div className="absolute bottom-24 left-6 z-20 pointer-events-none w-56">
-        {hotspots.map((spot) => (
-          activeHotspot === spot.id && (
-            <motion.div
-              key={spot.id}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="bg-obsidian-100/80 backdrop-blur-md border border-gold/30 rounded-lg px-4 py-3 shadow-gold-glow"
-            >
-              <p className="text-gold-bright text-xs font-semibold tracking-wider uppercase mb-0.5">{spot.label}</p>
-              <p className="text-white/50 text-xs leading-relaxed">{spot.description}</p>
-            </motion.div>
-          )
-        ))}
+      {/* Hover description — bottom-left corner */}
+      <div className="absolute bottom-20 left-6 z-20 pointer-events-none w-60">
+        <AnimatePresence mode="wait">
+          {activeHotspot && (() => {
+            const spot = hotspots.find((s) => s.id === activeHotspot)
+            if (!spot) return null
+            const color = EFFECT_COLOR[spot.visualEffect ?? ''] ?? '#c9973a'
+            return (
+              <motion.div
+                key={spot.id}
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -6 }}
+                transition={{ duration: 0.18 }}
+                className="rounded-lg px-4 py-3 border backdrop-blur-md"
+                style={{ background: 'rgba(7,5,15,0.75)', borderColor: `${color}40` }}
+              >
+                <p className="text-xs font-cinzel font-semibold tracking-widest uppercase mb-0.5" style={{ color }}>{spot.label}</p>
+                <p className="text-white/70 text-xs leading-relaxed">{spot.description}</p>
+              </motion.div>
+            )
+          })()}
+        </AnimatePresence>
       </div>
 
       {/* Top: title + subtitle */}
@@ -288,28 +376,7 @@ export default function ArcanumPortalHero({ buttons, hotspots, heroImages }: Arc
         ))}
       </motion.div>
 
-      {/* Bottom gateway buttons — sits over the image's label band */}
-      <motion.div
-        style={{ opacity: heroOpacity }}
-        className="absolute bottom-10 left-0 right-0 z-10 px-6"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.9 }}
-      >
-        <div className="flex flex-wrap justify-center gap-2 md:gap-4 max-w-4xl mx-auto">
-          {buttons.map((btn) => (
-            <Link
-              key={btn.href}
-              href={btn.href}
-              className="group relative px-5 py-2 text-xs md:text-sm tracking-widest uppercase font-medium transition-all duration-300"
-            >
-              <div className="absolute inset-0 rounded border border-gold/20 bg-black/50 backdrop-blur-md group-hover:border-gold/60 group-hover:bg-black/70 transition-all duration-300" />
-              <div className="absolute inset-0 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-gold-glow" />
-              <span className="relative text-gold-bright/80 group-hover:text-gold-bright">{btn.label}</span>
-            </Link>
-          ))}
-        </div>
-      </motion.div>
+      {/* Bottom fade — page transitions cleanly into sections below */}
 
       {/* Scroll cue */}
       <motion.div
