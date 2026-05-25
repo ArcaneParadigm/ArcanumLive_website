@@ -3,12 +3,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRef, useEffect, useState } from 'react'
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import type { GatewayButton, HeroHotspot } from '@/types'
 
 interface ArcanumPortalHeroProps {
   buttons: GatewayButton[]
   hotspots: HeroHotspot[]
+  heroImages?: string[]
 }
 
 const PORTAL_PARTICLES = Array.from({ length: 30 }, () => ({
@@ -89,12 +90,23 @@ function PortalRing() {
   )
 }
 
-export default function ArcanumPortalHero({ buttons, hotspots }: ArcanumPortalHeroProps) {
+const CYCLE_MS = 9000 // how long each image shows before crossfading
+
+export default function ArcanumPortalHero({ buttons, hotspots, heroImages }: ArcanumPortalHeroProps) {
+  const images = heroImages && heroImages.length > 0 ? heroImages : ['/images/arcanum-portal-v1.jpg']
   const prefersReducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null)
+  const [imgIdx, setImgIdx] = useState(0)
+
+  // Cycle through images when multiple are present
+  useEffect(() => {
+    if (images.length <= 1) return
+    const id = setInterval(() => setImgIdx((i) => (i + 1) % images.length), CYCLE_MS)
+    return () => clearInterval(id)
+  }, [images.length])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -131,13 +143,32 @@ export default function ArcanumPortalHero({ buttons, hotspots }: ArcanumPortalHe
         style={{ ...parallax(8) }}
         transition={{ type: 'spring', stiffness: 50, damping: 20 }}
       >
-        <Image
-          src="/images/arcanum-portal-v1.jpg"
-          alt="The Arcanum Portal"
-          fill
-          priority
-          className="object-cover object-center"
-        />
+        {/* Cycling hero art — crossfades every 9s, Ken Burns slow zoom */}
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={imgIdx}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.8, ease: 'easeInOut' }}
+          >
+            <motion.div
+              className="absolute inset-0"
+              initial={{ scale: 1 }}
+              animate={{ scale: prefersReducedMotion ? 1 : 1.07 }}
+              transition={{ duration: CYCLE_MS / 1000 + 1.8, ease: 'linear' }}
+            >
+              <Image
+                src={images[imgIdx]}
+                alt="The Arcanum Portal"
+                fill
+                priority={imgIdx === 0}
+                className="object-cover object-center"
+              />
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-b from-purple-cosmic/40 via-obsidian-200/30 to-obsidian-200" />
         <div className="absolute inset-0 bg-arcanum-radial opacity-40" />
       </motion.div>

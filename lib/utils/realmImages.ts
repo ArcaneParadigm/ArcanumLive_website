@@ -95,6 +95,29 @@ export function discoverRealmAudio(slug: string): DiscoveredAudioTrack[] {
 }
 
 /**
+ * Discovers 16:9 art for a given page from public/art/[page]/
+ * Drop JPG/PNG/WEBP files in — they appear automatically.
+ *
+ * Folder layout:
+ *   public/art/home/          ← hero background images, cycle on homepage
+ *   public/art/worlds/        ← worlds page background
+ *   public/art/dome-shows/    ← dome shows page
+ *   public/art/watch/
+ *   public/art/music/
+ *   public/art/screensaver/
+ *   public/art/realms/[slug]/ ← per-realm hero art (overrides gradient)
+ *
+ * Naming: prefix with 01-, 02- etc. to control display order.
+ * Falls back to `fallback` array if the folder is empty or missing.
+ */
+export function discoverPageArt(page: string, fallback: string[] = []): string[] {
+  const dir = path.join(process.cwd(), 'public', 'art', page)
+  const urlBase = `/art/${page}`
+  const found = listImages(dir, urlBase)
+  return found.length > 0 ? found : fallback
+}
+
+/**
  * Splits a flat image array as evenly as possible across N buckets.
  * Used to distribute lore images across chapters.
  */
