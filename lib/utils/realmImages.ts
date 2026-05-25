@@ -113,8 +113,24 @@ export function discoverRealmAudio(slug: string): DiscoveredAudioTrack[] {
 export function discoverPageArt(page: string, fallback: string[] = []): string[] {
   const dir = path.join(process.cwd(), 'public', 'art', page)
   const urlBase = `/art/${page}`
-  const found = listImages(dir, urlBase)
+  // Exclude ui-overlay.* — that's handled separately as a fixed UI layer
+  const found = listImages(dir, urlBase).filter((f) => !f.includes('ui-overlay'))
   return found.length > 0 ? found : fallback
+}
+
+/**
+ * Looks for a UI chrome overlay PNG in public/art/[page]/ui-overlay.png
+ * Export your buttons/panels/type as a transparent-background PNG and drop it here.
+ * It sits above the cycling background but below glow hotspots — background fades,
+ * UI chrome stays locked.
+ */
+export function discoverPageOverlay(page: string): string | null {
+  const exts = ['png', 'webp']
+  for (const ext of exts) {
+    const file = path.join(process.cwd(), 'public', 'art', page, `ui-overlay.${ext}`)
+    if (fs.existsSync(file)) return `/art/${page}/ui-overlay.${ext}`
+  }
+  return null
 }
 
 /**

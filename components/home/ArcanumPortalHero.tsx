@@ -99,6 +99,7 @@ interface ArcanumPortalHeroProps {
   buttons: GatewayButton[]
   hotspots: HeroHotspot[]
   heroImages?: string[]
+  uiOverlay?: string | null
 }
 
 const PORTAL_PARTICLES = Array.from({ length: 30 }, () => ({
@@ -181,7 +182,7 @@ function PortalRing() {
 
 const CYCLE_MS = 9000 // how long each image shows before crossfading
 
-export default function ArcanumPortalHero({ buttons, hotspots, heroImages }: ArcanumPortalHeroProps) {
+export default function ArcanumPortalHero({ buttons, hotspots, heroImages, uiOverlay }: ArcanumPortalHeroProps) {
   const images = heroImages && heroImages.length > 0 ? heroImages : ['/images/arcanum-portal-v1.jpg']
   const prefersReducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -279,6 +280,27 @@ export default function ArcanumPortalHero({ buttons, hotspots, heroImages }: Arc
       </motion.div>
 
       {mounted && !prefersReducedMotion && <PortalParticles />}
+
+      {/* ── UI CHROME OVERLAY ── transparent PNG above backgrounds, below hotspots
+           Drop public/art/home/ui-overlay.png to activate.
+           Export your buttons/labels/frames on a transparent layer in Photoshop/etc.
+           Background fades between images while this stays locked. */}
+      {uiOverlay && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.4 }}
+        >
+          <Image
+            src={uiOverlay}
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </motion.div>
+      )}
 
       {/* Glow hotspots — transparent click zones with radial glow over baked-in art */}
       <div className="absolute inset-0 z-10">
