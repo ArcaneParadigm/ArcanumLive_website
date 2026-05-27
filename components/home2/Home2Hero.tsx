@@ -116,12 +116,12 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
         </AnimatePresence>
       </motion.div>
 
-      {/* LAYER 2 — UI chrome overlay PNG (buttons/panels extracted from art) */}
+      {/* LAYER 2 — UI chrome overlay (JPG or PNG). mix-blend-mode:screen makes black vanish — no cutout needed */}
       {uiOverlay && (
         <motion.div className="absolute inset-0 pointer-events-none z-10"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.3 }}
         >
-          <Image src={uiOverlay} alt="" fill className="object-cover object-center" priority />
+          <Image src={uiOverlay} alt="" fill className="object-cover object-center" priority style={{ mixBlendMode: 'screen' }} />
         </motion.div>
       )}
 

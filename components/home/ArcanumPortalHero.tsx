@@ -160,7 +160,7 @@ export default function ArcanumPortalHero({ buttons, hotspots, heroImages, uiOve
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.3 }}
         >
-          <Image src={uiOverlay} alt="" fill className="object-cover object-center" priority />
+          <Image src={uiOverlay} alt="" fill className="object-cover object-center" priority style={{ mixBlendMode: 'screen' }} />
         </motion.div>
       )}
 
