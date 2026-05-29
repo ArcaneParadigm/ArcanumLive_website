@@ -15,6 +15,7 @@ export interface DiscoveredTrack {
 interface RealmsPlayerProps {
   audioMap?: Record<string, DiscoveredTrack[]>
   compact?: boolean
+  activeSlug?: string
 }
 
 function buildPlaceholderTracks(title: string) {
@@ -81,7 +82,7 @@ const BG_CYCLE_MS = 4200
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
+export default function RealmsPlayer({ audioMap, compact, activeSlug }: RealmsPlayerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PLAYLISTS = useMemo(() => buildPlaylists(audioMap), [])
 
@@ -98,6 +99,14 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
   // + Add dropdown
   const [showAddMenu, setShowAddMenu] = useState(false)
   const addMenuRef = useRef<HTMLDivElement>(null)
+
+  // External realm activation (from Ascension Chamber card click)
+  useEffect(() => {
+    if (!activeSlug) return
+    const idx = sequence.findIndex(e => PLAYLISTS[e.worldIdx].world.slug === activeSlug)
+    if (idx >= 0 && idx !== seqIdx) { setSeqIdx(idx); setTrackIdx(0); setProgress(0) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSlug])
 
   // Player state
   const [trackIdx, setTrackIdx]       = useState(0)
@@ -432,50 +441,39 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
               >
                 {/* Drag handle */}
                 <div
-                  className="flex items-center px-1.5 text-[11px] cursor-grab active:cursor-grabbing shrink-0"
-                  style={{ color: 'rgba(255,255,255,0.22)', borderRight: '1px solid rgba(255,255,255,0.07)' }}
+                  className="flex items-center px-1 text-[10px] cursor-grab active:cursor-grabbing shrink-0"
+                  style={{ color: 'rgba(255,255,255,0.2)', borderRight: '1px solid rgba(255,255,255,0.07)' }}
                 >
                   ⠿
                 </div>
 
-                {/* Title + visual mode */}
-                <div className="flex flex-col justify-center px-2 py-1.5 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{i + 1}</span>
-                    <span
-                      className="text-[10px] font-semibold tracking-wide whitespace-nowrap font-cinzel"
-                      style={{ color: isActive ? wAccent : 'rgba(255,255,255,0.82)' }}
-                    >
-                      {pl.world.title}
-                    </span>
-                    {isActive && playing && (
-                      <span className="inline-flex gap-0.5 items-end ml-0.5">
-                        {[0, 1, 2].map(j => (
-                          <motion.span key={j} className="inline-block w-0.5 rounded-full"
-                            style={{ background: wAccent, height: 7 }}
-                            animate={{ scaleY: [1, 1.8, 1] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: j * 0.15 }}
-                          />
-                        ))}
-                      </span>
-                    )}
-                  </div>
-                  {/* Visual mode — click to cycle */}
-                  <button
-                    onClick={cycleMode(entry.id)}
-                    className="text-[8px] tracking-wide mt-0.5 text-left transition-opacity hover:opacity-100"
-                    style={{ color: isActive ? `${wAccent}85` : 'rgba(255,255,255,0.32)' }}
-                    title="Click to cycle visual mode"
+                {/* Single-line: number + title + playing indicator */}
+                <div className="flex items-center gap-1 px-1.5 py-1 min-w-0">
+                  <span className="text-[7px] shrink-0" style={{ color: 'rgba(255,255,255,0.28)' }}>{i + 1}</span>
+                  <span
+                    className="text-[9px] font-semibold tracking-wide whitespace-nowrap font-cinzel"
+                    style={{ color: isActive ? wAccent : 'rgba(255,255,255,0.78)' }}
                   >
-                    {MODE_ICON[entry.visualMode]} {MODE_SHORT[entry.visualMode]}
-                  </button>
+                    {pl.world.title}
+                  </span>
+                  {isActive && playing && (
+                    <span className="inline-flex gap-0.5 items-end ml-0.5 shrink-0">
+                      {[0, 1, 2].map(j => (
+                        <motion.span key={j} className="inline-block w-0.5 rounded-full"
+                          style={{ background: wAccent, height: 6 }}
+                          animate={{ scaleY: [1, 1.8, 1] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: j * 0.15 }}
+                        />
+                      ))}
+                    </span>
+                  )}
                 </div>
 
                 {/* Remove button — appears on hover */}
                 {sequence.length > 1 && (
                   <button
                     onClick={removeEntry(i)}
-                    className="hidden group-hover:flex items-center px-1.5 text-[10px] transition-colors hover:text-red-400 shrink-0"
+                    className="hidden group-hover:flex items-center px-1 text-[9px] transition-colors hover:text-red-400 shrink-0"
                     style={{ color: 'rgba(255,255,255,0.28)', borderLeft: '1px solid rgba(255,255,255,0.07)' }}
                     title="Remove from sequence"
                   >

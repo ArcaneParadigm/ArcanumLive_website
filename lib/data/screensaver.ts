@@ -22,6 +22,11 @@ export const screensaverModes: ScreensaverMode[] = [
     href: '/screensaver?mode=fluid-oracle',
   },
   {
+    title: 'Particle Cosmos',
+    description: 'Immersive particle fields — stellar, cosmic, and elemental.',
+    href: '/screensaver?mode=particle-cosmos',
+  },
+  {
     title: 'MythMachine Shuffle',
     description: 'A living mix of worlds, visuals, and soundtracks.',
     href: '/screensaver?mode=mythmachine-shuffle',

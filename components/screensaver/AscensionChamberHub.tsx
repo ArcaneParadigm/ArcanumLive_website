@@ -23,7 +23,8 @@ const PURPLE = '#7c3aed'
 
 const modeAccent: Record<string, string> = {
   'gallery-drift': '#c9973a', 'video-temple': '#7c3aed',
-  'music-reactor': '#00e5ff', 'fluid-oracle': '#06b6d4', 'mythmachine-shuffle': '#a78bfa',
+  'music-reactor': '#00e5ff', 'fluid-oracle': '#06b6d4',
+  'particle-cosmos': '#e879f9', 'mythmachine-shuffle': '#a78bfa',
 }
 const modeIcons: Record<string, string> = {
   gallery_drift: '◈', video_temple: '⬡', music_reactor: '◉', fluid_oracle: '⌘', mythmachine_shuffle: '⧉',
@@ -351,33 +352,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
       </div>
 
       {/* ── Player ── */}
-      <RealmsPlayer audioMap={audioMap} compact />
-
-      {/* ── Realm cards grid ── */}
-      <div className="px-6 py-4 border-b" style={{ borderColor: `${GOLD}15`, background: '#07050f' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-3">
-            <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: `${GOLD}70` }}>Select Realm</p>
-            {activeRealm && (
-              <span className="text-[9px] px-2 py-0.5 rounded"
-                style={{ background: `${GOLD}15`, color: GOLD, border: `1px solid ${GOLD}50` }}>
-                {featuredWorlds.find(w => w.slug === activeRealm)?.title ?? activeRealm}
-              </span>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-3 max-h-[560px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-            {featuredWorlds.map(w => (
-              <AscensionRealmCard
-                key={w.slug}
-                world={{ slug: w.slug, title: w.title ?? undefined, color_primary: w.color_primary ?? undefined }}
-                isActive={activeRealm === w.slug}
-                onActivate={() => setActiveRealm(w.slug ?? null)}
-                cardImage={w.slug ? (cardImages[w.slug] ?? null) : null}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <RealmsPlayer audioMap={audioMap} compact activeSlug={activeRealm ?? undefined} />
 
       {/* ── Visual modes ── */}
       <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(168,85,247,0.12)', background: '#07050f' }}>
@@ -417,6 +392,32 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
         </div>
       </div>
 
+      {/* ── Realm cards grid ── */}
+      <div className="px-6 py-4 border-b" style={{ borderColor: `${GOLD}15`, background: '#07050f' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 mb-3">
+            <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: `${GOLD}70` }}>Select Realm</p>
+            {activeRealm && (
+              <span className="text-[9px] px-2 py-0.5 rounded"
+                style={{ background: `${GOLD}15`, color: GOLD, border: `1px solid ${GOLD}50` }}>
+                {featuredWorlds.find(w => w.slug === activeRealm)?.title ?? activeRealm}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-3 max-h-[560px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+            {featuredWorlds.map(w => (
+              <AscensionRealmCard
+                key={w.slug}
+                world={{ slug: w.slug, title: w.title ?? undefined, color_primary: w.color_primary ?? undefined }}
+                isActive={activeRealm === w.slug}
+                onActivate={() => setActiveRealm(w.slug ?? null)}
+                cardImage={w.slug ? (cardImages[w.slug] ?? null) : null}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ── Presets + Music (side by side, matching width) ── */}
       <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 gap-5 items-start">
 
@@ -441,7 +442,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
 
         {/* Music */}
         <div>
-          <Foldable title="Music" subtitle={`${allAlbums.length}`} defaultOpen={false}>
+          <Foldable title="Music" subtitle={`${allAlbums.length}`} defaultOpen>
             <div className="overflow-y-auto" style={{ maxHeight: 640, scrollbarWidth: 'thin' }}>
               <div className="space-y-1 px-3 pb-3 pt-1">
                 {allAlbums.map((album, i) => (
