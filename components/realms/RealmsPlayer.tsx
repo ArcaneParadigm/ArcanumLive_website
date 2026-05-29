@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { featuredWorlds } from '@/lib/data/worlds'
+import type { VisualMode } from '@/types'
 
 export interface DiscoveredTrack {
   id: string
@@ -47,62 +48,115 @@ function buildPlaylists(audioMap: Record<string, DiscoveredTrack[]> = {}) {
   })
 }
 
+// ── Visual mode config ────────────────────────────────────────────────────────
+
+const VISUAL_MODES: VisualMode[] = [
+  'gallery_drift', 'video_temple', 'music_reactor',
+  'fluid_oracle', 'particle_cosmos', 'mythmachine_shuffle',
+]
+
+const MODE_ICON: Record<VisualMode, string> = {
+  gallery_drift:      '◈',
+  video_temple:       '▶',
+  music_reactor:      '♫',
+  fluid_oracle:       '≋',
+  particle_cosmos:    '✦',
+  mythmachine_shuffle:'⟳',
+}
+
+const MODE_SHORT: Record<VisualMode, string> = {
+  gallery_drift:      'Gallery',
+  video_temple:       'Video',
+  music_reactor:      'Music',
+  fluid_oracle:       'Fluid',
+  particle_cosmos:    'Cosmos',
+  mythmachine_shuffle:'Shuffle',
+}
+
+type SeqEntry = { id: string; worldIdx: number; visualMode: VisualMode }
+
+function mkId() { return Math.random().toString(36).slice(2, 9) }
+
 const BG_CYCLE_MS = 4200
+
+// ── Main component ────────────────────────────────────────────────────────────
 
 export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PLAYLISTS = useMemo(() => buildPlaylists(audioMap), [])
 
-  const [worldIdx, setWorldIdx] = useState(0)
-  const [trackIdx, setTrackIdx] = useState(0)
-  const [playing, setPlaying] = useState(false)
-  const [loop, setLoop] = useState(false)
-  const [showPlaylist, setShowPlaylist] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [mounted, setMounted] = useState(false)
-  const [bgColorIdx, setBgColorIdx] = useState(0)
+  // Sequencer — ordered list of realm entries, each with its own visual mode
+  const [sequence, setSequence] = useState<SeqEntry[]>(() =>
+    PLAYLISTS.map((_, i) => ({ id: mkId(), worldIdx: i, visualMode: 'gallery_drift' as VisualMode }))
+  )
+  const [seqIdx, setSeqIdx] = useState(0)
 
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  // Drag-and-drop state
+  const [dragFrom, setDragFrom]   = useState<number | null>(null)
+  const [dragOver, setDragOver]   = useState<number | null>(null)
+
+  // + Add dropdown
+  const [showAddMenu, setShowAddMenu] = useState(false)
+  const addMenuRef = useRef<HTMLDivElement>(null)
+
+  // Player state
+  const [trackIdx, setTrackIdx]       = useState(0)
+  const [playing, setPlaying]         = useState(false)
+  const [loop, setLoop]               = useState(false)
+  const [showPlaylist, setShowPlaylist] = useState(false)
+  const [progress, setProgress]       = useState(0)
+  const [mounted, setMounted]         = useState(false)
+  const [bgColorIdx, setBgColorIdx]   = useState(0)
+
+  const audioRef    = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const tabsRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
-    const t = setInterval(() => setBgColorIdx((i) => (i + 1) % PLAYLISTS.length), BG_CYCLE_MS)
+    const t = setInterval(() => setBgColorIdx(i => (i + 1) % PLAYLISTS.length), BG_CYCLE_MS)
     return () => clearInterval(t)
   }, [PLAYLISTS.length])
 
+  // Close add-menu on outside click
+  useEffect(() => {
+    if (!showAddMenu) return
+    const handler = (e: MouseEvent) => {
+      if (addMenuRef.current && !addMenuRef.current.contains(e.target as Node)) setShowAddMenu(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [showAddMenu])
+
+  // Derived from sequencer
+  const currentEntry   = sequence[seqIdx] ?? sequence[0]
+  const worldIdx       = currentEntry?.worldIdx ?? 0
   const currentPlaylist = PLAYLISTS[worldIdx]
-  const currentTrack = currentPlaylist.tracks[trackIdx]
-  const accent = currentPlaylist.world.color_primary ?? '#c9973a'
-  const bgAccent = PLAYLISTS[bgColorIdx].world.color_primary ?? '#c9973a'
+  const currentTrack   = currentPlaylist.tracks[trackIdx]
+  const accent         = currentPlaylist.world.color_primary ?? '#c9973a'
+  const bgAccent       = PLAYLISTS[bgColorIdx].world.color_primary ?? '#c9973a'
 
   const nextTrack = useCallback(() => {
     const lastTrack = trackIdx >= currentPlaylist.tracks.length - 1
     if (lastTrack) {
       if (loop) { setTrackIdx(0); setProgress(0) }
-      else { setWorldIdx((w) => (w + 1) % PLAYLISTS.length); setTrackIdx(0); setProgress(0) }
-    } else { setTrackIdx((t) => t + 1); setProgress(0) }
-  }, [trackIdx, worldIdx, loop, currentPlaylist.tracks.length, PLAYLISTS.length])
+      else { setSeqIdx(s => (s + 1) % sequence.length); setTrackIdx(0); setProgress(0) }
+    } else { setTrackIdx(t => t + 1); setProgress(0) }
+  }, [trackIdx, loop, currentPlaylist.tracks.length, sequence.length])
 
   const prevTrack = () => {
     if (progress > 0.05) { setProgress(0); if (audioRef.current) audioRef.current.currentTime = 0; return }
-    if (trackIdx > 0) { setTrackIdx((t) => t - 1); setProgress(0) }
-    else if (worldIdx > 0) {
-      const prev = worldIdx - 1
-      setWorldIdx(prev)
-      setTrackIdx(PLAYLISTS[prev].tracks.length - 1)
+    if (trackIdx > 0) { setTrackIdx(t => t - 1); setProgress(0) }
+    else if (seqIdx > 0) {
+      const prev = seqIdx - 1
+      const prevWorld = sequence[prev].worldIdx
+      setSeqIdx(prev)
+      setTrackIdx(PLAYLISTS[prevWorld].tracks.length - 1)
       setProgress(0)
     }
   }
 
-  const selectWorld = (i: number) => {
-    setWorldIdx(i); setTrackIdx(0); setProgress(0)
-    setTimeout(() => {
-      tabsRef.current?.children[i]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-    }, 50)
-  }
+  const selectSeqEntry = (i: number) => { setSeqIdx(i); setTrackIdx(0); setProgress(0) }
 
   useEffect(() => {
     if (playing) {
@@ -110,7 +164,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         if (audioRef.current?.duration) {
           setProgress(audioRef.current.currentTime / audioRef.current.duration)
         } else {
-          setProgress((p) => { if (p >= 1) { nextTrack(); return 0 } return p + 0.001 })
+          setProgress(p => { if (p >= 1) { nextTrack(); return 0 } return p + 0.001 })
         }
       }, 300)
     } else {
@@ -125,8 +179,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
     else audioRef.current.pause()
   }, [playing, worldIdx, trackIdx, currentTrack.url])
 
-  const togglePlay = () => setPlaying((p) => !p)
-
+  const togglePlay = () => setPlaying(p => !p)
   const seekTo = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
@@ -134,13 +187,75 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
     if (audioRef.current?.duration) audioRef.current.currentTime = pct * audioRef.current.duration
   }
 
+  // ── Drag-and-drop handlers ──────────────────────────────────────────────────
+
+  const handleDragStart = (i: number) => (e: React.DragEvent) => {
+    setDragFrom(i)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+  const handleDragOver = (i: number) => (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (dragOver !== i) setDragOver(i)
+  }
+  const handleDrop = (i: number) => (e: React.DragEvent) => {
+    e.preventDefault()
+    if (dragFrom === null || dragFrom === i) { setDragFrom(null); setDragOver(null); return }
+    const newSeq = [...sequence]
+    const [moved] = newSeq.splice(dragFrom, 1)
+    newSeq.splice(i, 0, moved)
+    let newSeqIdx = seqIdx
+    if (seqIdx === dragFrom) newSeqIdx = i
+    else if (dragFrom < seqIdx && i >= seqIdx) newSeqIdx = seqIdx - 1
+    else if (dragFrom > seqIdx && i <= seqIdx) newSeqIdx = seqIdx + 1
+    setSequence(newSeq)
+    setSeqIdx(newSeqIdx)
+    setDragFrom(null); setDragOver(null)
+  }
+  const handleDragEnd = () => { setDragFrom(null); setDragOver(null) }
+
+  // ── Sequencer mutations ─────────────────────────────────────────────────────
+
+  const cycleMode = (seqId: string) => (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSequence(seq => seq.map(entry => {
+      if (entry.id !== seqId) return entry
+      const mi = VISUAL_MODES.indexOf(entry.visualMode)
+      return { ...entry, visualMode: VISUAL_MODES[(mi + 1) % VISUAL_MODES.length] }
+    }))
+  }
+
+  const removeEntry = (i: number) => (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (sequence.length <= 1) return
+    setSequence(seq => seq.filter((_, idx) => idx !== i))
+    if (seqIdx >= i && seqIdx > 0) setSeqIdx(s => s - 1)
+  }
+
+  const addToSequence = (wi: number) => {
+    setSequence(seq => [...seq, { id: mkId(), worldIdx: wi, visualMode: 'gallery_drift' }])
+    setShowAddMenu(false)
+  }
+
+  const shuffleSequence = () => {
+    const shuffled = [...sequence]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    setSequence(shuffled)
+    setSeqIdx(0); setTrackIdx(0); setProgress(0)
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────────
+
   return (
     <div className="relative w-full overflow-hidden" style={{ background: '#08060e' }}>
 
       {/* Audio element */}
       {currentTrack.url && <audio ref={audioRef} src={currentTrack.url} onEnded={nextTrack} />}
 
-      {/* ── Ambient bg color cycle ── */}
+      {/* Ambient bg color cycle */}
       {mounted && (
         <>
           <AnimatePresence mode="sync">
@@ -166,18 +281,16 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         }}
       />
 
-      {/* ── HEADER — centered, like DomeShows ── */}
+      {/* ── Header ── */}
       <div className={`relative z-10 ${compact ? 'pt-3 pb-3' : 'pt-8 pb-5'} text-center px-6`}>
         {!compact && (
           <>
-            {/* Back link top-left */}
             <div className="absolute left-6 top-8">
               <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
                 style={{ color: 'rgba(255,255,255,0.82)' }}>
                 ← Home
               </Link>
             </div>
-            {/* Ascension Chamber top-right */}
             <div className="absolute right-6 top-8">
               <Link href="/ascension" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
                 style={{
@@ -195,9 +308,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
           className={`font-cinzel font-bold tracking-widest leading-none ${compact ? 'text-2xl mb-1' : 'text-3xl md:text-4xl mb-2'}`}
           style={{
             background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 22%, #f5d06e 50%, #c9973a 78%, #6b4411 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
           }}
         >
           Realms
@@ -207,37 +318,27 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         </p>
       </div>
 
-      {/* ── IMAGERY BAND — full width, realm color cycling ── */}
+      {/* ── Imagery band ── */}
       <div className="relative z-10 w-full" style={{ aspectRatio: '21/7', minHeight: 240 }}>
-        {/* Realm color gradient as the "image" until real images are dropped */}
         <AnimatePresence mode="sync">
-          <motion.div
-            key={`img-${worldIdx}`}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            style={{
-              background: `linear-gradient(160deg, ${accent}35 0%, #08060e 50%, ${accent}12 100%)`,
-            }}
+          <motion.div key={`img-${worldIdx}`} className="absolute inset-0"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}
+            style={{ background: `linear-gradient(160deg, ${accent}35 0%, #08060e 50%, ${accent}12 100%)` }}
           />
         </AnimatePresence>
 
-        {/* Corner brackets — cinematic frame */}
+        {/* Corner brackets */}
         <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2" style={{ borderColor: `${accent}50` }} />
         <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2" style={{ borderColor: `${accent}50` }} />
         <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2" style={{ borderColor: `${accent}50` }} />
         <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2" style={{ borderColor: `${accent}50` }} />
 
-        {/* Realm name + track — centered overlay */}
+        {/* Realm name + current track */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
           <AnimatePresence mode="wait">
             <motion.div key={worldIdx}
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col items-center gap-1"
-            >
+              transition={{ duration: 0.4 }} className="flex flex-col items-center gap-1">
               <p className="text-[9px] tracking-[0.45em] uppercase" style={{ color: `${accent}95` }}>
                 {currentPlaylist.world.theme_style}
               </p>
@@ -246,16 +347,27 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
               </h2>
             </motion.div>
           </AnimatePresence>
-
           <AnimatePresence mode="wait">
             <motion.p key={`${worldIdx}-${trackIdx}`}
               className="text-xs tracking-wide mt-3" style={{ color: 'rgba(255,255,255,0.82)' }}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
-            >
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
               {currentTrack.title}
               {currentTrack.duration && <span className="ml-2" style={{ color: 'rgba(255,255,255,0.5)' }}>{currentTrack.duration}</span>}
             </motion.p>
           </AnimatePresence>
+
+          {/* Visual mode badge for current entry */}
+          {currentEntry && (
+            <div className="mt-2 flex items-center gap-1 px-2 py-0.5 rounded-full"
+              style={{ background: `${accent}15`, border: `1px solid ${accent}30` }}>
+              <span className="text-[9px]" style={{ color: accent }}>
+                {MODE_ICON[currentEntry.visualMode]}
+              </span>
+              <span className="text-[8px] tracking-widest uppercase" style={{ color: `${accent}90` }}>
+                {MODE_SHORT[currentEntry.visualMode]}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Bottom fade */}
@@ -264,27 +376,164 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         />
       </div>
 
-      {/* ── Realm tab chips — below image ── */}
-      <div className="relative z-10 flex justify-center px-4 py-3">
-        <div ref={tabsRef} className="flex gap-2 overflow-x-auto scrollbar-none max-w-full pb-1">
-          {PLAYLISTS.map((pl, i) => {
-            const isActive = i === worldIdx
-            const wAccent = pl.world.color_primary ?? '#c9973a'
+      {/* ── SEQUENCER ── */}
+      <div className="relative z-10 px-4 pt-3 pb-1 border-t" style={{ borderColor: `${accent}18` }}>
+
+        {/* Sequencer header */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[9px] tracking-[0.4em] uppercase font-semibold" style={{ color: `${accent}80` }}>
+              Sequence
+            </span>
+            <span className="text-[9px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              {sequence.length} realm{sequence.length !== 1 ? 's' : ''}
+            </span>
+            <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.2)' }}>· drag to reorder</span>
+          </div>
+          <button
+            onClick={shuffleSequence}
+            className="text-[9px] tracking-widest uppercase px-2 py-0.5 rounded border transition-all hover:border-white/40 hover:text-white/70"
+            style={{ borderColor: 'rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.45)' }}
+          >
+            ⟳ Shuffle
+          </button>
+        </div>
+
+        {/* Sequencer chips — multi-row wrapping */}
+        <div className="flex flex-wrap gap-1.5 pb-3">
+          {sequence.map((entry, i) => {
+            const pl        = PLAYLISTS[entry.worldIdx]
+            const wAccent   = pl.world.color_primary ?? '#c9973a'
+            const isActive  = i === seqIdx
+            const isDragging   = dragFrom === i
+            const isDragTarget = dragOver === i && dragFrom !== null && dragFrom !== i
+
             return (
-              <button
-                key={pl.world.id}
-                onClick={() => selectWorld(i)}
-                className="shrink-0 px-3 py-1 rounded-full text-[10px] tracking-widest uppercase whitespace-nowrap transition-all duration-200 border"
+              <div
+                key={entry.id}
+                draggable
+                onDragStart={handleDragStart(i)}
+                onDragOver={handleDragOver(i)}
+                onDrop={handleDrop(i)}
+                onDragEnd={handleDragEnd}
+                onClick={() => selectSeqEntry(i)}
+                className="relative flex items-stretch rounded-lg overflow-hidden cursor-pointer group select-none transition-all duration-150"
                 style={{
-                  borderColor: isActive ? wAccent : 'rgba(255,255,255,0.25)',
-                  color: isActive ? wAccent : 'rgba(255,255,255,0.72)',
-                  background: isActive ? `${wAccent}18` : 'transparent',
+                  border: `1px solid ${isActive ? wAccent + '80' : isDragTarget ? wAccent + '50' : 'rgba(255,255,255,0.13)'}`,
+                  background: isActive
+                    ? `${wAccent}1a`
+                    : isDragTarget
+                      ? 'rgba(255,255,255,0.07)'
+                      : 'rgba(255,255,255,0.04)',
+                  opacity: isDragging ? 0.4 : 1,
+                  boxShadow: isActive ? `0 0 14px ${wAccent}22` : 'none',
+                  transform: isDragTarget ? 'scale(1.03)' : 'scale(1)',
                 }}
               >
-                {pl.world.title}
-              </button>
+                {/* Drag handle */}
+                <div
+                  className="flex items-center px-1.5 text-[11px] cursor-grab active:cursor-grabbing shrink-0"
+                  style={{ color: 'rgba(255,255,255,0.22)', borderRight: '1px solid rgba(255,255,255,0.07)' }}
+                >
+                  ⠿
+                </div>
+
+                {/* Title + visual mode */}
+                <div className="flex flex-col justify-center px-2 py-1.5 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{i + 1}</span>
+                    <span
+                      className="text-[10px] font-semibold tracking-wide whitespace-nowrap font-cinzel"
+                      style={{ color: isActive ? wAccent : 'rgba(255,255,255,0.82)' }}
+                    >
+                      {pl.world.title}
+                    </span>
+                    {isActive && playing && (
+                      <span className="inline-flex gap-0.5 items-end ml-0.5">
+                        {[0, 1, 2].map(j => (
+                          <motion.span key={j} className="inline-block w-0.5 rounded-full"
+                            style={{ background: wAccent, height: 7 }}
+                            animate={{ scaleY: [1, 1.8, 1] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: j * 0.15 }}
+                          />
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                  {/* Visual mode — click to cycle */}
+                  <button
+                    onClick={cycleMode(entry.id)}
+                    className="text-[8px] tracking-wide mt-0.5 text-left transition-opacity hover:opacity-100"
+                    style={{ color: isActive ? `${wAccent}85` : 'rgba(255,255,255,0.32)' }}
+                    title="Click to cycle visual mode"
+                  >
+                    {MODE_ICON[entry.visualMode]} {MODE_SHORT[entry.visualMode]}
+                  </button>
+                </div>
+
+                {/* Remove button — appears on hover */}
+                {sequence.length > 1 && (
+                  <button
+                    onClick={removeEntry(i)}
+                    className="hidden group-hover:flex items-center px-1.5 text-[10px] transition-colors hover:text-red-400 shrink-0"
+                    style={{ color: 'rgba(255,255,255,0.28)', borderLeft: '1px solid rgba(255,255,255,0.07)' }}
+                    title="Remove from sequence"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             )
           })}
+
+          {/* + Add realm button */}
+          <div className="relative" ref={addMenuRef}>
+            <button
+              onClick={() => setShowAddMenu(v => !v)}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] tracking-widest uppercase border transition-all hover:border-white/30 hover:text-white/60"
+              style={{
+                borderColor: showAddMenu ? `${accent}50` : 'rgba(255,255,255,0.14)',
+                color: showAddMenu ? accent : 'rgba(255,255,255,0.38)',
+                background: showAddMenu ? `${accent}12` : 'rgba(255,255,255,0.03)',
+              }}
+            >
+              + Add
+            </button>
+
+            {/* Dropdown */}
+            {showAddMenu && (
+              <div
+                className="absolute top-full left-0 mt-1 z-50 rounded-xl overflow-y-auto border"
+                style={{
+                  background: 'rgba(8,6,14,0.98)',
+                  borderColor: 'rgba(255,255,255,0.14)',
+                  minWidth: 170,
+                  maxHeight: 280,
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.7)',
+                  backdropFilter: 'blur(20px)',
+                }}
+              >
+                <p className="px-3 pt-2 pb-1 text-[8px] tracking-[0.3em] uppercase" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                  Add to sequence
+                </p>
+                {PLAYLISTS.map((pl, wi) => (
+                  <button
+                    key={pl.world.id}
+                    onClick={() => addToSequence(wi)}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-white/6"
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={{ background: pl.world.color_primary ?? '#c9973a' }}
+                    />
+                    <span className="font-cinzel text-[10px] font-semibold" style={{ color: pl.world.color_primary ?? '#c9973a' }}>
+                      {pl.world.title}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -293,7 +542,8 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         style={{ borderColor: `${accent}18`, background: 'rgba(8,6,14,0.6)', backdropFilter: 'blur(12px)' }}
       >
         {/* Progress bar */}
-        <div className="w-full h-0.5 rounded-full bg-white/8 cursor-pointer overflow-hidden mt-4 mb-4"
+        <div className="w-full h-0.5 rounded-full cursor-pointer overflow-hidden mt-4 mb-4"
+          style={{ background: 'rgba(255,255,255,0.08)' }}
           onClick={seekTo}
         >
           <motion.div className="h-full rounded-full" style={{ width: `${progress * 100}%`, background: accent }} transition={{ duration: 0.3 }} />
@@ -324,7 +574,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
           {/* Right controls */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setLoop((l) => !l)}
+              onClick={() => setLoop(l => !l)}
               className="text-[10px] tracking-widest uppercase px-3 py-1 rounded-full border transition-all"
               style={{
                 borderColor: loop ? `${accent}70` : 'rgba(255,255,255,0.3)',
@@ -333,7 +583,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
               }}
             >↻ Loop</button>
             <button
-              onClick={() => setShowPlaylist((s) => !s)}
+              onClick={() => setShowPlaylist(s => !s)}
               className="text-[10px] tracking-widest uppercase transition-colors"
               style={{ color: showPlaylist ? accent : 'rgba(255,255,255,0.78)' }}
             >≡ Tracks</button>
@@ -341,7 +591,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         </div>
       </div>
 
-      {/* ── Playlist panel ── */}
+      {/* ── Playlist panel (slide-up) ── */}
       <AnimatePresence>
         {showPlaylist && (
           <motion.div
@@ -351,8 +601,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
             style={{ background: 'rgba(8,6,14,0.97)', backdropFilter: 'blur(20px)', border: `1px solid ${accent}25`, maxHeight: 480 }}
           >
             <div className="flex items-center justify-between px-5 py-3 border-b sticky top-0"
-              style={{ borderColor: `${accent}20`, background: 'rgba(8,6,14,0.99)' }}
-            >
+              style={{ borderColor: `${accent}20`, background: 'rgba(8,6,14,0.99)' }}>
               <div>
                 <p className="text-[10px] tracking-widest uppercase" style={{ color: `${accent}70` }}>Now Playing</p>
                 <p className="font-cinzel text-sm font-bold" style={{ color: accent }}>{currentPlaylist.world.title}</p>
@@ -365,12 +614,11 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
                 return (
                   <button key={track.id} onClick={() => { setTrackIdx(i); setProgress(0) }}
                     className="w-full flex items-center gap-3 px-5 py-3 text-left transition-all hover:bg-white/4"
-                    style={{ background: isActive ? `${accent}12` : undefined }}
-                  >
+                    style={{ background: isActive ? `${accent}12` : undefined }}>
                     <div className="w-5 text-center shrink-0">
                       {isActive && playing ? (
                         <span className="inline-flex gap-0.5 items-end">
-                          {[0, 1, 2].map((j) => (
+                          {[0, 1, 2].map(j => (
                             <motion.span key={j} className="inline-block w-0.5 rounded-full"
                               style={{ background: accent, height: 10 }}
                               animate={{ scaleY: [1, 1.8, 1] }}

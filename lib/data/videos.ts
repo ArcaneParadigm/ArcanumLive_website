@@ -15,6 +15,8 @@ export interface VideoItem {
   title: string
   /** Vimeo video ID (the number from the URL) */
   vimeoId: string
+  /** YouTube video ID — takes priority over vimeoId when present */
+  youtubeId?: string
   type: VideoType
   /** Short description shown in the grid */
   description?: string
@@ -37,7 +39,8 @@ export const trailers: VideoItem[] = [
   {
     id: 'tr-aeon',
     title: 'Aeon — Official Trailer',
-    vimeoId: '76979871', // ← replace with real ID
+    vimeoId: '76979871', // ← replace with real Vimeo ID
+    youtubeId: 'tvliE1yCUwE', // Immersive Dome Shows
     type: 'trailer',
     description: 'A cosmic 360 journey through the eternal cycles of creation.',
     duration: '2:30',
@@ -174,6 +177,7 @@ export const premieres: VideoItem[] = [
     id: 'premiere-aeon',
     title: 'Aeon — World Premiere',
     vimeoId: '76979871', // ← replace with real premiere vimeo ID
+    youtubeId: '0fWRJaLLHxg', // Rent 360 Movies
     type: 'premiere',
     description: 'The official world premiere screening of Aeon — a cosmic 360° fulldome journey.',
     isPremiere: true,

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -64,7 +64,7 @@ const S = {
     const ctx = getSharedAudioCtx(); if (!ctx) return
     try {
       const t = ctx.currentTime
-      ;[root, root * 1.26, root * 1.498].forEach((hz, i) => bowlStrike(hz, ctx, t + i * 0.065, 0.015, 2.8))
+      ;[root, root * 1.26, root * 1.498].forEach((hz, i) => bowlStrike(hz, ctx, t + i * 0.065, 0.0043, 2.8))
     } catch {}
   },
   // Two bowls — root + perfect fifth, slight offset (realm depth)
@@ -143,6 +143,11 @@ function DoubleRule({ color = GOLD, width = 160 }: { color?: string; width?: num
 // SECTION 1 — DOME SHOWS + 360 MOVIES
 // ════════════════════════════════════════════════════════════════════════════
 
+// Send a command to an embedded YouTube iframe via postMessage
+function ytCmd(iframe: HTMLIFrameElement | null, func: string, args: unknown[] = []) {
+  iframe?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), '*')
+}
+
 function PanelWithVideo({
   title, desc, btnA, btnB, color, image, images, video, youtube,
 }: {
@@ -151,10 +156,25 @@ function PanelWithVideo({
   btnB: { label: string; href: string };
   color: string; image?: string; images?: string[]; video?: string; youtube?: string;
 }) {
-  const vidRef = useRef<HTMLVideoElement>(null)
+  const vidRef  = useRef<HTMLVideoElement>(null)
+  const ytRef   = useRef<HTMLIFrameElement>(null)
   const [playing, setPlaying] = useState(false)
   const allImages = images ?? (image ? [image] : [])
   const [imgIdx, setImgIdx] = useState(0)
+
+  const handlePanelEnter = useCallback(() => {
+    if (!youtube) return
+    // Stop any other audio/music playing on the page
+    document.dispatchEvent(new CustomEvent('arcanum:stop-all-audio'))
+    // Unmute the YouTube iframe and raise volume
+    ytCmd(ytRef.current, 'unMute')
+    ytCmd(ytRef.current, 'setVolume', [80])
+  }, [youtube])
+
+  const handlePanelLeave = useCallback(() => {
+    if (!youtube) return
+    ytCmd(ytRef.current, 'mute')
+  }, [youtube])
 
   useEffect(() => {
     if (allImages.length <= 1) return
@@ -175,6 +195,8 @@ function PanelWithVideo({
       initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
       transition={{ duration: 0.55, ease: 'easeOut' }}
       whileHover={{ borderColor: `${color}60` }}
+      onMouseEnter={handlePanelEnter}
+      onMouseLeave={handlePanelLeave}
     >
       {allImages.length > 0
         ? (
@@ -221,14 +243,19 @@ function PanelWithVideo({
             style={{ aspectRatio: '16/9', border: `1px solid ${color}30`, background: '#0a0710' }}
             onClick={!youtube ? toggle : undefined}>
             {youtube ? (
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&enablejsapi=1`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                title={title}
-                style={{ border: 'none' }}
-              />
+              <>
+                <iframe
+                  ref={ytRef}
+                  className="absolute inset-0 w-full h-full"
+                  src={`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  title={title}
+                  style={{ border: 'none' }}
+                />
+                {/* Transparent overlay — blocks hover events that trigger YouTube branding UI */}
+                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
+              </>
             ) : (
               <>
                 {video && <video ref={vidRef} src={video} className="absolute inset-0 w-full h-full object-cover" loop muted playsInline />}
@@ -428,12 +455,14 @@ function ScreensaverBanner() {
                 style={{ aspectRatio: '16/9', border: `1px solid ${VIOLET}35` }}>
                 <iframe
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube-nocookie.com/embed/YciEwOrj-Ek?autoplay=1&mute=1&loop=1&playlist=YciEwOrj-Ek&controls=0&rel=0&enablejsapi=1"
+                  src="https://www.youtube-nocookie.com/embed/YciEwOrj-Ek?autoplay=1&mute=1&loop=1&playlist=YciEwOrj-Ek&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   title="Ascension Chamber Preview"
                   style={{ border: 'none' }}
                 />
+                {/* Transparent overlay — blocks hover events that trigger YouTube branding UI */}
+                <div className="absolute inset-0 pointer-events-all z-10" style={{ background: 'transparent' }} />
                 <div className="absolute top-0 left-0 w-4 h-4 pointer-events-none" style={{ borderTop: `1px solid ${VIOLET}60`, borderLeft: `1px solid ${VIOLET}60` }} />
                 <div className="absolute bottom-0 right-0 w-4 h-4 pointer-events-none" style={{ borderBottom: `1px solid ${VIOLET}40`, borderRight: `1px solid ${VIOLET}40` }} />
               </div>
@@ -737,6 +766,13 @@ function SonicPanel() {
     let high = false
     const id = setInterval(() => { high = !high; setBeat(high ? 1.038 : 1) }, 500)
     return () => clearInterval(id)
+  }, [])
+
+  // Stop preview audio when a video panel takes over
+  useEffect(() => {
+    const stop = () => audioRef.current?.pause()
+    document.addEventListener('arcanum:stop-all-audio', stop)
+    return () => document.removeEventListener('arcanum:stop-all-audio', stop)
   }, [])
 
   return (

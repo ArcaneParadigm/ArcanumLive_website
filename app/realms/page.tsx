@@ -3,7 +3,7 @@ import PageShell from '@/components/layout/PageShell'
 import RealmsPlayer from '@/components/realms/RealmsPlayer'
 import RealmsPortraitGrid from '@/components/realms/RealmsPortraitGrid'
 import { featuredWorlds } from '@/lib/data/worlds'
-import { discoverRealmAudio, discoverRealmCardImage } from '@/lib/utils/realmImages'
+import { discoverRealmAudio, discoverRealmCardImage, discoverRealmImages } from '@/lib/utils/realmImages'
 
 export const metadata: Metadata = {
   title: 'Realms · The Arcanum',
@@ -23,10 +23,16 @@ export default function WorldsPage() {
       .map((w) => [w.slug, discoverRealmCardImage(w.slug!)])
   ) as Record<string, string | null>
 
+  const galleryImages = Object.fromEntries(
+    featuredWorlds
+      .filter((w) => w.slug)
+      .map((w) => [w.slug, discoverRealmImages(w.slug!).gallery])
+  ) as Record<string, string[]>
+
   return (
     <PageShell noHeader>
       <RealmsPlayer audioMap={audioMap} />
-      <RealmsPortraitGrid worlds={featuredWorlds} cardImages={cardImages} />
+      <RealmsPortraitGrid worlds={featuredWorlds} cardImages={cardImages} galleryImages={galleryImages} />
     </PageShell>
   )
 }

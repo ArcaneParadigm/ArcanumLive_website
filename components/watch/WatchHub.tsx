@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { playCrystalBowl } from '@/lib/utils/crystalSound'
+import YouTubePlayer from '@/components/ui/YouTubePlayer'
 import type { VideoItem, VideoType } from '@/lib/data/videos'
 
 interface WatchHubProps {
@@ -153,16 +154,25 @@ export default function WatchHub({ videos, featuredVideo }: WatchHubProps) {
             className="relative overflow-hidden rounded-2xl mb-5"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(201,151,58,0.15), 0 16px 64px rgba(0,0,0,0.8)' }}
           >
-            <div className="relative" style={{ paddingBottom: '56.25%' }}>
-              <iframe
-                key={selected.vimeoId}
-                src={`https://player.vimeo.com/video/${selected.vimeoId}?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0`}
-                className="absolute inset-0 w-full h-full rounded-2xl"
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                style={{ border: 0 }}
+            {selected.youtubeId ? (
+              <YouTubePlayer
+                key={selected.youtubeId}
+                videoId={selected.youtubeId}
                 title={selected.title}
+                className="rounded-2xl"
               />
-            </div>
+            ) : (
+              <div className="relative" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  key={selected.vimeoId}
+                  src={`https://player.vimeo.com/video/${selected.vimeoId}?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0`}
+                  className="absolute inset-0 w-full h-full rounded-2xl"
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                  style={{ border: 0 }}
+                  title={selected.title}
+                />
+              </div>
+            )}
             <div className="absolute inset-0 rounded-2xl pointer-events-none"
               style={{ boxShadow: 'inset 0 0 0 1px rgba(201,151,58,0.12)' }} />
           </div>
