@@ -174,20 +174,6 @@ function Foldable({ title, subtitle, accent = GOLD, defaultOpen = true, children
   )
 }
 
-// ── Orange slider bar with handle ─────────────────────────────────────────────
-
-function SliderBar({ value, max = 10 }: { value: number; max?: number }) {
-  const pct = (value / max) * 100
-  return (
-    <div className="relative h-0.5 rounded-full shrink-0 w-10" style={{ background: 'rgba(249,115,22,0.22)' }}>
-      <div className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${pct}%`, background: '#f97316' }} />
-      <div
-        className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
-        style={{ left: `calc(${pct}% - 4px)`, background: '#f97316', boxShadow: '0 0 4px #f9731680' }}
-      />
-    </div>
-  )
-}
 
 // ── Preset row ────────────────────────────────────────────────────────────────
 
@@ -205,7 +191,7 @@ function getRealmPresets() {
 }
 
 function PresetRow({ preset, index, isActive, onClick }: {
-  preset: { id: string; title: string; slug?: string; description?: string; visual_mode?: string; color?: string; default_intensity?: number }
+  preset: { id: string; title: string; slug?: string; description?: string; visual_mode?: string; color?: string }
   index: number
   isActive?: boolean
   onClick?: () => void
@@ -253,7 +239,6 @@ function PresetRow({ preset, index, isActive, onClick }: {
             <p className="text-[8px] text-white/55 leading-none truncate">{preset.description}</p>
           )}
         </div>
-        <SliderBar value={preset.default_intensity ?? 5} />
       </div>
     </button>
   )
@@ -302,7 +287,6 @@ function MusicRow({ album, index, isActive, onClick }: {
             <p className="text-[8px] text-white/55 leading-none truncate">{album.desc}</p>
           )}
         </div>
-        <SliderBar value={album.energy} />
       </div>
     </button>
   )
