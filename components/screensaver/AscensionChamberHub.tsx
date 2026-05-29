@@ -59,7 +59,7 @@ function AscensionRealmCard({
     <motion.div
       className="shrink-0 rounded-lg overflow-hidden flex flex-col cursor-pointer"
       style={{
-        width: 84,
+        width: 168,
         aspectRatio: '2/3',
         border: `1px solid ${isActive ? color + 'cc' : color + '40'}`,
         boxShadow: isActive
@@ -111,7 +111,7 @@ function AscensionRealmCard({
       >
         <p
           className="font-cinzel truncate text-center leading-none"
-          style={{ fontSize: 7.5, color: isActive ? color : 'rgba(255,255,255,0.85)', letterSpacing: '0.05em' }}
+          style={{ fontSize: 11, color: isActive ? color : 'rgba(255,255,255,0.85)', letterSpacing: '0.05em' }}
         >
           {world.title}
         </p>
@@ -122,7 +122,7 @@ function AscensionRealmCard({
         onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
         className="shrink-0 w-full text-center py-0.5 transition-colors"
         style={{
-          fontSize: 6.5, letterSpacing: '0.12em', textTransform: 'uppercase',
+          fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase',
           fontFamily: 'Cinzel, serif', fontWeight: 600,
           borderTop: `1px solid ${color}25`,
           color: hov ? color : 'rgba(255,255,255,0.4)',
@@ -179,7 +179,7 @@ function Foldable({ title, subtitle, accent = GOLD, defaultOpen = true, children
 function SliderBar({ value, max = 10 }: { value: number; max?: number }) {
   const pct = (value / max) * 100
   return (
-    <div className="relative h-0.5 rounded-full shrink-0 w-10" style={{ background: 'rgba(255,255,255,0.12)' }}>
+    <div className="relative h-0.5 rounded-full shrink-0 w-10" style={{ background: 'rgba(249,115,22,0.22)' }}>
       <div className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${pct}%`, background: '#f97316' }} />
       <div
         className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
@@ -381,7 +381,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
               </span>
             )}
           </div>
-          <div className="flex flex-wrap gap-2 max-h-[280px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex flex-wrap gap-3 max-h-[560px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
             {featuredWorlds.map(w => (
               <AscensionRealmCard
                 key={w.slug}
