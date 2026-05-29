@@ -254,9 +254,12 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
 
       {/* ── SLIM TOP HEADER ── */}
       <div className="flex items-center justify-between px-6 pt-3 pb-1">
-        <Link href="/" className="text-[9px] tracking-widest uppercase text-white/60 hover:text-white/90 transition-colors">← Home</Link>
+        <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity flex-1"
+          style={{ color: 'rgba(255,255,255,0.82)' }}>
+          ← Home
+        </Link>
         <h1
-          className="font-cinzel text-lg font-bold tracking-[0.25em]"
+          className="font-cinzel text-lg font-bold tracking-[0.25em] shrink-0"
           style={{
             background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 30%, #f5d06e 50%, #c9973a 70%, #6b4411 100%)',
             WebkitBackgroundClip: 'text',
@@ -266,7 +269,13 @@ export default function AscensionChamberHub({ audioMap }: AscensionChamberHubPro
         >
           The Ascension Chamber
         </h1>
-        <span className="text-[9px] tracking-[0.3em] uppercase text-white/60">Living Visualizer</span>
+        <span className="font-cinzel text-[10px] italic tracking-widest flex-1 text-right"
+          style={{
+            background: 'linear-gradient(135deg, #8a6020, #c9973a 40%, #f0c84a 60%, #c9973a 80%, #8a6020)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          }}>
+          Living Visualizer
+        </span>
       </div>
 
       {/* ── REALMS PLAYER (viewing panel) ── */}

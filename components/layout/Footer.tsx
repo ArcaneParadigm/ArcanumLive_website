@@ -18,11 +18,12 @@ function FooterLink({ link, hoverClass = 'hover:text-white/90' }: { link: Footer
 
 const footerLinks: Record<string, FooterLinkItem[]> = {
   explore: [
-    { label: 'Realms', href: '/worlds' },
+    { label: 'Realms', href: '/realms' },
     { label: 'Dome Shows', href: '/dome-shows' },
     { label: 'Watch', href: '/watch' },
     { label: 'Music', href: '/music' },
-    { label: 'Ascension Chamber', href: '/screensaver' },
+    { label: 'Ascension Chamber', href: '/ascension' },
+    { label: 'Lore Archive', href: '/blog' },
     { label: 'Archive', href: '/archive' },
   ],
   work: [

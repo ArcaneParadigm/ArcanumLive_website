@@ -119,7 +119,7 @@ export default function MusicRealmsFeatureSection() {
 
         <div className="flex justify-center gap-4">
           <Link href="/music" className="arcanum-btn-primary">Explore Music</Link>
-          <Link href="/screensaver?mode=music-reactor" className="arcanum-btn-ghost">Launch Music Visualizer</Link>
+          <Link href="/ascension?mode=music-reactor" className="arcanum-btn-ghost">Launch Music Visualizer</Link>
         </div>
       </div>
     </section>

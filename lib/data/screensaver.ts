@@ -30,6 +30,19 @@ export const screensaverModes: ScreensaverMode[] = [
 
 export const featuredScreensaverPresets: Partial<ScreensaverPreset>[] = [
   {
+    id: 'portal-one',
+    title: 'Portal One',
+    slug: 'portal-one',
+    description: 'The primary portal — a living gateway of dimensional light and ancient geometric resonance.',
+    visual_mode: 'fluid_oracle',
+    default_intensity: 9,
+    default_speed: 4,
+    default_bloom: 8,
+    audio_reactive: true,
+    is_featured: true,
+    is_public: true,
+  },
+  {
     id: '1',
     title: 'Cosmic Anthem Mode',
     slug: 'cosmic-anthem-mode',

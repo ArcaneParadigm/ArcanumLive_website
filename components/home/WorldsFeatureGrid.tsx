@@ -270,7 +270,7 @@ export default function WorldsFeatureGrid() {
           transition={{ duration: 0.5, delay: 0.8 }}
           className="flex justify-center"
         >
-          <Link href="/worlds" className="arcanum-btn-primary">Explore All Worlds</Link>
+          <Link href="/realms" className="arcanum-btn-primary">Explore All Worlds</Link>
         </motion.div>
       </div>
     </section>

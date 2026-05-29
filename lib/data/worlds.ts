@@ -265,4 +265,15 @@ export const featuredWorlds: Partial<IpWorld>[] = [
     is_featured: false,
     is_public: true,
   },
+  {
+    id: '25',
+    title: 'Eternal Watch',
+    slug: 'eternal-watch',
+    short_description: 'Guardians who stand vigil at the threshold between ages — sentinels of the eternal flame, keepers of the long memory.',
+    color_primary: '#c9973a',
+    color_secondary: '#8b5cf6',
+    theme_style: 'eternal sentinel mythology',
+    is_featured: false,
+    is_public: true,
+  },
 ]

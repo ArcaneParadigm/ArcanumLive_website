@@ -118,7 +118,7 @@ export default function Home2AscensionSection() {
         viewport={viewport}
         className="flex justify-center"
       >
-        <Link href="/screensaver">
+        <Link href="/ascension">
           <motion.div
             className="inline-flex items-center gap-3 px-8 py-3 rounded-xl border font-cinzel text-sm font-bold tracking-widest uppercase"
             style={{

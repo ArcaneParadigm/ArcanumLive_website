@@ -1,39 +1,29 @@
-import { discoverPageArt, discoverPageOverlay } from '@/lib/utils/realmImages'
+import { discoverPageArt, discoverPageOverlay, discoverRealmCardImage } from '@/lib/utils/realmImages'
 import { featuredWorlds } from '@/lib/data/worlds'
+import Home2Nav from '@/components/home2/Home2Nav'
 import Home2Hero from '@/components/home2/Home2Hero'
-import Home2DomeSection from '@/components/home2/Home2DomeSection'
-import Home2WorldsSection from '@/components/home2/Home2WorldsSection'
-import Home2AscensionSection from '@/components/home2/Home2AscensionSection'
-import Home2PortalCards from '@/components/home2/Home2PortalCards'
+import Home2Content from '@/components/home2/Home2Content'
 
 // Experimental homepage — visit at localhost:3000/home2
-// Art: public/art/home2/   UI overlay: public/art/home2/ui-overlay.png
-// Section art: public/art/home2/dome.jpg  public/art/home2/movies.jpg
+// Drop hero art into: public/art/home2/   (any 16:9 JPGs cycle automatically)
+// UI chrome overlay:  public/art/home2/ui-overlay.png  (screen blend — black = transparent)
+// Realm card images:  public/realms/[slug]/card.jpg    (portrait 3:4)
 
 export default function Home2Page() {
   const heroImages = discoverPageArt('home2', ['/images/arcanum-portal-v1.jpg'])
   const uiOverlay  = discoverPageOverlay('home2')
 
-  // Section art — optional, panels show placeholder if missing
-  const domeImage   = heroImages.find((i) => i.includes('dome'))
-  const moviesImage = heroImages.find((i) => i.includes('movie') || i.includes('360') || i.includes('vr'))
+  const cardImages = Object.fromEntries(
+    featuredWorlds
+      .filter(w => w.slug)
+      .map(w => [w.slug, discoverRealmCardImage(w.slug!)])
+  ) as Record<string, string | null>
 
   return (
-    <div className="min-h-screen bg-obsidian-200">
-      {/* Full-screen hero with cycling art */}
+    <div className="w-full min-h-screen" style={{ background: '#08060e' }}>
+      <Home2Nav />
       <Home2Hero heroImages={heroImages} uiOverlay={uiOverlay} />
-
-      {/* Dome Shows + 360 Movies — fly in from sides */}
-      <Home2DomeSection domeImage={domeImage} moviesImage={moviesImage} />
-
-      {/* World cards — staggered wobble in */}
-      <Home2WorldsSection worlds={featuredWorlds} />
-
-      {/* Ascension Chamber — mode chips wobble in */}
-      <Home2AscensionSection />
-
-      {/* Portal navigation cards */}
-      <Home2PortalCards />
+      <Home2Content worlds={featuredWorlds} cardImages={cardImages} />
     </div>
   )
 }

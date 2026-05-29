@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function MusicPage() {
   return (
     <PageShell>
-      <div className="pt-16 pb-12 min-h-screen">
+      <div className="pt-6 pb-12 min-h-screen">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-6">
             <p className="text-gold/60 text-xs tracking-[0.4em] uppercase mb-4">Sonic Realms</p>

@@ -8,7 +8,7 @@
  * For Vimeo On Demand rentals, use the full URL in rentUrl.
  */
 
-export type VideoType = 'film' | 'trailer' | 'music-video' | 'premiere' | 'dome-trailer'
+export type VideoType = 'film' | '360-film' | 'trailer' | 'music-video' | 'premiere' | 'dome-trailer'
 
 export interface VideoItem {
   id: string
@@ -87,7 +87,7 @@ export const rentalFilms: VideoItem[] = [
     id: 'film-aeon',
     title: 'Aeon',
     vimeoId: '76979871', // ← full film preview/teaser Vimeo ID
-    type: 'film',
+    type: '360-film',
     description: 'A cosmic 360° journey through the eternal cycles of creation and destruction.',
     duration: '24:00',
     rentUrl: 'https://vimeo.com/ondemand/aeon', // ← your Vimeo On Demand URL
@@ -97,7 +97,7 @@ export const rentalFilms: VideoItem[] = [
     id: 'film-gaia',
     title: 'Gaia Heart Shard',
     vimeoId: '76979871',
-    type: 'film',
+    type: '360-film',
     description: 'Descend into the living crystal heart of the Earth goddess.',
     duration: '18:00',
     rentUrl: 'https://vimeo.com/ondemand/gaia-heart-shard',
@@ -107,7 +107,7 @@ export const rentalFilms: VideoItem[] = [
     id: 'film-atlantis',
     title: 'Atlantis Nexus',
     vimeoId: '76979871',
-    type: 'film',
+    type: '360-film',
     description: 'Immerse in the ancient-tech temples of the sunken civilization.',
     duration: '21:00',
     rentUrl: 'https://vimeo.com/ondemand/atlantis-nexus',
@@ -117,7 +117,7 @@ export const rentalFilms: VideoItem[] = [
     id: 'film-soulblade',
     title: 'SoulBlade: The Awakening',
     vimeoId: '76979871',
-    type: 'film',
+    type: '360-film',
     description: 'Enter the battlefield between stars where the SoulBlade was forged.',
     duration: '32:00',
     rentUrl: 'https://vimeo.com/ondemand/soulblade',
@@ -127,7 +127,7 @@ export const rentalFilms: VideoItem[] = [
     id: 'film-aether',
     title: 'Aether Transmission',
     vimeoId: '76979871',
-    type: 'film',
+    type: '360-film',
     description: 'Receive the transmission from the edge of the known universe.',
     duration: '16:00',
     rentUrl: 'https://vimeo.com/ondemand/aether-transmission',

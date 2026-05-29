@@ -15,13 +15,13 @@ export const gatewayButtons: GatewayButton[] = [
   },
   {
     label: 'Ascension Chamber',
-    href: '/screensaver',
+    href: '/ascension',
     description: 'Open the living visualizer and ambient MythMachine.',
     icon: 'sparkles',
   },
   {
     label: 'Explore the Worlds',
-    href: '/worlds',
+    href: '/realms',
     description: 'Enter the mythic IP universes of The Arcanum.',
     icon: 'portal',
   },
@@ -31,7 +31,7 @@ export const heroHotspots: HeroHotspot[] = [
   {
     id: 'portal',
     label: 'Ascension Chamber',
-    href: '/screensaver',
+    href: '/ascension',
     x: 50,
     y: 45,
     width: 18,
@@ -53,7 +53,7 @@ export const heroHotspots: HeroHotspot[] = [
   {
     id: 'worlds',
     label: 'Explore the Worlds',
-    href: '/worlds',
+    href: '/realms',
     x: 66,
     y: 38,
     width: 25,

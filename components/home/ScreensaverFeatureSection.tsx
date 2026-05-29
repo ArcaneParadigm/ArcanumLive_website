@@ -157,8 +157,8 @@ export default function ScreensaverFeatureSection() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="flex flex-wrap justify-center gap-4"
         >
-          <GlassButton href="/screensaver" variant="gold">Enter Ascension Chamber</GlassButton>
-          <GlassButton href="/screensaver#modes" variant="silver">Preview Visual Modes</GlassButton>
+          <GlassButton href="/ascension" variant="gold">Enter Ascension Chamber</GlassButton>
+          <GlassButton href="/ascension#modes" variant="silver">Preview Visual Modes</GlassButton>
         </motion.div>
       </div>
     </section>

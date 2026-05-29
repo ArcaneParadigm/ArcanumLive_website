@@ -1,49 +1,5 @@
-import PageShell from '@/components/layout/PageShell'
-import ArcanumPortalHero from '@/components/home/ArcanumPortalHero'
-import WorldsGalleryBand from '@/components/home/WorldsGalleryBand'
-import DomeShowsFeatureSection from '@/components/home/DomeShowsFeatureSection'
-import ScreensaverFeatureSection from '@/components/home/ScreensaverFeatureSection'
-import ArchiveVaultFeatureSection from '@/components/home/ArchiveVaultFeatureSection'
-import MusicRealmsFeatureSection from '@/components/home/MusicRealmsFeatureSection'
-import StoreFeatureSection from '@/components/home/StoreFeatureSection'
-import LicensingFeatureSection from '@/components/home/LicensingFeatureSection'
-import FinalPortalCTA from '@/components/home/FinalPortalCTA'
-import { gatewayButtons, heroHotspots } from '@/lib/data/seed'
-import { discoverPageArt, discoverPageOverlay } from '@/lib/utils/realmImages'
+import { redirect } from 'next/navigation'
 
 export default function HomePage() {
-  // Drop 16:9 art into public/art/home/ → cycles as hero background automatically
-  const heroImages = discoverPageArt('home', ['/images/arcanum-portal-v1.jpg'])
-  // Drop public/art/home/ui-overlay.png → transparent PNG floats above backgrounds
-  const uiOverlay = discoverPageOverlay('home')
-
-  return (
-    <PageShell noHeader>
-      {/* Hero has its own transparent nav built in */}
-      <ArcanumPortalHero buttons={gatewayButtons} hotspots={heroHotspots} heroImages={heroImages} uiOverlay={uiOverlay} />
-
-      <WorldsGalleryBand />
-      <div className="arcanum-divider" />
-
-      <DomeShowsFeatureSection />
-      <div className="arcanum-divider" />
-
-      <ScreensaverFeatureSection />
-      <div className="arcanum-divider" />
-
-      <ArchiveVaultFeatureSection />
-      <div className="arcanum-divider" />
-
-      <MusicRealmsFeatureSection />
-      <div className="arcanum-divider" />
-
-      <StoreFeatureSection />
-      <div className="arcanum-divider" />
-
-      <LicensingFeatureSection />
-      <div className="arcanum-divider" />
-
-      <FinalPortalCTA />
-    </PageShell>
-  )
+  redirect('/home2')
 }

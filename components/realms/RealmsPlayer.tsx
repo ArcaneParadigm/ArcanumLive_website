@@ -17,12 +17,21 @@ interface RealmsPlayerProps {
 }
 
 function buildPlaceholderTracks(title: string) {
+  const u = undefined as string | undefined
   return [
-    { id: '1', title: `${title} — Opening Theme`, duration: '4:22', url: undefined as string | undefined },
-    { id: '2', title: `${title} — The Descent`, duration: '5:47', url: undefined as string | undefined },
-    { id: '3', title: `${title} — Sacred Geometry`, duration: '6:14', url: undefined as string | undefined },
-    { id: '4', title: `${title} — Convergence`, duration: '3:58', url: undefined as string | undefined },
-    { id: '5', title: `${title} — Infinite Horizon`, duration: '7:03', url: undefined as string | undefined },
+    { id: '1',  title: `${title} — Opening Theme`,       duration: '4:22', url: u },
+    { id: '2',  title: `${title} — The Descent`,          duration: '5:47', url: u },
+    { id: '3',  title: `${title} — Sacred Geometry`,      duration: '6:14', url: u },
+    { id: '4',  title: `${title} — Convergence`,          duration: '3:58', url: u },
+    { id: '5',  title: `${title} — Infinite Horizon`,     duration: '7:03', url: u },
+    { id: '6',  title: `${title} — Portal Sequence`,      duration: '5:31', url: u },
+    { id: '7',  title: `${title} — The Awakening`,        duration: '4:55', url: u },
+    { id: '8',  title: `${title} — Dark Meditation`,      duration: '6:40', url: u },
+    { id: '9',  title: `${title} — Celestial Gate`,       duration: '5:12', url: u },
+    { id: '10', title: `${title} — Field of Light`,       duration: '4:44', url: u },
+    { id: '11', title: `${title} — The Return`,           duration: '6:08', url: u },
+    { id: '12', title: `${title} — Ancient Transmission`, duration: '5:29', url: u },
+    { id: '13', title: `${title} — Closing Ceremony`,     duration: '7:18', url: u },
   ]
 }
 
@@ -163,11 +172,21 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
           <>
             {/* Back link top-left */}
             <div className="absolute left-6 top-8">
-              <Link href="/" className="text-[9px] tracking-widest uppercase text-white/50 hover:text-white/80 transition-colors">← Home</Link>
+              <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
+                style={{ color: 'rgba(255,255,255,0.82)' }}>
+                ← Home
+              </Link>
             </div>
             {/* Ascension Chamber top-right */}
             <div className="absolute right-6 top-8">
-              <Link href="/screensaver" className="text-[9px] tracking-widest uppercase text-white/50 hover:text-white/80 transition-colors">Ascension Chamber</Link>
+              <Link href="/ascension" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
+                style={{
+                  background: 'linear-gradient(135deg, #8a6020, #c9973a 40%, #f0c84a 60%, #c9973a 80%, #8a6020)',
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                  filter: 'drop-shadow(0 0 8px rgba(201,151,58,0.35))',
+                }}>
+                Ascension Chamber
+              </Link>
             </div>
             <p className="text-[9px] tracking-[0.5em] uppercase mb-2" style={{ color: `${accent}90` }}>The Arcanum</p>
           </>
@@ -183,7 +202,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         >
           Realms
         </h1>
-        <p className="text-white/70 text-xs">
+        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.82)' }}>
           Choose a realm · Music plays continuously across all worlds
         </p>
       </div>
@@ -219,7 +238,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center gap-1"
             >
-              <p className="text-[9px] tracking-[0.45em] uppercase" style={{ color: `${accent}60` }}>
+              <p className="text-[9px] tracking-[0.45em] uppercase" style={{ color: `${accent}95` }}>
                 {currentPlaylist.world.theme_style}
               </p>
               <h2 className="font-cinzel text-2xl md:text-3xl font-bold tracking-widest" style={{ color: accent }}>
@@ -230,11 +249,11 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
 
           <AnimatePresence mode="wait">
             <motion.p key={`${worldIdx}-${trackIdx}`}
-              className="text-white/40 text-xs tracking-wide mt-3"
+              className="text-xs tracking-wide mt-3" style={{ color: 'rgba(255,255,255,0.82)' }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
             >
               {currentTrack.title}
-              {currentTrack.duration && <span className="text-white/20 ml-2">{currentTrack.duration}</span>}
+              {currentTrack.duration && <span className="ml-2" style={{ color: 'rgba(255,255,255,0.5)' }}>{currentTrack.duration}</span>}
             </motion.p>
           </AnimatePresence>
         </div>
@@ -257,8 +276,8 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
                 onClick={() => selectWorld(i)}
                 className="shrink-0 px-3 py-1 rounded-full text-[10px] tracking-widest uppercase whitespace-nowrap transition-all duration-200 border"
                 style={{
-                  borderColor: isActive ? wAccent : 'rgba(255,255,255,0.1)',
-                  color: isActive ? wAccent : 'rgba(255,255,255,0.3)',
+                  borderColor: isActive ? wAccent : 'rgba(255,255,255,0.25)',
+                  color: isActive ? wAccent : 'rgba(255,255,255,0.72)',
                   background: isActive ? `${wAccent}18` : 'transparent',
                 }}
               >
@@ -283,7 +302,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
         <div className="flex items-center justify-between gap-4">
           {/* Playback */}
           <div className="flex items-center gap-3">
-            <button onClick={prevTrack} className="text-white/35 hover:text-white transition-colors" title="Previous">⏮</button>
+            <button onClick={prevTrack} className="hover:text-white transition-colors" style={{ color: 'rgba(255,255,255,0.75)' }} title="Previous">⏮</button>
             <button
               onClick={togglePlay}
               className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
@@ -291,14 +310,14 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
             >
               {playing ? '⏸' : '▶'}
             </button>
-            <button onClick={nextTrack} className="text-white/35 hover:text-white transition-colors" title="Next">⏭</button>
+            <button onClick={nextTrack} className="hover:text-white transition-colors" style={{ color: 'rgba(255,255,255,0.75)' }} title="Next">⏭</button>
           </div>
 
           {/* Track info */}
           <div className="flex-1 text-center min-w-0 hidden sm:block">
-            <p className="text-white/40 text-[11px] tracking-wide truncate">
+            <p className="text-[11px] tracking-wide truncate" style={{ color: 'rgba(255,255,255,0.85)' }}>
               {currentTrack.title}
-              <span className="text-white/20 ml-2">{currentTrack.duration}</span>
+              {currentTrack.duration && <span className="ml-2" style={{ color: 'rgba(255,255,255,0.5)' }}>{currentTrack.duration}</span>}
             </p>
           </div>
 
@@ -308,15 +327,15 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
               onClick={() => setLoop((l) => !l)}
               className="text-[10px] tracking-widest uppercase px-3 py-1 rounded-full border transition-all"
               style={{
-                borderColor: loop ? `${accent}60` : 'rgba(255,255,255,0.12)',
-                color: loop ? accent : 'rgba(255,255,255,0.28)',
+                borderColor: loop ? `${accent}70` : 'rgba(255,255,255,0.3)',
+                color: loop ? accent : 'rgba(255,255,255,0.78)',
                 background: loop ? `${accent}15` : 'transparent',
               }}
             >↻ Loop</button>
             <button
               onClick={() => setShowPlaylist((s) => !s)}
               className="text-[10px] tracking-widest uppercase transition-colors"
-              style={{ color: showPlaylist ? accent : 'rgba(255,255,255,0.28)' }}
+              style={{ color: showPlaylist ? accent : 'rgba(255,255,255,0.78)' }}
             >≡ Tracks</button>
           </div>
         </div>
@@ -329,7 +348,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
             className="absolute inset-x-0 bottom-0 z-30 rounded-t-2xl overflow-hidden"
             initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
             transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
-            style={{ background: 'rgba(8,6,14,0.97)', backdropFilter: 'blur(20px)', border: `1px solid ${accent}25`, maxHeight: '60%' }}
+            style={{ background: 'rgba(8,6,14,0.97)', backdropFilter: 'blur(20px)', border: `1px solid ${accent}25`, maxHeight: 480 }}
           >
             <div className="flex items-center justify-between px-5 py-3 border-b sticky top-0"
               style={{ borderColor: `${accent}20`, background: 'rgba(8,6,14,0.99)' }}
@@ -340,7 +359,7 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
               </div>
               <button onClick={() => setShowPlaylist(false)} className="text-white/30 hover:text-white text-lg w-8 h-8 flex items-center justify-center">↓</button>
             </div>
-            <div className="overflow-y-auto" style={{ maxHeight: 'calc(60vh - 60px)' }}>
+            <div className="overflow-y-auto" style={{ maxHeight: 420 }}>
               {currentPlaylist.tracks.map((track, i) => {
                 const isActive = i === trackIdx
                 return (
@@ -360,12 +379,12 @@ export default function RealmsPlayer({ audioMap, compact }: RealmsPlayerProps) {
                           ))}
                         </span>
                       ) : (
-                        <span className="text-xs" style={{ color: isActive ? accent : 'rgba(255,255,255,0.25)' }}>{i + 1}</span>
+                        <span className="text-xs" style={{ color: isActive ? accent : 'rgba(255,255,255,0.55)' }}>{i + 1}</span>
                       )}
                     </div>
-                    <p className="flex-1 text-sm truncate" style={{ color: isActive ? accent : 'rgba(255,255,255,0.6)' }}>{track.title}</p>
-                    {track.duration && <span className="text-xs text-white/25 shrink-0">{track.duration}</span>}
-                    {!track.url && <span className="text-[9px] tracking-widest uppercase shrink-0" style={{ color: `${accent}40` }}>Soon</span>}
+                    <p className="flex-1 text-sm truncate" style={{ color: isActive ? accent : 'rgba(255,255,255,0.85)' }}>{track.title}</p>
+                    {track.duration && <span className="text-xs shrink-0" style={{ color: 'rgba(255,255,255,0.55)' }}>{track.duration}</span>}
+                    {!track.url && <span className="text-[9px] tracking-widest uppercase shrink-0" style={{ color: `${accent}70` }}>Soon</span>}
                   </button>
                 )
               })}

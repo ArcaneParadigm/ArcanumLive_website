@@ -62,7 +62,7 @@ const platforms = [
 export default function StorePage() {
   return (
     <PageShell>
-      <div className="pt-16 pb-12 min-h-screen">
+      <div className="pt-6 pb-12 min-h-screen">
         <div className="max-w-6xl mx-auto px-6">
 
           {/* Header */}

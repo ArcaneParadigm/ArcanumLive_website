@@ -110,12 +110,12 @@ export default function WorldAudioPlayer({
 
           <div className="flex-1 min-w-0">
             <p className="text-white/90 text-sm font-medium truncate">{activeTrack.title}</p>
-            <p className="text-white/30 text-xs">{worldTitle}</p>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.75)' }}>{worldTitle}</p>
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={prevTrack} className="text-white/30 hover:text-white/70 transition-colors text-sm">⏮</button>
-            <button onClick={nextTrack} className="text-white/30 hover:text-white/70 transition-colors text-sm">⏭</button>
+            <button onClick={prevTrack} className="hover:text-white transition-colors text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>⏮</button>
+            <button onClick={nextTrack} className="hover:text-white transition-colors text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>⏭</button>
           </div>
         </div>
 
@@ -129,8 +129,8 @@ export default function WorldAudioPlayer({
         </div>
       </div>
 
-      {/* Track list */}
-      <div className="divide-y" style={{ borderColor: `${accentColor}15` }}>
+      {/* Track list — scrollable for 13+ tracks */}
+      <div className="divide-y overflow-y-auto" style={{ borderColor: `${accentColor}15`, maxHeight: 420 }}>
         {tracks.map((track, i) => {
           const isActive = i === activeIdx
           return (
@@ -157,7 +157,7 @@ export default function WorldAudioPlayer({
                 ) : (
                   <span
                     className="text-xs"
-                    style={{ color: isActive ? accentColor : 'rgba(255,255,255,0.25)' }}
+                    style={{ color: isActive ? accentColor : 'rgba(255,255,255,0.65)' }}
                   >
                     {i + 1}
                   </span>
@@ -174,14 +174,11 @@ export default function WorldAudioPlayer({
               </div>
 
               {track.duration && (
-                <span className="text-xs text-white/25 shrink-0">{track.duration}</span>
+                <span className="text-xs shrink-0" style={{ color: 'rgba(255,255,255,0.55)' }}>{track.duration}</span>
               )}
 
               {!track.url && (
-                <span
-                  className="text-[9px] tracking-widest uppercase shrink-0"
-                  style={{ color: `${accentColor}50` }}
-                >
+                <span className="text-[9px] tracking-widest uppercase shrink-0" style={{ color: `${accentColor}75` }}>
                   Soon
                 </span>
               )}

@@ -26,7 +26,7 @@ export default async function FilmDetailPage({ params }: Props) {
 
   return (
     <PageShell>
-      <div className="pt-16 pb-12 min-h-screen">
+      <div className="pt-6 pb-12 min-h-screen">
         <div className="max-w-5xl mx-auto px-6">
           {/* Breadcrumb */}
           <div className="flex gap-2 text-xs text-white/30 mb-5">

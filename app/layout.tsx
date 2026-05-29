@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Cinzel, Raleway } from 'next/font/google'
 import './globals.css'
+import DevControls from '@/components/admin/DevControls'
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -57,7 +58,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cinzel.variable} ${raleway.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <DevControls />
+      </body>
     </html>
   )
 }

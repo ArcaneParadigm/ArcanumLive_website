@@ -61,6 +61,34 @@ export interface DiscoveredAudioTrack {
   duration?: string
 }
 
+/**
+ * Looks for a card.jpg/png/webp in public/realms/[slug]/ — used for the home2 rail thumbnail.
+ * Returns the URL string or null if not found.
+ */
+export function discoverRealmCardImage(slug: string): string | null {
+  const base = path.join(process.cwd(), 'public', 'realms', slug)
+  const exts = ['jpg', 'jpeg', 'png', 'webp', 'avif']
+  for (const ext of exts) {
+    const file = path.join(base, `card.${ext}`)
+    if (fs.existsSync(file)) return `/realms/${slug}/card.${ext}`
+  }
+  return null
+}
+
+/**
+ * Looks for a hero.jpg/png/webp in public/realms/[slug]/ — used as the hero banner
+ * on the realm detail page. Returns the URL string or null if not found.
+ */
+export function discoverRealmHeroImage(slug: string): string | null {
+  const base = path.join(process.cwd(), 'public', 'realms', slug)
+  const exts = ['jpg', 'jpeg', 'png', 'webp', 'avif']
+  for (const ext of exts) {
+    const file = path.join(base, `hero.${ext}`)
+    if (fs.existsSync(file)) return `/realms/${slug}/hero.${ext}`
+  }
+  return null
+}
+
 export function discoverRealmImages(slug: string): DiscoveredImages {
   const base = path.join(process.cwd(), 'public', 'realms', slug)
   const urlBase = `/realms/${slug}`

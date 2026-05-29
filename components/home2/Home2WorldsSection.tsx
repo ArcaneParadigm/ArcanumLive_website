@@ -20,7 +20,7 @@ function WorldCard({ world }: WorldCardProps) {
       whileTap={cardTap}
       style={{ originX: 0.5, originY: 0.5 }}
     >
-      <Link href={`/worlds/${world.slug}`} className="group block">
+      <Link href={`/realms/${world.slug}`} className="group block">
         {/* 16:9 image panel */}
         <div
           className="relative overflow-hidden rounded-xl"
@@ -128,7 +128,7 @@ export default function Home2WorldsSection({ worlds }: Home2WorldsSectionProps) 
               The Worlds
             </h2>
           </div>
-          <Link href="/worlds">
+          <Link href="/realms">
             <motion.span
               className="text-[9px] tracking-[0.4em] uppercase font-medium border-b pb-0.5 transition-colors"
               style={{ color: '#c9973a80', borderColor: '#c9973a30' }}
