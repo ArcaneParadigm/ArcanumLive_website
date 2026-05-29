@@ -56,27 +56,35 @@ function RealmCard({
     <motion.div
       className="relative rounded-xl overflow-hidden shrink-0 flex flex-col"
       style={{
-        width: 148,
+        width: 163,
         aspectRatio: '3/4',
-        background: `radial-gradient(ellipse at 50% 30%, ${color}22, #06040c 80%)`,
-        border: `1px solid ${hovered ? color + '80' : color + '28'}`,
-        boxShadow: hovered ? `0 0 22px ${color}35, 0 10px 36px rgba(0,0,0,0.7)` : '0 4px 16px rgba(0,0,0,0.5)',
+        background: `radial-gradient(ellipse at 50% 30%, ${color}28, #06040c 80%)`,
+        border: `1px solid ${hovered ? color + 'cc' : color + '45'}`,
+        boxShadow: hovered
+          ? `0 0 28px ${color}60, 0 0 8px ${color}40, 0 12px 40px rgba(0,0,0,0.75)`
+          : `0 0 8px ${color}20, 0 4px 16px rgba(0,0,0,0.5)`,
       }}
-      animate={{ y: hovered ? -7 : 0, scale: hovered ? 1.04 : 1 }}
+      animate={{ y: hovered ? -8 : 0, scale: hovered ? 1.04 : 1 }}
       transition={{ duration: 0.2, ease: 'easeOut' }}
       onMouseEnter={() => { onEnter(); playCrystalBowl(color, 0.025) }}
     >
+      {/* Neon top edge on hover */}
+      {hovered && (
+        <div className="absolute inset-x-0 top-0 z-10 h-px pointer-events-none"
+          style={{ background: `linear-gradient(to right, transparent, ${color}ee 30%, ${color}ee 70%, transparent)` }} />
+      )}
+
       {/* Ground glow */}
       <motion.div
         className="absolute inset-x-2 pointer-events-none"
-        style={{ bottom: -14, height: 18, background: `radial-gradient(ellipse at 50% 0%, ${color}90, transparent 70%)`, filter: 'blur(6px)' }}
+        style={{ bottom: -14, height: 22, background: `radial-gradient(ellipse at 50% 0%, ${color}cc, transparent 70%)`, filter: 'blur(7px)' }}
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.25 }}
       />
 
-      {/* TOP ZONE — click to open gallery (covers ~75% of card) */}
+      {/* TOP ZONE — click to open gallery */}
       <div
-        className="relative flex-1 cursor-pointer group"
+        className="relative flex-1 cursor-pointer"
         style={{ minHeight: 0 }}
         onClick={onOpenGallery}
       >
@@ -85,28 +93,20 @@ function RealmCard({
         )}
         <div className="absolute inset-0" style={{
           background: hovered
-            ? 'linear-gradient(to bottom, rgba(6,4,12,0.0) 30%, rgba(6,4,12,0.85) 100%)'
-            : 'linear-gradient(to bottom, rgba(6,4,12,0.0) 40%, rgba(6,4,12,0.80) 100%)',
+            ? 'linear-gradient(to bottom, rgba(6,4,12,0.0) 30%, rgba(6,4,12,0.82) 100%)'
+            : 'linear-gradient(to bottom, rgba(6,4,12,0.0) 40%, rgba(6,4,12,0.78) 100%)',
         }} />
-        {hovered && (
-          <div className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${color}70 40%, ${color}70 60%, transparent)` }} />
-        )}
-        {/* Gallery hint on hover */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.2 }}>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-white text-lg">⊞</span>
-            <span className="text-[7px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>Gallery</span>
-          </div>
-        </motion.div>
         {/* Corner marks */}
-        <div className="absolute top-2 left-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}55`, borderLeft: `1px solid ${color}55` }} />
-        <div className="absolute top-2 right-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}35`, borderRight: `1px solid ${color}35` }} />
+        <div className="absolute top-2 left-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}80`, borderLeft: `1px solid ${color}80` }} />
+        <div className="absolute top-2 right-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}60`, borderRight: `1px solid ${color}60` }} />
         {/* Title */}
         <div className="absolute bottom-0 inset-x-0 px-2.5 pb-1.5">
-          <p className="font-cinzel text-[9px] font-bold leading-snug" style={{ color, textShadow: '0 1px 6px rgba(0,0,0,0.95)' }}>{world.title}</p>
+          <p
+            className="font-cinzel text-[10px] font-bold leading-snug"
+            style={{ color, textShadow: `0 0 12px ${color}80, 0 1px 6px rgba(0,0,0,0.95)` }}
+          >
+            {world.title}
+          </p>
         </div>
       </div>
 
@@ -115,9 +115,9 @@ function RealmCard({
         onClick={() => router.push(`/realms/${world.slug}`)}
         className="shrink-0 w-full flex items-center justify-center gap-1 py-1.5 transition-all"
         style={{
-          background: hovered ? `${color}22` : 'rgba(6,4,12,0.9)',
-          borderTop: `1px solid ${color}30`,
-          color: hovered ? color : 'rgba(255,255,255,0.5)',
+          background: hovered ? `${color}28` : 'rgba(6,4,12,0.9)',
+          borderTop: `1px solid ${color}45`,
+          color: hovered ? color : 'rgba(255,255,255,0.65)',
           fontSize: 8,
           letterSpacing: '0.15em',
           textTransform: 'uppercase',

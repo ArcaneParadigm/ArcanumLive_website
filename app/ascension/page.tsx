@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import PageShell from '@/components/layout/PageShell'
 import AscensionChamberHub from '@/components/screensaver/AscensionChamberHub'
 import { featuredWorlds } from '@/lib/data/worlds'
-import { discoverRealmAudio } from '@/lib/utils/realmImages'
+import { discoverRealmAudio, discoverRealmCardImage } from '@/lib/utils/realmImages'
 
 export const metadata: Metadata = {
   title: 'Ascension Chamber · The Arcanum',
@@ -10,16 +10,21 @@ export const metadata: Metadata = {
 }
 
 export default function ScreensaverPage() {
-  // Discover real audio for all realms server-side
   const audioMap = Object.fromEntries(
     featuredWorlds
       .filter((w) => w.slug)
       .map((w) => [w.slug, discoverRealmAudio(w.slug!)])
   )
 
+  const cardImages = Object.fromEntries(
+    featuredWorlds
+      .filter((w) => w.slug)
+      .map((w) => [w.slug, discoverRealmCardImage(w.slug!)])
+  ) as Record<string, string | null>
+
   return (
     <PageShell noHeader>
-      <AscensionChamberHub audioMap={audioMap} />
+      <AscensionChamberHub audioMap={audioMap} cardImages={cardImages} />
     </PageShell>
   )
 }
