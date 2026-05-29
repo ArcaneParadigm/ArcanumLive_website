@@ -434,12 +434,12 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
       </div>
 
       {/* ── Presets + Music (side by side, matching width) ── */}
-      <div className="max-w-7xl mx-auto px-6 py-5 flex gap-5 items-start">
+      <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 gap-5 items-start">
 
         {/* Presets */}
-        <div className="w-80 shrink-0">
+        <div>
           <Foldable title="Presets" subtitle={`${allPresets.length}`} defaultOpen>
-            <div className="overflow-y-auto" style={{ maxHeight: 320, scrollbarWidth: 'thin' }}>
+            <div className="overflow-y-auto" style={{ maxHeight: 640, scrollbarWidth: 'thin' }}>
               <div className="space-y-1 px-3 pb-3 pt-1">
                 {allPresets.map((preset, i) => (
                   <PresetRow
@@ -456,9 +456,9 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
         </div>
 
         {/* Music */}
-        <div className="w-80 shrink-0">
+        <div>
           <Foldable title="Music" subtitle={`${allAlbums.length}`} defaultOpen={false}>
-            <div className="overflow-y-auto" style={{ maxHeight: 320, scrollbarWidth: 'thin' }}>
+            <div className="overflow-y-auto" style={{ maxHeight: 640, scrollbarWidth: 'thin' }}>
               <div className="space-y-1 px-3 pb-3 pt-1">
                 {allAlbums.map((album, i) => (
                   <MusicRow
