@@ -1,0 +1,1130 @@
+Arcanum.Live Homepage Copy + Design Doc
+Homepage Core Concept
+The homepage should not feel like a normal website. It should feel like the visitor is entering the metaverse of The Arcanum.
+The first page is a portal chamber: image-heavy, cinematic, interactive, animated, musical, and alive. The world itself should act like a map. The main pathways should be highlighted clearly so visitors know where to go.
+Core feeling:
+You are entering The Arcanum.
+The homepage is a portal chamber.
+The image is the map.
+The buttons are gateways.
+The cursor awakens the world.
+The scroll pulls you deeper.
+Main homepage flow:
+1. Portal Entrance
+2. Dome Shows
+3. 360 Movie Rentals
+4. The Worlds
+5. Screensaver / Living Visualizer
+6. Archive / Vault
+7. Music / Sonic Realms
+8. Store / Sacred Products / TV Art
+9. Licensing / Work With Us
+10. Final Portal CTA
+
+1. Homepage Hero: The Arcanum Portal Entrance
+Component name
+ArcanumPortalHero
+Public title
+ENTER THE ARCANUM
+Subtitle
+A cinematic universe of immersive dome shows, 360 movies, AI films, mythic worlds, sacred media systems, and dimensional archives.
+Alternative shorter subtitle:
+Immersive dome shows, 360 films, mythic worlds, AI cinema, sacred products, and living media portals.
+Primary hero CTAs
+Watch Dome Shows
+Rent 360 Movies
+Launch Screensaver
+Explore the Worlds
+Secondary hero CTAs
+Enter the Archive
+Visit the Store
+Work With Us
+Important:
+Do not show After Dark / adult-adjacent links on the default family-safe homepage.
+
+2. Simple Hero Layer Structure
+Build the homepage hero like stacked layers, so the main image/video can be swapped later without rebuilding the whole page.
+LAYER 1  = main background image OR looping video
+LAYER 2  = optional dark gradient / readability overlay
+LAYER 3  = smoke / fog overlay
+LAYER 4  = particles / drifting embers / stars
+LAYER 5  = portal glow / ring animation
+LAYER 6  = title + subtitle
+LAYER 7  = gateway buttons
+LAYER 8  = invisible hotspot zones
+LAYER 9  = sound toggle / top nav / scroll cue
+Recommended V1:
+Main hero = one strong background image
+Optional center portal loop = short looping video or animated SVG/CSS ring
+Smoke = separate overlay
+Particles = separate overlay
+Buttons = separate UI layer
+Hotspots = invisible positioned zones
+Best hybrid setup:
+Background = still image
+Center portal = looping video or animated ring layer
+Smoke = transparent looping overlay
+Particles = canvas or CSS overlay
+Character motion = optional later
+This gives a living-world feeling while keeping image replacement simple.
+
+3. Hero Visual Zone Map
+Use the hero image as a flexible map with consistent zones.
+????????????????????????????????????????????????????????????????????????
+?                          TOP NAV / SOUND                            ?
+?       Logo      Worlds   Dome   360 Movies   Screensaver   Store    ?
+?                                                             Sound    ?
+????????????????????????????????????????????????????????????????????????
+?                                                                      ?
+?                      TITLE / SUBTITLE AREA                           ?
+?                      ENTER THE ARCANUM                               ?
+?        A cinematic universe of immersive dome shows, 360 movies,    ?
+?         AI films, mythic worlds, sacred media systems, and archives ?
+?                                                                      ?
+?                                                                      ?
+?   [ZONE A]                    [ZONE B]                 [ZONE C]      ?
+?   Left temple /               Center portal            Guardian /    ?
+?   dome area                   focal area               worlds area   ?
+?   -> Dome Shows               -> Screensaver /         -> Worlds     ?
+?                                 Archive / Enter        / AI Films    ?
+?                                                                      ?
+?                                                                      ?
+?                      [ZONE D] FLOOR / RINGS                          ?
+?                      -> Screensaver launch                           ?
+?                                                                      ?
+?                                                                      ?
+????????????????????????????????????????????????????????????????????????
+?              PRIMARY HERO GATEWAY BUTTONS                            ?
+?  [Watch Dome Shows] [Rent 360 Movies] [Launch Screensaver]           ?
+?                     [Explore the Worlds]                             ?
+?                                                                      ?
+?           optional smaller row: [Archive] [Store] [Work With Us]     ?
+????????????????????????????????????????????????????????????????????????
+?                        SCROLL CUE / PORTAL DESCENT                   ?
+?                          ? Step Deeper                               ?
+????????????????????????????????????????????????????????????????????????
+Zone A: Left visual area
+Use for:
+dome shows
+architecture
+temple towers
+projection world
+big environmental feature
+Zone B: Center focal area
+Use for:
+portal
+rings
+orb
+looping energy
+main animated focus
+Zone C: Right visual area
+Use for:
+guide / goddess / character
+worlds
+AI films
+mythic beings
+Zone D: Lower floor area
+Use for:
+floor sigils
+launch screensaver
+particle lift
+scroll transition cue
+Zone E: Bottom button band
+Keep this relatively uncluttered so the buttons are readable.
+
+4. Hero Hotspot Map
+Use invisible hotspot regions over the scene. Coordinates should be percentage-based so they can be adjusted when the hero image changes.
+Hotspot 1: Central portal / black orb
+Destination:
+/screensaver or /worlds
+Label:
+Enter the Portal
+Behavior:
+orb glow intensifies
+rings spin faster
+subtle bass pulse
+button tooltip appears
+particles pull toward center
+Hotspot 2: Left temple / dome architecture
+Destination:
+/dome-shows
+Label:
+Watch the Dome Shows
+Behavior:
+left architecture brightens
+projection-like light sweep
+small dome icon appears
+Hotspot 3: Right guardian / guide figure
+Destination:
+/worlds
+Label:
+Meet the Worlds
+Behavior:
+hair/cloth layer subtly lifts
+eyes/glow pulse
+world cards preview faintly behind her
+Hotspot 4: Floating glyphs / scroll fragments
+Destination:
+/archive
+Label:
+Enter the Archive
+Behavior:
+glyphs rotate toward cursor
+scroll fragments drift outward
+rune text briefly illuminates
+Hotspot 5: Floor sigil / circular interface
+Destination:
+/screensaver
+Label:
+Launch the Screensaver
+Behavior:
+floor rings pulse
+particles rise upward
+UI lines trace around the circle
+Hotspot 6: Lower-right artifact / store zone
+Destination:
+/store
+Label:
+Visit the Store
+Behavior:
+artifact glow warms
+gold sparks appear
+small product/card preview appears
+
+5. Cursor Parallax Behavior
+Use mouse/pointer movement to create subtle cinematic depth.
+Rules:
+background moves least
+foreground pillars move moderately
+guardian character moves slightly more
+floating glyphs move most
+buttons move very little for readability
+portal ring rotates independently
+Recommended movement range:
+background: 4-8px
+midground: 8-16px
+foreground: 12-24px
+particles/glyphs: 20-40px
+Desktop behavior:
+cursor position controls parallax offset
+hovering hotspots intensifies the related area
+Mobile behavior:
+use slow idle parallax
+no required hover interactions
+buttons remain visible and tappable
+Accessibility:
+respect prefers-reduced-motion
+allow motion intensity setting later
+keep parallax subtle to avoid nausea
+
+6. Hero Animation Plan
+Required V1 animations
+central portal ring slow rotation
+portal glow breathing/pulsing
+floating particles drifting
+smoke/fog slow movement
+button hover glows
+text shimmer on title load
+scroll cue pulsing
+V2 animations
+hair loop on guardian
+cloth/ribbon loop
+glyphs orbiting gently
+floor sigil tracing animation
+light cracks flickering on pillars
+small video loop inside center portal
+V3 advanced animations
+audio-reactive portal glow
+music-reactive particle field
+hotspot-specific sound cues
+fluid-like portal distortion
+3D depth layers from separated PNGs
+
+7. Music and Sound Behavior
+Do not autoplay loud music immediately.
+V1 behavior:
+page loads muted or silent
+show sound toggle / Enter With Sound button
+on first user interaction, allow ambient soundtrack to begin
+Suggested sound modes:
+Muted
+Ambient Portal Hum
+Cinematic Theme
+Screensaver Playlist Preview
+Sound design:
+low cosmic drone
+subtle portal hum
+soft shimmer accents
+distant temple tone
+hover chimes
+button activation pulse
+UI:
+sound icon top-right
+small tooltip: Enter with sound
+volume control optional later
+
+8. Main Video / Looping Image Behavior
+The hero can use a looping movie as the main image, but the best V1 approach is hybrid.
+Option A: Static hero image + animated overlays
+Best for:
+sharp artwork
+easier swapping
+better performance
+clean hotspot mapping
+Option B: Looping video as main hero
+Best if:
+the loop is high quality
+file size is controlled
+motion is slow and atmospheric
+no important text is baked into it
+poster fallback exists
+Good loop content:
+portal rotating
+smoke drifting
+character hair moving
+cloth fluttering
+magical energy pulses
+slow camera float
+Recommended V1:
+static high-resolution key art
+animated overlay layers
+looping portal/ring animation
+particle/smoke overlays
+optional small video loop inside the portal
+
+9. Scroll Behavior
+Use standard scroll as the primary journey mechanic.
+Do not make left mouse drag the required way to enter the image.
+Recommended pattern:
+sticky hero with scroll-driven portal zoom
+Scroll stage A: Arrival
+full scene visible
+title visible
+buttons visible
+portal slowly spins
+ambient particles drift
+Scroll stage B: Awakening
+As user scrolls slightly:
+portal enlarges 5-10%
+foreground layers separate
+floating glyphs accelerate slightly
+button row subtly lowers or fades
+edge vignette increases
+Scroll stage C: Threshold
+At mid-scroll:
+camera pushes toward central portal
+portal glow brightens
+rings rotate faster
+world darkens around edges
+short text appears: Choose Your Path or Step Deeper Into The Arcanum
+Scroll stage D: Release
+After pinned hero sequence:
+hero unpins
+page scrolls into next immersive panel
+next section begins with Dome Shows or 360 Movies
+Optional:
+clicking central portal can jump to /screensaver or open a Choose Your Path overlay
+
+10. Full Homepage Section Structure
+<Homepage>
+  <Header />
+
+  <ArcanumPortalHero />
+
+  <DomeShowsFeatureSection />
+
+  <MovieRentalsFeatureSection />
+
+  <WorldsFeatureGrid />
+
+  <ScreensaverFeatureSection />
+
+  <ArchiveVaultFeatureSection />
+
+  <MusicRealmsFeatureSection />
+
+  <StoreFeatureSection />
+
+  <LicensingFeatureSection />
+
+  <FinalPortalCTA />
+
+  <Footer />
+</Homepage>
+
+11. Section 2: Dome Shows
+Component:
+DomeShowsFeatureSection
+Purpose:
+Show that Arcanum.Live has professional immersive dome/fulldome content for venues, festivals, planetariums, museums, events, and immersive theaters.
+Headline:
+Immersive Dome Shows
+Subheadline:
+Cinematic fulldome experiences designed for planetariums, immersive venues, festivals, museums, and next-generation projection environments.
+Body copy:
+The Arcanum creates large-format visual journeys built to wrap audiences inside mythic worlds, cosmic architecture, sacred geometry, AI cinema, and visionary science-fantasy landscapes. These works can be licensed for dome venues, special events, immersive galleries, and projection environments.
+Primary CTAs:
+Watch Dome Shows
+License Dome Content
+Secondary CTA:
+Contact for Venue Licensing
+Visual direction:
+giant dome interior
+celestial projection overhead
+audience silhouettes
+cosmic visuals wrapping the ceiling
+projection beams
+cinematic scale
+Animation ideas:
+dome ceiling slowly rotates
+stars drift across curved projection
+soft light sweeps across audience
+button hover creates projection flare
+hovering show cards preview a short loop or animated still
+Suggested content cards:
+Aeon
+Atlantis Nexus
+Gaia Heart Shard
+SoulBlade Journey
+Dome Worlds Ambient
+
+12. Section 3: 360 Movie Rentals
+Component:
+MovieRentalsFeatureSection
+Purpose:
+Push traffic to Vimeo On Demand rentals and explain that visitors can rent 360 movies for VR headsets.
+Headline:
+Rent 360 Movies for VR Headsets
+Subheadline:
+Watch immersive 360 films through Vimeo On Demand and step inside cinematic worlds built for VR headsets, spatial screens, and future media temples.
+Body copy:
+Arcanum.Live is the gateway to immersive 360 movies that can be rented online and experienced in VR. Each film page includes trailers, artwork, viewing notes, and direct rental access through Vimeo On Demand.
+Primary CTAs:
+Browse 360 Movies
+Rent on Vimeo
+Secondary CTA:
+How to Watch in VR
+Visual direction:
+VR headset user silhouette
+360 film stills floating as curved panels
+cosmic theater environment
+portal frame around trailer embed
+Animation ideas:
+film cards curve slightly in 3D
+hovering card expands trailer preview
+background stars rotate slowly
+central trailer screen glows softly
+Suggested film page cards:
+Aeon
+Gaia Heart Shard
+Atlantis Nexus
+SoulBlade
+Aether Transmission
+Important:
+Vimeo handles rentals. Arcanum.Live handles marketing, trailers, embeds, and conversion.
+
+13. Section 4: The Worlds
+Component:
+WorldsFeatureGrid
+Purpose:
+Show the IP universe. This is where The Arcanum becomes a metaverse of mythic worlds.
+Headline:
+Explore the Worlds
+Subheadline:
+Each world is a cinematic realm of characters, music, films, visuals, lore, and immersive experiences.
+Body copy:
+The Arcanum is built from interconnected mythic media worlds: cosmic heroines, ancient-tech temples, AI gods, trickster spirits, goddess anthems, visual archives, and living screensaver realms. Enter a world to discover its films, songs, art, lore, and visual experiences.
+Primary CTA:
+Explore All Worlds
+World cards:
+The Arcanum
+MythMachine
+SoulBlade
+Atlantis Nexus
+Gaia Heart Shard
+Aether
+Creatrix
+Cyber Shamanic Ninja Geisha
+Raven
+Kali
+Coyote
+Dome Worlds
+TV Art
+Cosmic Surfer
+Singularity
+Metaburn
+HoneyVerse
+Card fields:
+title
+short_description
+thumbnail
+color_primary
+color_secondary
+music_type
+featured_media
+primary_cta
+Animation ideas:
+cards tilt on cursor
+world image parallax within card
+hover reveals short description and CTA
+selected world expands into larger feature card
+background color shifts to selected world palette
+Important:
+HoneyVerse and adult-adjacent worlds should be filterable or separated, not shown automatically in family-safe contexts.
+
+14. Section 5: Screensaver / Living Visualizer
+Component:
+ScreensaverFeatureSection
+Purpose:
+Introduce the sticky retention feature: a fullscreen ambient visual/music experience people can leave running.
+Headline:
+Launch the Living Screensaver
+Subheadline:
+Choose a world, select a soundtrack, and let The Arcanum become a fullscreen ambient visualizer of animated art, music-reactive particles, videos, and cinematic motion.
+Body copy:
+The Arcanum Screensaver transforms the site into a living media portal. Drift through image worlds, loop cinematic videos, play themed music playlists, and activate audio-reactive particle systems designed for browsers, TVs, projections, and ambient displays.
+Primary CTAs:
+Launch Screensaver
+Preview Visual Modes
+Mode preview buttons:
+Gallery Drift
+Video Temple
+Music Reactor
+Fluid Oracle
+MythMachine Shuffle
+Visual direction:
+wide interactive preview window
+floating control panel
+particles reacting to sound
+image/video cards orbiting around a portal
+Animation ideas:
+preview window cycles through visual modes
+music bars subtly pulse
+particle cloud blooms on hover
+mode buttons change the preview background
+Homepage preview controls:
+World selector mini dropdown
+Music style selector
+Launch fullscreen button
+Muted demo state
+Important:
+Homepage preview should be lightweight. The full screensaver engine lives at /screensaver.
+
+15. Section 6: Archive / Vault
+Component:
+ArchiveVaultFeatureSection
+Purpose:
+Create mystery and depth. This is the lore/media archive: AI films, experiments, visual relics, images, documents, clips, and mythic content.
+Headline:
+Enter the Archive
+Subheadline:
+Browse the hidden galleries, AI films, lore fragments, visual relics, experiments, and dimensional media artifacts of The Arcanum.
+Body copy:
+The Archive is the living library of The Arcanum: concept art, AI cinema experiments, mythic documents, character fragments, unreleased visuals, world lore, and evolving media systems. It is the place where the hidden machinery of the universe becomes visible.
+Primary CTAs:
+Enter the Archive
+Explore the Vault
+Visual direction:
+forbidden library
+floating holographic pages
+obsidian archive doors
+gold/cyan data runes
+ancient-tech storage chamber
+Animation ideas:
+hovering cards open like magical files
+runes trace around archive doors
+floating pages drift in parallax
+glyph scanner passes over cards
+Archive categories:
+AI Films
+Concept Worlds
+Character Files
+Dome Visuals
+360 Film Stills
+Music Lore
+Prompt Experiments
+Sacred Geometry
+Behind the MythMachine
+
+16. Section 7: Music / Sonic Realms
+Component:
+MusicRealmsFeatureSection
+Purpose:
+Introduce the huge song library and connect it to screensaver playlists, worlds, and sonic identities.
+Headline:
+Enter the Sonic Realms
+Subheadline:
+Explore music worlds built for goddesses, tricksters, cyber shamans, cosmic portals, Burning Man nights, and cinematic myth machines.
+Body copy:
+The Arcanum music library spans cosmic anthems, sacred downtempo, psytrance, cyber ritual, dark oracle chants, mythic goddess songs, trickster folk, ambient transmissions, and AI creation myths. These tracks can power the screensaver, character worlds, trailers, and immersive experiences.
+Primary CTAs:
+Explore Music
+Launch Music Visualizer
+Featured music categories:
+Cosmic Anthem
+Sacred Downtempo
+Psytrance / Psy-Slam
+Cyber Ritual
+Dark Oracle
+Festival / Burning Man
+Mythic Goddess
+Trickster Folk
+Fae Dream
+Ambient Transmission
+Romantic Tantric
+AI Creation Myth
+Rap Prophecy
+Visual direction:
+album covers as floating portals
+soundwave geometry
+music-reactive particles
+cosmic DJ altar
+Animation ideas:
+album cards pulse with subtle waveform
+hover plays silent visual pulse preview
+selected category changes particle colors
+Important:
+Do not try to show thousands of songs on homepage. Show categories and featured playlists only.
+
+17. Section 8: Store / Sacred Products / TV Art
+Component:
+StoreFeatureSection
+Purpose:
+Send users to physical/digital products, TV art, and sacred visual artifacts without overbuilding ecommerce in V1.
+Headline:
+Sacred Products & TV Art
+Subheadline:
+Bring the visual worlds of The Arcanum into your home, studio, altar, screen, or creative space.
+Body copy:
+Explore visual artifacts, TV art, sacred media pieces, and products connected to the worlds of The Arcanum. The store begins with external shop links and can expand into a fully integrated marketplace later.
+Primary CTAs:
+Visit the Store
+Explore TV Art
+Store link:
+https://www.etsy.com/shop/ArcanumTvArt
+Visual direction:
+luxury product wall
+living room with cinematic TV art
+sacred objects on obsidian/gold display
+floating product cards
+Animation ideas:
+product cards hover in 3D
+TV art slowly animates
+store portal glows gold on hover
+Important:
+Keep store external in V1. Do not build full ecommerce until traffic justifies it.
+
+18. Section 9: Licensing / Work With Us
+Component:
+LicensingFeatureSection
+Purpose:
+Convert serious buyers: venues, planetariums, festivals, immersive theaters, resorts, collaborators, clients, production partners.
+Headline:
+License the Worlds
+Subheadline:
+Book immersive content, dome shows, custom visuals, AI cinema, projection-mapped experiences, and mythic media worlds for venues and events.
+Body copy:
+Arcane Realities creates cinematic immersive media for domes, VR, projection environments, music events, installations, and visionary brands. The Arcanum can be licensed, customized, or expanded for venues, festivals, museums, theaters, and special events.
+Primary CTAs:
+Start a Licensing Inquiry
+Work With Us
+Secondary CTAs:
+View Dome Shows
+Contact Arcane Realities
+Visual direction:
+professional cinematic chamber
+venue silhouettes
+dome projection blueprints
+holographic licensing panels
+Inquiry form fields:
+name
+email
+organization
+project type
+venue type
+location
+message
+interested in dome shows / 360 films / custom visuals / licensing / collaboration
+
+19. Section 10: Final Portal CTA
+Component:
+FinalPortalCTA
+Purpose:
+End the homepage with a strong final choice.
+Headline:
+Choose Your Portal
+Subheadline:
+Watch, rent, explore, license, or launch the living visualizer.
+Final CTA buttons:
+Launch Screensaver
+Rent 360 Movies
+Explore Worlds
+License Content
+Visual direction:
+four glowing portals
+black/gold cosmic chamber
+soft particle field
+return-to-top portal link
+
+20. Complete Homepage Copy Draft
+Hero
+ENTER THE ARCANUM
+
+A cinematic universe of immersive dome shows, 360 movies, AI films, mythic worlds, sacred media systems, and dimensional archives.
+
+[Watch Dome Shows] [Rent 360 Movies] [Launch Screensaver] [Explore the Worlds]
+Dome Shows
+Immersive Dome Shows
+
+Cinematic fulldome experiences designed for planetariums, immersive venues, festivals, museums, and next-generation projection environments.
+
+The Arcanum creates large-format visual journeys built to wrap audiences inside mythic worlds, cosmic architecture, sacred geometry, AI cinema, and visionary science-fantasy landscapes.
+
+[Watch Dome Shows] [License Dome Content]
+360 Movie Rentals
+Rent 360 Movies for VR Headsets
+
+Watch immersive 360 films through Vimeo On Demand and step inside cinematic worlds built for VR headsets, spatial screens, and future media temples.
+
+Each film page includes trailers, artwork, viewing notes, and direct rental access through Vimeo On Demand.
+
+[Browse 360 Movies] [How to Watch in VR]
+Worlds
+Explore the Worlds
+
+Each world is a cinematic realm of characters, music, films, visuals, lore, and immersive experiences.
+
+The Arcanum is built from interconnected mythic media worlds: cosmic heroines, ancient-tech temples, AI gods, trickster spirits, goddess anthems, visual archives, and living screensaver realms.
+
+[Explore All Worlds]
+Screensaver
+Launch the Living Screensaver
+
+Choose a world, select a soundtrack, and let The Arcanum become a fullscreen ambient visualizer of animated art, music-reactive particles, videos, and cinematic motion.
+
+Drift through image worlds, loop cinematic videos, play themed music playlists, and activate audio-reactive visual systems designed for browsers, TVs, projections, and ambient displays.
+
+[Launch Screensaver] [Preview Visual Modes]
+Archive
+Enter the Archive
+
+Browse the hidden galleries, AI films, lore fragments, visual relics, experiments, and dimensional media artifacts of The Arcanum.
+
+The Archive is the living library of the MythMachine: concept art, AI cinema experiments, character files, unreleased visuals, world lore, prompt systems, and evolving media artifacts.
+
+[Enter the Archive] [Explore the Vault]
+Music
+Enter the Sonic Realms
+
+Explore music worlds built for goddesses, tricksters, cyber shamans, cosmic portals, Burning Man nights, and cinematic myth machines.
+
+The Arcanum music library spans cosmic anthems, sacred downtempo, psytrance, cyber ritual, dark oracle chants, mythic goddess songs, trickster folk, ambient transmissions, and AI creation myths.
+
+[Explore Music] [Launch Music Visualizer]
+Store
+Sacred Products & TV Art
+
+Bring the visual worlds of The Arcanum into your home, studio, altar, screen, or creative space.
+
+Explore visual artifacts, TV art, sacred media pieces, and products connected to the worlds of The Arcanum.
+
+[Visit the Store] [Explore TV Art]
+Licensing
+License the Worlds
+
+Book immersive content, dome shows, custom visuals, AI cinema, projection-mapped experiences, and mythic media worlds for venues and events.
+
+Arcane Realities creates cinematic immersive media for domes, VR, projection environments, music events, installations, and visionary brands.
+
+[Start a Licensing Inquiry] [Work With Us]
+Final CTA
+Choose Your Portal
+
+Watch, rent, explore, license, or launch the living visualizer.
+
+[Launch Screensaver] [Rent 360 Movies] [Explore Worlds] [License Content]
+
+21. Homepage Animations
+Global animations
+slow background particles
+soft fade/slide section reveals
+subtle glow breathing on CTAs
+parallax on key visual panels
+hover tilt on cards
+Hero animations
+portal ring rotates slowly
+portal glow pulses
+fog drifts
+particles drift
+cursor parallax
+hotspot glow on hover
+scroll-driven portal zoom
+Dome section
+dome stars slowly pan
+projection light sweeps
+show cards reveal trailer preview on hover
+360 Movies section
+film cards slide/float in 3D
+trailer frame glow
+VR headset icon pulse
+Worlds section
+world cards tilt on hover
+background gradient shifts by selected world
+card image parallax
+Screensaver section
+preview window cycles animated modes
+particles react subtly to fake/demo waveform
+mode buttons glow when selected
+Archive section
+archive cards open like files
+runes trace around hovered panels
+floating pages drift
+Music section
+album cards pulse faintly
+waveform lines move gently
+category hover shifts particles
+Store section
+product cards hover in 3D
+TV art screen animates slowly
+store portal glows gold
+Licensing section
+holographic blueprint lines draw in
+form panel fades up cleanly
+
+22. Homepage Asset Plan
+Hero
+main background: portal temple / metaverse entrance
+overlays: portal ring, smoke, particles, glyphs, floor sigil, guardian hair/cloth later
+Dome Shows
+main visual: dome audience / projection environment
+overlays: stars, projection light sweep, curved dome grid
+360 Movies
+main visual: VR headset / cinematic film portal
+cards: film posters/stills
+Worlds
+world thumbnails/cards for each IP
+hover art per world
+Screensaver
+preview image/video canvas
+particles/waveform overlay
+mode cards
+Archive
+forbidden archive / library / holographic media vault
+cards: archive categories
+Music
+album covers / sonic portals
+waveform overlay
+playlist category cards
+Store
+TV art wall / product display
+product images
+Licensing
+dome blueprint / venue projection / professional cinematic media lab
+contact form panel
+
+23. Homepage Data Structures
+Gateway buttons
+export const gatewayButtons = [
+  {
+    label: 'Watch Dome Shows',
+    href: '/dome-shows',
+    description: 'Fulldome films and immersive venue experiences.',
+    icon: 'dome'
+  },
+  {
+    label: 'Rent 360 Movies',
+    href: '/films',
+    description: 'Immersive films for VR headsets through Vimeo On Demand.',
+    icon: 'vr'
+  },
+  {
+    label: 'Launch Screensaver',
+    href: '/screensaver',
+    description: 'Open the living visualizer and ambient MythMachine.',
+    icon: 'sparkles'
+  },
+  {
+    label: 'Explore the Worlds',
+    href: '/worlds',
+    description: 'Enter the mythic IP universes of The Arcanum.',
+    icon: 'portal'
+  }
+]
+Featured worlds
+export const featuredWorlds = [
+  { title: 'The Arcanum', slug: 'the-arcanum', theme: 'cosmic mythic portal' },
+  { title: 'MythMachine', slug: 'mythmachine', theme: 'AI cinematic engine' },
+  { title: 'SoulBlade', slug: 'soulblade', theme: 'heroic cosmic warrior' },
+  { title: 'Atlantis Nexus', slug: 'atlantis-nexus', theme: 'ancient aquatic technology' },
+  { title: 'Gaia Heart Shard', slug: 'gaia-heart-shard', theme: 'earth oracle crystal myth' },
+  { title: 'Aether', slug: 'aether', theme: 'interdimensional transmissions' },
+  { title: 'Creatrix', slug: 'creatrix', theme: 'AI goddess creation myth' },
+  { title: 'Raven', slug: 'raven', theme: 'dark oracle trickster goddess' }
+]
+Music categories
+export const musicCategories = [
+  'Cosmic Anthem',
+  'Sacred Downtempo',
+  'Psytrance / Psy-Slam',
+  'Cyber Ritual',
+  'Dark Oracle',
+  'Festival / Burning Man',
+  'Mythic Goddess',
+  'Trickster Folk',
+  'Fae Dream',
+  'Ambient Transmission',
+  'Romantic Tantric',
+  'AI Creation Myth',
+  'Rap Prophecy'
+]
+Screensaver modes
+export const screensaverModes = [
+  {
+    title: 'Gallery Drift',
+    description: 'Animated image worlds with slow cinematic motion.',
+    href: '/screensaver?mode=gallery-drift'
+  },
+  {
+    title: 'Video Temple',
+    description: 'Looping cinematic video chambers and ambient motion.',
+    href: '/screensaver?mode=video-temple'
+  },
+  {
+    title: 'Music Reactor',
+    description: 'Audio-reactive particles and sonic visual fields.',
+    href: '/screensaver?mode=music-reactor'
+  },
+  {
+    title: 'Fluid Oracle',
+    description: 'Liquid energy fields and reactive portal distortion.',
+    href: '/screensaver?mode=fluid-oracle'
+  },
+  {
+    title: 'MythMachine Shuffle',
+    description: 'A living mix of worlds, visuals, and soundtracks.',
+    href: '/screensaver?mode=mythmachine-shuffle'
+  }
+]
+Hero scene config example
+const heroScene = {
+  backgroundImage: '/images/arcanum-portal-v1.jpg',
+  backgroundVideo: '/videos/arcanum-portal-loop-v1.mp4',
+  posterImage: '/images/arcanum-portal-poster-v1.jpg',
+  focalPoint: { x: 50, y: 45 },
+  portalZoomTarget: { x: 50, y: 45 },
+  overlays: {
+    smoke: '/overlays/smoke-loop.webm',
+    particles: true,
+    portalRing: '/overlays/portal-ring.svg'
+  },
+  hotspots: [
+    {
+      id: 'portal',
+      label: 'Enter the Portal',
+      href: '/screensaver',
+      x: 50,
+      y: 45,
+      width: 18,
+      height: 24,
+      description: 'Launch the living MythMachine visualizer.',
+      visualEffect: 'portal-pulse'
+    },
+    {
+      id: 'dome-shows',
+      label: 'Watch the Dome Shows',
+      href: '/dome-shows',
+      x: 12,
+      y: 56,
+      width: 22,
+      height: 30,
+      description: 'Fulldome films and immersive venue experiences.',
+      visualEffect: 'dome-light-sweep'
+    },
+    {
+      id: 'worlds',
+      label: 'Explore the Worlds',
+      href: '/worlds',
+      x: 66,
+      y: 38,
+      width: 25,
+      height: 46,
+      description: 'Enter the mythic IP universes of The Arcanum.',
+      visualEffect: 'guardian-glow'
+    },
+    {
+      id: 'archive',
+      label: 'Enter the Archive',
+      href: '/archive',
+      x: 36,
+      y: 30,
+      width: 18,
+      height: 35,
+      description: 'Browse films, lore, relics, and dimensional media.',
+      visualEffect: 'glyph-orbit'
+    },
+    {
+      id: 'store',
+      label: 'Visit the Store',
+      href: '/store',
+      x: 76,
+      y: 73,
+      width: 20,
+      height: 18,
+      description: 'Sacred products, TV art, and visual artifacts.',
+      visualEffect: 'gold-sparks'
+    }
+  ]
+}
+
+24. Build Priority
+Build homepage in this order:
+1. Static responsive layout with all sections and copy
+2. Hero with background image, buttons, and simple particles
+3. Section cards and CTA links
+4. Framer Motion section reveals
+5. Hero parallax
+6. Hero hotspots
+7. Sticky scroll portal zoom
+8. Screensaver preview mockup
+9. Supabase dynamic data later
+Do not build the full backend first just to design the homepage. Use placeholder arrays, then swap to Supabase later.
+
+25. Claude/Codex Build Prompt: Homepage V1
+Build the full Arcanum.Live homepage using Next.js App Router, React, TypeScript, Tailwind CSS, Framer Motion, and a modular component architecture.
+
+The homepage should feel like entering a cinematic mythic metaverse, not a normal SaaS or portfolio website. It should be image-heavy, interactive, luxurious, and clear about the main site destinations.
+
+Use these homepage sections in order:
+1. ArcanumPortalHero
+2. DomeShowsFeatureSection
+3. MovieRentalsFeatureSection
+4. WorldsFeatureGrid
+5. ScreensaverFeatureSection
+6. ArchiveVaultFeatureSection
+7. MusicRealmsFeatureSection
+8. StoreFeatureSection
+9. LicensingFeatureSection
+10. FinalPortalCTA
+
+Visual style:
+- obsidian black
+- molten gold
+- deep cosmic purple
+- electric cyan
+- holographic glass
+- sacred geometry
+- dimensional portal atmosphere
+- cinematic sci-fi temple design
+
+Hero requirements:
+- Build the hero as a layered portal scene with editable image zones.
+- Main background layer should support one hero image or one looping video.
+- Add gradient overlay for text readability.
+- Add separate smoke/fog overlay.
+- Add separate particle overlay.
+- Add central portal layer with glow/ring motion.
+- Add title and subtitle layer.
+- Add button layer with primary gateway buttons.
+- Add invisible hotspot layer mapped by percentage coordinates.
+- Add top nav, sound toggle, and scroll cue.
+- Build so the background image or video can be swapped easily later without rebuilding the structure.
+- Smoke, particles, glow, and portal animation should remain independent overlays.
+
+Hero copy:
+Title: ENTER THE ARCANUM
+Subtitle: A cinematic universe of immersive dome shows, 360 movies, AI films, mythic worlds, sacred media systems, and dimensional archives.
+Primary buttons: Watch Dome Shows, Rent 360 Movies, Launch Screensaver, Explore the Worlds.
+
+Dome Shows:
+Headline: Immersive Dome Shows
+Copy: Cinematic fulldome experiences designed for planetariums, immersive venues, festivals, museums, and next-generation projection environments.
+Buttons: Watch Dome Shows, License Dome Content.
+
+360 Movies:
+Headline: Rent 360 Movies for VR Headsets
+Copy: Watch immersive 360 films through Vimeo On Demand and step inside cinematic worlds built for VR headsets, spatial screens, and future media temples.
+Buttons: Browse 360 Movies, How to Watch in VR.
+
+Worlds:
+Headline: Explore the Worlds
+Copy: Each world is a cinematic realm of characters, music, films, visuals, lore, and immersive experiences.
+Button: Explore All Worlds.
+
+Screensaver:
+Headline: Launch the Living Screensaver
+Copy: Choose a world, select a soundtrack, and let The Arcanum become a fullscreen ambient visualizer of animated art, music-reactive particles, videos, and cinematic motion.
+Buttons: Launch Screensaver, Preview Visual Modes.
+
+Archive:
+Headline: Enter the Archive
+Copy: Browse the hidden galleries, AI films, lore fragments, visual relics, experiments, and dimensional media artifacts of The Arcanum.
+Buttons: Enter the Archive, Explore the Vault.
+
+Music:
+Headline: Enter the Sonic Realms
+Copy: Explore music worlds built for goddesses, tricksters, cyber shamans, cosmic portals, Burning Man nights, and cinematic myth machines.
+Buttons: Explore Music, Launch Music Visualizer.
+
+Store:
+Headline: Sacred Products & TV Art
+Copy: Bring the visual worlds of The Arcanum into your home, studio, altar, screen, or creative space.
+Buttons: Visit the Store, Explore TV Art.
+
+Licensing:
+Headline: License the Worlds
+Copy: Book immersive content, dome shows, custom visuals, AI cinema, projection-mapped experiences, and mythic media worlds for venues and events.
+Buttons: Start a Licensing Inquiry, Work With Us.
+
+Final CTA:
+Headline: Choose Your Portal
+Copy: Watch, rent, explore, license, or launch the living visualizer.
+Buttons: Launch Screensaver, Rent 360 Movies, Explore Worlds, License Content.
+
+Requirements:
+- Use reusable data arrays for buttons, worlds, film cards, music categories, and feature sections.
+- Use placeholder image paths for now.
+- Make all CTAs real Next.js links.
+- Add smooth section reveals with Framer Motion.
+- Add hover glow/tilt effects on cards.
+- Keep page responsive.
+- Respect prefers-reduced-motion.
+- Do not autoplay audio.
+- Keep animations lightweight.
+- Build the screensaver preview as a lightweight mockup, not the full screensaver engine yet.
+- Do not include adult-adjacent HoneyVerse/After Dark links in the default homepage unless an explicit flag enables them.
+
+26. Homepage Success Checklist
+The homepage is successful when:
+A first-time visitor understands what Arcanum.Live offers within 5 seconds.
+The visual impact feels premium, cinematic, mythic, and immersive.
+The main pathways are obvious.
+The hero feels interactive without confusing users.
+The scroll feels like descending into a world.
+Dome shows, 360 rentals, screensaver, worlds, store, and licensing are all clearly visible.
+The site does not feel like a generic template.
+The page runs smoothly on normal laptops.
+Emotional goal:
+I am entering a portal, not reading a website.
+
+27. Immediate Design Decisions
+Current recommended choices:
+Hero image: portal chamber / Arcanum entrance
+Archive naming: Enter the Archive, with Explore the Vault as secondary phrase
+Top 4 hero CTAs: Watch Dome Shows, Rent 360 Movies, Launch Screensaver, Explore the Worlds
+After Dark: excluded from default homepage
+Store: Etsy external link in V1
+Section order: Dome Shows, 360 Movies, Worlds, Screensaver, Archive, Music, Store, Licensing
+Question 1 answer:
+Hero image is not locked yet. Build the hero with a flexible image/video swap system.
+Swapping images should be easy if:
+hero art follows the same rough composition
+center portal stays near x 45-55%, y 35-55%
+title space remains near top
+button space remains near lower third
+hotspots are stored in config, not hardcoded
+smoke/particles/glows remain separate overlays
+Difficulty target:
+Basic image swap with similar composition: 2/10 difficulty
+Layered art swap: 5/10 difficulty
+Custom exact animation/image rebuild: avoid unless necessary
+
