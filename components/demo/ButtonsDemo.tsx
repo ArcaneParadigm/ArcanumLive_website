@@ -265,8 +265,8 @@ function PanelSectionFullBleed({ title, desc, color, btnA = 'Watch Now', btnB = 
                 whileHover={{ scale: 1.04, borderColor: `${GOLD}80`, boxShadow: `0 4px 20px ${GOLD}30`, transition: { duration: 0.15 } }}
                 onMouseEnter={() => playCrystalBowl(GALLERY_WORLDS[i % 6].color, 0.06)}
               >
-                {'src' in item && item.src && (
-                  <img src={item.src} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                {'src' in item && (item as { src: string }).src && (
+                  <img src={(item as { src: string }).src} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 )}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span style={{ color: GALLERY_WORLDS[i % 6].color, opacity: 0.18, fontSize: 18 }}>✦</span>
