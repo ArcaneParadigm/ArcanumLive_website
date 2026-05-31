@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import { Metadata, Suspense } from 'next'
 import PageShell from '@/components/layout/PageShell'
 import WatchHub from '@/components/watch/WatchHub'
 import { allVideos, premieres } from '@/lib/data/videos'
@@ -13,7 +13,9 @@ export default function WatchPage() {
   const featured = premieres[0] ?? allVideos[0]
   return (
     <PageShell>
-      <WatchHub videos={allVideos} featuredVideo={featured} />
+      <Suspense fallback={null}>
+        <WatchHub videos={allVideos} featuredVideo={featured} />
+      </Suspense>
     </PageShell>
   )
 }
