@@ -9,11 +9,15 @@ const GOLD   = '#c9973a'
 const NAV_LINKS = [
   { label: 'Realms',      href: '/realms' },
   { label: 'Dome Shows',  href: '/dome-shows' },
-  { label: '360 Movies',  href: '/watch' },
+  { label: '360 Movies',  href: '/vr-films' },
   { label: 'Ascension',   href: '/ascension' },
+  { label: 'Altar',       href: '/altar' },
+  { label: 'AI Films',    href: '/ai-films' },
   { label: 'Store',       href: '/store' },
   { label: 'Blog',        href: '/blog' },
   { label: 'Contact',     href: '/contact' },
+  { label: 'VR Play',     href: '/vr-play' },
+  { label: 'Channels',    href: '/channels' },
 ]
 
 export default function Home2Nav() {

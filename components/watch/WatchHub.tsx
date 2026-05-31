@@ -58,6 +58,11 @@ function OrnateRule() {
   )
 }
 
+// Fill order: visual positions [0,1,2,3,4] map to premiere array indices [3,1,0,2,4]
+// meaning slot 3 fills first, then 2, then 4, then 1, then 5
+const VISUAL_TO_IDX = [3, 1, 0, 2, 4]
+const PREMIERE_SLOTS = 5
+
 // ── Premiere card in the top band ─────────────────────────────────────────────
 function PremiereCard({ video, isSelected, onClick }: { video: VideoItem; isSelected: boolean; onClick: () => void }) {
   return (
@@ -86,16 +91,13 @@ function PremiereCard({ video, isSelected, onClick }: { video: VideoItem; isSele
             <span className="text-gold/80 text-sm" style={{ marginLeft: 2 }}>▶</span>
           </div>
         </div>
-        {/* Corner marks */}
         <div className="absolute top-2 left-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${GOLD}50`, borderLeft: `1px solid ${GOLD}50` }} />
         <div className="absolute bottom-2 right-2 w-3 h-3 pointer-events-none" style={{ borderBottom: `1px solid ${GOLD}30`, borderRight: `1px solid ${GOLD}30` }} />
-        {/* Live/Premiere badge */}
         <div className="absolute top-2 right-2 px-2 py-0.5 rounded text-[8px] tracking-widest uppercase"
           style={{ background: `${GOLD}22`, color: GOLD, border: `1px solid ${GOLD}50` }}>
           Premiere
         </div>
       </div>
-      {/* Info */}
       <div className="p-3">
         <p className="font-cinzel text-[11px] font-bold tracking-wide leading-snug mb-0.5"
           style={{ color: isSelected ? GOLD : 'rgba(255,255,255,0.88)', textShadow: isSelected ? `0 0 12px ${GOLD}40` : 'none' }}>
@@ -108,6 +110,39 @@ function PremiereCard({ video, isSelected, onClick }: { video: VideoItem; isSele
         )}
       </div>
     </motion.button>
+  )
+}
+
+// ── Empty premiere placeholder slot ──────────────────────────────────────────
+function PremiereSlotEmpty({ slotNum }: { slotNum: number }) {
+  return (
+    <div
+      className="shrink-0 rounded-xl overflow-hidden relative"
+      style={{
+        width: 220,
+        background: 'linear-gradient(135deg, rgba(12,9,20,0.9), rgba(8,6,14,0.95))',
+        border: `1px solid ${GOLD}12`,
+      }}
+    >
+      <div className="relative overflow-hidden" style={{ aspectRatio: '16/9' }}>
+        <div style={{ background: `radial-gradient(ellipse at 50% 50%, ${GOLD}06, transparent 70%)`, position: 'absolute', inset: 0 }} />
+        {/* Slot number */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
+          <span className="font-cinzel text-2xl font-bold" style={{ color: `${GOLD}15` }}>{slotNum}</span>
+          <div className="w-8 h-px" style={{ background: `${GOLD}15` }} />
+        </div>
+        <div className="absolute top-2 left-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${GOLD}20`, borderLeft: `1px solid ${GOLD}20` }} />
+        <div className="absolute bottom-2 right-2 w-3 h-3 pointer-events-none" style={{ borderBottom: `1px solid ${GOLD}12`, borderRight: `1px solid ${GOLD}12` }} />
+        <div className="absolute top-2 right-2 px-2 py-0.5 rounded text-[8px] tracking-widest uppercase"
+          style={{ background: `${GOLD}08`, color: `${GOLD}35`, border: `1px solid ${GOLD}15` }}>
+          Coming Soon
+        </div>
+      </div>
+      <div className="p-3">
+        <div className="h-2.5 rounded-sm mb-2" style={{ background: `${GOLD}10`, width: '70%' }} />
+        <div className="h-2 rounded-sm" style={{ background: `${GOLD}07`, width: '45%' }} />
+      </div>
+    </div>
   )
 }
 
@@ -214,27 +249,30 @@ export default function WatchHub({ videos, featuredVideo }: WatchHubProps) {
           </div>
         </div>
 
-        {/* ── Premieres band — below player ── */}
-        {premieres.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, ${GOLD}30)` }} />
-              <span className="text-[9px] tracking-[0.4em] uppercase font-medium" style={{ color: `${GOLD}90` }}>◆ Premieres ◆</span>
-              <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${GOLD}30)` }} />
-            </div>
-            <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-              {premieres.map(video => (
+        {/* ── Premieres band — always 5 slots, fills center-out (3→2→4→1→5) ── */}
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, ${GOLD}30)` }} />
+            <span className="text-[9px] tracking-[0.4em] uppercase font-medium" style={{ color: `${GOLD}90` }}>◆ Premieres ◆</span>
+            <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${GOLD}30)` }} />
+          </div>
+          <div className="flex gap-4 pb-2">
+            {Array.from({ length: PREMIERE_SLOTS }, (_, visualPos) => {
+              const video = premieres[VISUAL_TO_IDX[visualPos]]
+              return video ? (
                 <PremiereCard
                   key={video.id}
                   video={video}
                   isSelected={selected.id === video.id}
                   onClick={() => { setSelected(video); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                 />
-              ))}
-            </div>
-            <OrnateRule />
+              ) : (
+                <PremiereSlotEmpty key={`empty-${visualPos}`} slotNum={visualPos + 1} />
+              )
+            })}
           </div>
-        )}
+          <OrnateRule />
+        </div>
 
         {/* ── Tabs ── */}
         <div className="flex items-center gap-0.5 mb-6 border-b pb-0" style={{ borderColor: `${GOLD}18` }}>

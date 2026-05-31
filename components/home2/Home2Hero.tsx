@@ -14,10 +14,10 @@ const CYCLE_MS = 9000
 
 // 4 portal buttons — centred as a row over the image's button zone
 const HERO_BTNS = [
-  { label: 'Watch VR Films',     href: '/dome-shows'  },
-  { label: 'Ascension\nChamber',  href: '/screensaver' },
+  { label: 'Watch VR Films',     href: '/vr-films'    },
+  { label: 'Ascension\nChamber',  href: '/ascension'  },
   { label: 'Explore\nthe Realms', href: '/realms'      },
-  { label: 'Watch AI Films',     href: '/watch'       },
+  { label: 'Watch AI Films',     href: '/ai-films'    },
 ]
 
 // Tune these two values to align with your art's button positions

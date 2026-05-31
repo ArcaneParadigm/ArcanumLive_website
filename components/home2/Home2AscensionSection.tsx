@@ -110,7 +110,7 @@ export default function Home2AscensionSection() {
         ))}
       </motion.div>
 
-      {/* CTA */}
+{/* CTA */}
       <motion.div
         variants={flyInBottom}
         initial="hidden"
