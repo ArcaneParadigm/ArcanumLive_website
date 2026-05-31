@@ -164,8 +164,8 @@ function PlatformCard({ p, i }: { p: typeof PLATFORMS[0]; i: number }) {
       whileHover={p.comingSoon ? {} : {
         borderColor: `${p.color}80`,
         boxShadow: `0 0 40px ${p.color}20, 0 0 80px ${p.color}08`,
+        transition: { duration: 0.2 },
       }}
-      transition={{ duration: 0.2 }}
     >
       <div className="text-3xl mb-4" style={{ color: p.color, filter: `drop-shadow(0 0 8px ${p.color}60)` }}>{p.icon}</div>
       <div className="mb-3">
