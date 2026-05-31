@@ -1,4 +1,5 @@
-import { Metadata, Suspense } from 'next'
+import { Metadata } from 'next'
+import { Suspense } from 'react'
 import PageShell from '@/components/layout/PageShell'
 import WatchHub from '@/components/watch/WatchHub'
 import { allVideos, premieres } from '@/lib/data/videos'
