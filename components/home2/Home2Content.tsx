@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getSharedAudioCtx, playCrystalBowl, getHoverVolumeMultiplier } from '@/lib/utils/crystalSound'
+import { YT_CHANNELS } from '@/lib/data/channels'
 import type { IpWorld } from '@/types'
 
 const GOLD   = '#c9973a'
@@ -80,6 +81,26 @@ const S = {
 // Pentatonic notes for world cards (G major pentatonic across 2 octaves)
 const PENTA = [196, 220, 247, 294, 330, 392, 440, 494, 587, 659, 784, 880]
 
+// ── YouTube Subscribe Button ─────────────────────────────────────────────────
+
+function SubscribeBtn({ subscribeUrl, color = '#FF0000' }: { subscribeUrl: string; color?: string }) {
+  return (
+    <a
+      href={subscribeUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={e => e.stopPropagation()}
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold tracking-wide uppercase text-white cursor-pointer select-none"
+      style={{ background: '#FF0000', boxShadow: `0 2px 10px rgba(255,0,0,0.5)`, whiteSpace: 'nowrap' }}
+    >
+      <svg width="11" height="8" viewBox="0 0 24 17" fill="white">
+        <path d="M23.5 2.6S23.2.8 22.4.1C21.4-.9 20.3-.9 19.8-.8 16.5 0 12 0 12 0s-4.5 0-7.8-.8C3.7-.9 2.6-.9 1.6.1.8.8.5 2.6.5 2.6S.2 4.7.2 6.8v2c0 2 .3 4.2.3 4.2s.3 1.8 1.1 2.5c1 1 2.4.9 3 1C6.6 16.7 12 16.7 12 16.7s4.5 0 7.8-.8c.5-.1 1.6-.1 2.6-1.1.8-.7 1.1-2.5 1.1-2.5s.3-2.1.3-4.2v-2C23.8 4.7 23.5 2.6 23.5 2.6zM9.7 11.5V5.2l6.6 3.2-6.6 3.1z"/>
+      </svg>
+      Subscribe
+    </a>
+  )
+}
+
 // ── Shared button components ─────────────────────────────────────────────────
 
 function BtnGold({ label, href = '#' }: { label: string; href?: string }) {
@@ -149,12 +170,12 @@ function ytCmd(iframe: HTMLIFrameElement | null, func: string, args: unknown[] =
 }
 
 function PanelWithVideo({
-  title, desc, btnA, btnB, color, image, images, video, youtube,
+  title, desc, btnA, btnB, color, image, images, video, youtube, subscribeUrl,
 }: {
   title: string; desc: string;
   btnA: { label: string; href: string };
   btnB: { label: string; href: string };
-  color: string; image?: string; images?: string[]; video?: string; youtube?: string;
+  color: string; image?: string; images?: string[]; video?: string; youtube?: string; subscribeUrl?: string;
 }) {
   const vidRef  = useRef<HTMLVideoElement>(null)
   const ytRef   = useRef<HTMLIFrameElement>(null)
@@ -168,7 +189,7 @@ function PanelWithVideo({
     document.dispatchEvent(new CustomEvent('arcanum:stop-all-audio'))
     // Unmute the YouTube iframe and raise volume
     ytCmd(ytRef.current, 'unMute')
-    ytCmd(ytRef.current, 'setVolume', [80])
+    ytCmd(ytRef.current, 'setVolume', [60])
   }, [youtube])
 
   const handlePanelLeave = useCallback(() => {
@@ -253,7 +274,6 @@ function PanelWithVideo({
                   title={title}
                   style={{ border: 'none' }}
                 />
-                {/* Transparent overlay — blocks hover events that trigger YouTube branding UI */}
                 <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
               </>
             ) : (
@@ -423,6 +443,16 @@ const SCREENSAVER_MODES = [
 
 function ScreensaverBanner() {
   const [active, setActive] = useState(0)
+  const ytRef = useRef<HTMLIFrameElement>(null)
+
+  function onVideoEnter() {
+    document.dispatchEvent(new CustomEvent('arcanum:stop-all-audio'))
+    ytCmd(ytRef.current, 'unMute')
+    ytCmd(ytRef.current, 'setVolume', [60])
+  }
+  function onVideoLeave() {
+    ytCmd(ytRef.current, 'mute')
+  }
 
   return (
     <section className="px-8 py-2" style={{ background: '#08060e' }}>
@@ -451,18 +481,22 @@ function ScreensaverBanner() {
 
             {/* Center video — YouTube embed */}
             <div className="flex-1 flex items-center self-stretch">
-              <div className="relative w-full rounded-xl overflow-hidden"
-                style={{ aspectRatio: '16/9', border: `1px solid ${VIOLET}35` }}>
+              <div
+                className="relative w-full rounded-xl overflow-hidden"
+                style={{ aspectRatio: '16/9', border: `1px solid ${VIOLET}35` }}
+                onMouseEnter={onVideoEnter}
+                onMouseLeave={onVideoLeave}
+              >
                 <iframe
+                  ref={ytRef}
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube-nocookie.com/embed/YciEwOrj-Ek?autoplay=1&mute=1&loop=1&playlist=YciEwOrj-Ek&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
+                  src="https://www.youtube-nocookie.com/embed/4MRrrkrBn_c?autoplay=1&mute=1&loop=1&playlist=4MRrrkrBn_c&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   title="Ascension Chamber Preview"
                   style={{ border: 'none' }}
                 />
-                {/* Transparent overlay — blocks hover events that trigger YouTube branding UI */}
-                <div className="absolute inset-0 pointer-events-all z-10" style={{ background: 'transparent' }} />
+                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
                 <div className="absolute top-0 left-0 w-4 h-4 pointer-events-none" style={{ borderTop: `1px solid ${VIOLET}60`, borderLeft: `1px solid ${VIOLET}60` }} />
                 <div className="absolute bottom-0 right-0 w-4 h-4 pointer-events-none" style={{ borderBottom: `1px solid ${VIOLET}40`, borderRight: `1px solid ${VIOLET}40` }} />
               </div>
@@ -620,7 +654,7 @@ function FullBleedPanel({
 }: {
   title: string; desc: string;
   btnA: { label: string; href: string };
-  btnB: { label: string; href: string };
+  btnB?: { label: string; href: string };
   color: string; accentColor?: string; image?: string; images?: string[]; glowColor?: string;
 }) {
   const ac = accentColor ?? color
@@ -666,7 +700,7 @@ function FullBleedPanel({
         </div>
         <div className="flex flex-col gap-2" style={{ width: 200 }}>
           <BtnGold label={btnA.label} href={btnA.href} />
-          <BtnGhost label={btnB.label} href={btnB.href} color={ac} />
+          {btnB && <BtnGhost label={btnB.label} href={btnB.href} color={ac} />}
         </div>
       </div>
     </motion.div>
@@ -815,8 +849,7 @@ function ArchiveAndSonic() {
         <FullBleedPanel
           title="Enter the Codex"
           desc="Secrets, relics and forbidden archives from across the multiverse."
-          btnA={{ label: 'Enter the Codex', href: '/archive' }}
-          btnB={{ label: 'Explore the Codex', href: '/archive#vault' }}
+          btnA={{ label: 'Enter the Codex', href: '/codex' }}
           color={GOLD}
           images={[
             '/art/home2/panels/entercodex_panel.jpg',
@@ -921,8 +954,8 @@ function ProductsSection() {
 // ════════════════════════════════════════════════════════════════════════════
 
 const PORTAL_ITEMS = [
-  { label: 'Watch Dome Shows',   sub: '', color: GOLD,   glow: '#c9973a', href: '/dome-shows', image: '/art/home2/panels/watchdome_portal.jpg',          hz: 369 },
-  { label: 'Rent 360 Movies',    sub: '', color: VIOLET, glow: '#7c3aed', href: '/watch',      image: '/art/home2/panels/rent360mov_portal.jpg',         hz: 440 },
+  { label: 'Rent 360 Movies',    sub: '', color: GOLD,   glow: '#c9973a', href: '/dome-shows', image: '/art/home2/panels/watchdome_portal.jpg',          hz: 369 },
+  { label: 'VR Films',           sub: '', color: VIOLET, glow: '#7c3aed', href: '/vr-films',   image: '/art/home2/panels/rent360mov_portal.jpg',         hz: 440 },
   { label: 'Launch Screensaver', sub: '', color: CYAN,   glow: '#00aaff', href: '/ascension',  image: '/art/home2/panels/launch_screensaver_portal.jpg', hz: 528 },
   { label: 'Explore the Worlds', sub: '', color: ORANGE, glow: '#f97316', href: '/realms',     image: '/art/home2/panels/exploreworlds_portal.jpg',      hz: 587 },
 ]
