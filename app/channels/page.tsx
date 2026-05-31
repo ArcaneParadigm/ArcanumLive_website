@@ -80,9 +80,8 @@ function SocialCard({ acct, index }: { acct: SocialAccount; index: number }) {
         border: `1px solid ${acct.color}25`,
         boxShadow: `0 0 30px ${acct.color}05`,
       }}
-      whileHover={{ borderColor: `${acct.color}60`, boxShadow: `0 0 30px ${acct.color}18`, y: -2 }}
+      whileHover={{ borderColor: `${acct.color}60`, boxShadow: `0 0 30px ${acct.color}18`, y: -2, transition: { duration: 0.15 } }}
       whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.15 }}
     >
       {/* Platform icon circle */}
       <div
