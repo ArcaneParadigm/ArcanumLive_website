@@ -18,9 +18,9 @@ interface Film {
 const FILMS: Film[] = [
   { id: 'infinite-recursion', title: 'Infinite Recursion', youtubeId: 'jNcOT5fKMQk', desc: 'Each layer of consciousness reflecting all others endlessly.' },
   { id: 'ascension-city-future', title: 'Ascension City: The Future is Now', youtubeId: 'mJlxIIaEMps', desc: 'An anthem launching viewers into a multiversal dreamworld where ancient magic meets futuristic sound.' },
-  { id: 'whispers-of-the-fae', title: 'Girls of the Multiverse: Whispers of the Fae', youtubeId: 'p9bNH9wDDrY', desc: 'The Fae Realms whisper as divine feminine chaos skips through an enchanted apocalypse.' },
-  { id: 'queen-of-the-infernals', title: 'Queen of the Infernals', youtubeId: 'xTmergUXPtc', desc: 'A seductress forged from smoke, bone, and screams emerges as a gothic horror anthem.' },
   { id: 'eshaton-rap-2025', title: 'The Eshaton Rap 2025', youtubeId: '14W5znwK4OU', desc: 'A sci-fi rap saga depicting a multiversal last stand between annihilation and infinity.' },
+  { id: 'queen-of-the-infernals', title: 'Queen of the Infernals', youtubeId: 'xTmergUXPtc', desc: 'A seductress forged from smoke, bone, and screams emerges as a gothic horror anthem.' },
+  { id: 'whispers-of-the-fae', title: 'Girls of the Multiverse: Whispers of the Fae', youtubeId: 'p9bNH9wDDrY', desc: 'The Fae Realms whisper as divine feminine chaos skips through an enchanted apocalypse.' },
   { id: 'infinite-horizons', title: 'Infinite Horizons feat. the Fly Girls', youtubeId: '6ZBV-xhfCkA', desc: 'An animated sonic voyage across space, soul, and sound for dreamers and starborn wanderers.' },
   { id: 'kumulipo', title: 'Kumulipo: The Age of Creation', youtubeId: 'AY7B9pXHShY', desc: 'A cosmic spectacle unveiling Hawaiian mythology through celestial visuals and mystical narrative.' },
   { id: 'merge-with-you', title: 'Merge With You', youtubeId: '1IqX2ZyU2jM', desc: 'A devotional love song depicting soul fusion across lifetimes through music, motion, and mystic fire.' },
@@ -44,14 +44,14 @@ const FILMS: Film[] = [
 ]
 
 const PREMIERE_FILMS: Film[] = [
-  { id: 'premiere-1', title: 'Ascension Chamber', youtubeId: '4MRrrkrBn_c', desc: 'Entry gateway into the mystical chambers of consciousness.' },
+  { id: 'premiere-1', title: 'Singularity 2026 Trailer', youtubeId: 'f08oGGZbyyc', desc: 'A mythic, glitchcore fever dream rendered with AI visuals, pushing into new dimensions of speed and surreal clarity.' },
   { id: 'premiere-2', title: 'Galactika', youtubeId: 'P0uVoINJNPc', desc: 'A journey through the cosmic architecture of galactic consciousness.' },
   { id: 'premiere-3', title: 'Sacred Transmissions', youtubeId: 'VwTlGogpQ04', desc: 'Divine frequencies encoded in light and sound.' },
-  { id: 'premiere-4', title: 'Quantum Convergence', youtubeId: 'dmifMUZyEm4', desc: 'Where all possibilities collapse into singular moments of creation.' },
+  { id: 'premiere-4', title: 'Ascension Chamber', youtubeId: '4MRrrkrBn_c', desc: 'Entry gateway into the mystical chambers of consciousness.' },
   { id: 'premiere-5', title: 'The Descent', youtubeId: 'lcn9DCqwA5U', desc: 'A dive into the depths of the underworld\'s mysteries.' },
   { id: 'premiere-6', title: 'Ethereal Dance', youtubeId: '9lQpOu5Rm1E', desc: 'Movement through dimensions of pure energy and form.' },
   { id: 'premiere-7', title: 'The Convergence', youtubeId: 'ONLCEq7HXSA', desc: 'All timelines intersect at the eternal now.' },
-  { id: 'premiere-8', title: 'Singularity 2026 Trailer', youtubeId: 'f08oGGZbyyc', desc: 'A mythic, glitchcore fever dream rendered with AI visuals, pushing into new dimensions of speed and surreal clarity.' },
+  { id: 'premiere-8', title: 'Quantum Convergence', youtubeId: 'dmifMUZyEm4', desc: 'Where all possibilities collapse into singular moments of creation.' },
 ]
 
 function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean; onSelect: () => void }) {

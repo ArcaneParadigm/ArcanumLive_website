@@ -56,6 +56,17 @@ export default function Home2Nav() {
       <div className="absolute top-0 left-8 right-8 h-px pointer-events-none"
         style={{ background: `linear-gradient(to right, transparent, ${GOLD}b3 20%, ${GOLD}d9 50%, ${GOLD}b3 80%, transparent)` }} />
 
+      {/* Purple light sweep */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `linear-gradient(90deg, transparent, rgba(168,85,247,0.15) 25%, rgba(168,85,247,0.25) 50%, rgba(168,85,247,0.15) 75%, transparent)`,
+          opacity: 0.4,
+        }}
+        animate={{ x: ['-100%', '100%'] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
       {/* Logo */}
       <Link href="/home2">
         <motion.span
@@ -80,7 +91,7 @@ export default function Home2Nav() {
             <Link href={link.href}>
               <motion.span
                 className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer"
-                style={{ color: 'rgba(255,255,255,0.6)' }}
+                style={{ color: i < 3 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)' }}
                 whileHover={{ color: '#e8dcc8' }}
                 transition={{ duration: 0.15 }}
                 onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
