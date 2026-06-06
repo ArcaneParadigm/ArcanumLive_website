@@ -151,9 +151,9 @@ function Corners({ color = GOLD }: { color?: string }) {
   )
 }
 
-function DoubleRule({ color = GOLD, width = 160 }: { color?: string; width?: number }) {
+function DoubleRule({ color = GOLD, width = 160 }: { color?: string; width?: number | string }) {
   return (
-    <div className="flex flex-col gap-0.5 mb-3" style={{ width }}>
+    <div className="flex flex-col gap-0.5 mb-3" style={{ width: typeof width === 'string' ? width : `${width}px` }}>
       <div className="h-px" style={{ background: `linear-gradient(to right, ${color}80, transparent)` }} />
       <div className="h-px" style={{ background: `linear-gradient(to right, ${color}40, transparent)` }} />
     </div>
@@ -212,7 +212,7 @@ function PanelWithVideo({
   return (
     <motion.div
       className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer"
-      style={{ minHeight: 260, border: `1px solid ${color}30`, boxShadow: `0 0 40px ${color}10` }}
+      style={{ minHeight: 'clamp(200px, 40vh, 320px)', border: `1px solid ${color}30`, boxShadow: `0 0 40px ${color}10` }}
       initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
       transition={{ duration: 0.55, ease: 'easeOut' }}
       whileHover={{ borderColor: `${color}60` }}
@@ -238,21 +238,22 @@ function PanelWithVideo({
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(6,4,12,0.73) 35%, rgba(6,4,12,0.63) 50%, rgba(6,4,12,0.33) 70%, transparent 100%)' }} />
       <Corners color={color} />
 
-      <div className="relative z-10 p-6 flex gap-4 h-full" style={{ minHeight: 260 }}>
+      <div className="relative z-10 p-3 sm:p-4 md:p-6 flex gap-3 sm:gap-4 h-full flex-col sm:flex-row" style={{ minHeight: 'clamp(200px, 40vh, 320px)' }}>
         {/* Text */}
-        <div className="flex flex-col justify-between" style={{ minWidth: 190, maxWidth: 220 }}>
+        <div className="flex flex-col justify-between" style={{ minWidth: 'clamp(150px, 20vw, 220px)', maxWidth: 'clamp(150px, 20vw, 220px)' }}>
           <div>
             <h2 className="font-cinzel text-xl font-bold leading-tight mb-2" style={{
               color: '#fff',
               textShadow: `0 0 18px ${color}80, 0 0 40px ${color}40, 0 1px 4px rgba(0,0,0,0.9)`,
             }}>{title}</h2>
-            <DoubleRule color={color} width={140} />
+            <DoubleRule color={color} width="clamp(100px, 15vw, 140px)" />
             <p className="text-xs leading-relaxed mb-5" style={{
               color: 'rgba(255,255,255,0.88)',
               textShadow: `0 0 14px ${color}60, 0 1px 3px rgba(0,0,0,0.9)`,
+              fontSize: 'clamp(11px, 1.5vw, 13px)',
             }}>{desc}</p>
           </div>
-          <div className="flex flex-col gap-2" style={{ width: 200 }}>
+          <div className="flex flex-col gap-2" style={{ width: 'clamp(150px, 20vw, 200px)' }}>
             <BtnGold label={btnA.label} href={btnA.href} />
             <BtnGhost label={btnB.label} href={btnB.href} color={color} />
           </div>
