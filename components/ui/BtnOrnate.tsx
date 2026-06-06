@@ -93,9 +93,10 @@ interface BtnOrnateProps {
   width?: number
   height?: number
   href?: string
+  responsive?: { width?: string; height?: string }
 }
 
-export function BtnOrnate({ label = 'Enter the Arcanum', width = 360, height = 116, href }: BtnOrnateProps) {
+export function BtnOrnate({ label = 'Enter the Arcanum', width = 360, height = 116, href, responsive }: BtnOrnateProps) {
   const uid  = useId().replace(/:/g, '')
   const CX   = width / 2
   const CUT  = Math.round(height * 0.19)
@@ -208,7 +209,7 @@ export function BtnOrnate({ label = 'Enter the Arcanum', width = 360, height = 1
       {/* Label */}
       <span className="relative z-10 font-cinzel font-bold tracking-[0.22em] uppercase text-center"
         style={{
-          fontSize: 13,
+          fontSize: 'clamp(9px, 2vw, 13px)',
           lineHeight: 1.35,
           whiteSpace: 'pre-line',
           color: 'rgba(225,205,155,0.92)',
@@ -222,7 +223,9 @@ export function BtnOrnate({ label = 'Enter the Arcanum', width = 360, height = 1
   const motionProps = {
     className: 'relative inline-flex items-center justify-center cursor-pointer select-none overflow-visible',
     style: {
-      width, height, marginTop: 26,
+      width: responsive?.width || width,
+      height: responsive?.height || height,
+      marginTop: 'clamp(16px, 3vh, 26px)',
       filter: 'drop-shadow(0 0 8px rgba(180,120,20,0.5)) drop-shadow(0 0 18px rgba(140,90,10,0.3))',
     },
     whileHover: {

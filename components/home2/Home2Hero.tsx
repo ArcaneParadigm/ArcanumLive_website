@@ -21,7 +21,9 @@ const HERO_BTNS = [
 ]
 
 // Tune these two values to align with your art's button positions
-const BTN_W   = 220   // button width (px)
+// Responsive button sizing: min 140px (mobile), max 220px (desktop)
+const BTN_W_RESPONSIVE = 'clamp(140px, 25vw, 220px)'
+const BTN_W   = 220   // fallback for BtnOrnate when clamp not used
 const BTN_Y   = 83    // % from top of hero — halfway to bottom
 
 export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
@@ -87,7 +89,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
       {/* LAYER 3 — Title + subtitle just below the nav header */}
       <div className="absolute inset-x-0 z-20 flex flex-col items-center text-center pointer-events-none"
-        style={{ top: 32 }}>
+        style={{ top: 'clamp(16px, 3vh, 48px)' }}>
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -122,9 +124,9 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       </div>
 
       {/* LAYER 4 — 4 ornate portal buttons centred over image button zone */}
-      <div className="absolute inset-x-0 z-20 flex justify-center"
+      <div className="absolute inset-x-0 z-20 flex justify-center px-2"
         style={{ top: `${BTN_Y}%`, transform: 'translateY(-50%)' }}>
-        <div className="flex gap-4 items-start">
+        <div className="flex gap-2 sm:gap-3 lg:gap-4 items-start flex-wrap justify-center">
           {HERO_BTNS.map((btn, i) => (
             <motion.div
               key={btn.label}
@@ -132,22 +134,22 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 + i * 0.12, ease: 'easeOut' }}
             >
-              <BtnOrnate label={btn.label} href={btn.href} width={BTN_W} height={88} />
+              <BtnOrnate label={btn.label} href={btn.href} width={220} height={88} responsive={{ width: 'clamp(140px, 25vw, 220px)', height: 'clamp(70px, 15vw, 88px)' }} />
             </motion.div>
           ))}
         </div>
       </div>
 
       {/* Bottom page fade */}
-      <div className="absolute bottom-0 inset-x-0 h-32 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to top, #08060e, transparent)' }} />
+      <div className="absolute bottom-0 inset-x-0 pointer-events-none z-10"
+        style={{ height: 'clamp(80px, 15vh, 128px)', background: 'linear-gradient(to top, #08060e, transparent)' }} />
 
       {/* Scroll cue */}
       <motion.div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center gap-1"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1 }}>
-        <p className="text-[8px] tracking-[0.5em] uppercase" style={{ color: 'rgba(201,151,58,0.6)' }}>Scroll to Enter</p>
-        <motion.div className="w-px h-5 mx-auto"
-          style={{ background: 'linear-gradient(to bottom, rgba(201,151,58,0.5), transparent)', originY: 0 }}
+        <p className="tracking-[0.5em] uppercase" style={{ fontSize: 'clamp(6px, 1.5vw, 8px)', color: 'rgba(201,151,58,0.6)' }}>Scroll to Enter</p>
+        <motion.div className="w-px mx-auto"
+          style={{ height: 'clamp(16px, 3vh, 20px)', background: 'linear-gradient(to bottom, rgba(201,151,58,0.5), transparent)', originY: 0 }}
           animate={{ scaleY: [0, 1, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
       </motion.div>
