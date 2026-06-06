@@ -29,11 +29,11 @@ export default function Home2Nav() {
       style={{
         height: 52,
         background: 'linear-gradient(180deg, rgba(18,13,28,0.98) 0%, rgba(10,7,18,0.96) 100%)',
-        borderTop:    `1px solid ${GOLD}55`,
-        borderBottom: `1px solid ${GOLD}30`,
-        borderLeft:   `1px solid ${GOLD}40`,
-        borderRight:  `1px solid ${GOLD}40`,
-        boxShadow: `inset 0 1px 0 ${GOLD}18, inset 0 -1px 0 ${GOLD}10, inset 0 0 60px rgba(201,151,58,0.06), 0 2px 24px rgba(0,0,0,0.6)`,
+        borderTop:    `1px solid ${GOLD}d9`,
+        borderBottom: `1px solid ${GOLD}cc`,
+        borderLeft:   `1px solid ${GOLD}d9`,
+        borderRight:  `1px solid ${GOLD}d9`,
+        boxShadow: `inset 0 1px 0 ${GOLD}cc, inset 0 -1px 0 ${GOLD}b3, inset 0 0 60px rgba(201,151,58,0.25), 0 2px 24px rgba(0,0,0,0.6)`,
       }}
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -41,20 +41,20 @@ export default function Home2Nav() {
     >
       {/* Angled corner cuts */}
       <svg className="absolute top-0 left-0 pointer-events-none" width="22" height="22" viewBox="0 0 22 22" fill="none">
-        <path d="M0 22 L0 8 L8 0 L22 0" stroke={`${GOLD}70`} strokeWidth="1" fill="none"/>
+        <path d="M0 22 L0 8 L8 0 L22 0" stroke={`${GOLD}cc`} strokeWidth="1" fill="none"/>
       </svg>
       <svg className="absolute top-0 right-0 pointer-events-none" width="22" height="22" viewBox="0 0 22 22" fill="none">
-        <path d="M22 22 L22 8 L14 0 L0 0" stroke={`${GOLD}70`} strokeWidth="1" fill="none"/>
+        <path d="M22 22 L22 8 L14 0 L0 0" stroke={`${GOLD}cc`} strokeWidth="1" fill="none"/>
       </svg>
       <svg className="absolute bottom-0 left-0 pointer-events-none" width="22" height="22" viewBox="0 0 22 22" fill="none">
-        <path d="M0 0 L0 14 L8 22 L22 22" stroke={`${GOLD}45`} strokeWidth="1" fill="none"/>
+        <path d="M0 0 L0 14 L8 22 L22 22" stroke={`${GOLD}b3`} strokeWidth="1" fill="none"/>
       </svg>
       <svg className="absolute bottom-0 right-0 pointer-events-none" width="22" height="22" viewBox="0 0 22 22" fill="none">
-        <path d="M22 0 L22 14 L14 22 L0 22" stroke={`${GOLD}45`} strokeWidth="1" fill="none"/>
+        <path d="M22 0 L22 14 L14 22 L0 22" stroke={`${GOLD}b3`} strokeWidth="1" fill="none"/>
       </svg>
       {/* Inner glow line */}
       <div className="absolute top-0 left-8 right-8 h-px pointer-events-none"
-        style={{ background: `linear-gradient(to right, transparent, ${GOLD}40 20%, ${GOLD}60 50%, ${GOLD}40 80%, transparent)` }} />
+        style={{ background: `linear-gradient(to right, transparent, ${GOLD}b3 20%, ${GOLD}d9 50%, ${GOLD}b3 80%, transparent)` }} />
 
       {/* Logo */}
       <Link href="/home2">

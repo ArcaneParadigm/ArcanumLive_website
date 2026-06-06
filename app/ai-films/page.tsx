@@ -16,7 +16,7 @@ interface Film {
 }
 
 const FILMS: Film[] = [
-  { id: 'singularity-2026', title: 'Singularity 2026 Trailer', youtubeId: 'f08oGGZbyyc', desc: 'A mythic, glitchcore fever dream rendered with AI visuals, pushing into new dimensions of speed and surreal clarity.' },
+  { id: 'infinite-recursion', title: 'Infinite Recursion', youtubeId: 'jNcOT5fKMQk', desc: 'Each layer of consciousness reflecting all others endlessly.' },
   { id: 'ascension-city-future', title: 'Ascension City: The Future is Now', youtubeId: 'mJlxIIaEMps', desc: 'An anthem launching viewers into a multiversal dreamworld where ancient magic meets futuristic sound.' },
   { id: 'whispers-of-the-fae', title: 'Girls of the Multiverse: Whispers of the Fae', youtubeId: 'p9bNH9wDDrY', desc: 'The Fae Realms whisper as divine feminine chaos skips through an enchanted apocalypse.' },
   { id: 'queen-of-the-infernals', title: 'Queen of the Infernals', youtubeId: 'xTmergUXPtc', desc: 'A seductress forged from smoke, bone, and screams emerges as a gothic horror anthem.' },
@@ -28,7 +28,7 @@ const FILMS: Film[] = [
   { id: 'metaburn-horizon', title: 'Metaburn777: Chasing the Horizon', youtubeId: 'dGwX8Dfm7Qw', desc: 'A soul-scorching odyssey across galaxies where futurepunk druid witches dance in celestial ember-light.' },
   { id: 'singularity-part1', title: 'Singularity Part 1: Dawning of the Sixth Age', youtubeId: 'vpdODmduicM', desc: 'Explores the technological singularity hypothesis and superintelligence development implications.' },
   { id: 'cyber-geisha-ep3', title: 'Cyber Shamanic Ninja Geishas — Episode 3', youtubeId: 'e7QXdwy0n_Y', desc: 'Ancient arts meet futuristic fury as cyber shamanic geishas battle malevolent forces toward singularity.' },
-  { id: 'whisker-wings', title: 'Whisker Wings Episode 1', youtubeId: 'rl-0v2x6m2c', desc: 'Dragon kitten Whisker Wings journeys through a magical realm discovering dragonflies and mythical creatures.' },
+  { id: 'whisker-wings', title: 'Whisker Wings Episode 1', youtubeId: 'wn55IMZeT24', desc: 'Dragon kitten Whisker Wings journeys through a magical realm discovering dragonflies and mythical creatures.' },
   { id: 'pudgy-penguins', title: 'Pudgy Penguins', youtubeId: 'TdzqvQXM1ro', desc: 'A creative work featuring whimsical penguin characters in a magical world.' },
   { id: 'gypsey-feather', title: 'Gypsey Feather', youtubeId: 'UBDCrXvuVt0', desc: 'A sacred meditation exploring the spiritual essence of feather spirits.' },
   { id: 'metaburn-crystal', title: 'Metaburn the Crystal', youtubeId: 'm8_lXeufQzI', desc: 'Crystal energy, sacred geometry, and the Metaburn universe collide.' },
@@ -51,7 +51,7 @@ const PREMIERE_FILMS: Film[] = [
   { id: 'premiere-5', title: 'The Descent', youtubeId: 'lcn9DCqwA5U', desc: 'A dive into the depths of the underworld\'s mysteries.' },
   { id: 'premiere-6', title: 'Ethereal Dance', youtubeId: '9lQpOu5Rm1E', desc: 'Movement through dimensions of pure energy and form.' },
   { id: 'premiere-7', title: 'The Convergence', youtubeId: 'ONLCEq7HXSA', desc: 'All timelines intersect at the eternal now.' },
-  { id: 'premiere-8', title: 'Infinite Recursion', youtubeId: 'jNcOT5fKMQk', desc: 'Each layer of consciousness reflecting all others endlessly.' },
+  { id: 'premiere-8', title: 'Singularity 2026 Trailer', youtubeId: 'f08oGGZbyyc', desc: 'A mythic, glitchcore fever dream rendered with AI visuals, pushing into new dimensions of speed and surreal clarity.' },
 ]
 
 function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean; onSelect: () => void }) {
@@ -165,8 +165,12 @@ export default function AiFilmsPage() {
           </div>
 
           {/* Divider */}
-          <div className="relative h-px my-10"
-            style={{ background: `linear-gradient(90deg, transparent, ${GOLD}40, transparent)` }} />
+          <div className="relative my-8">
+            <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}cc, transparent)` }} />
+            <div className="text-center mt-4">
+              <span className="font-cinzel text-sm tracking-widest" style={{ color: `${GOLD}cc` }}>AI FILMS</span>
+            </div>
+          </div>
         </div>
 
         {/* All Films Grid */}
