@@ -64,7 +64,7 @@ export default function Home2Nav() {
           opacity: 0.8,
         }}
         animate={{ x: ['-100%', '100%'] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 7.5, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Logo */}
