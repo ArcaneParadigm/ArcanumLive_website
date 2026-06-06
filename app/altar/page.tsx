@@ -128,12 +128,13 @@ function LightCodeCard({ lc, isActive, onSelect }: { lc: LightCode; isActive: bo
 
 // ── Sacred geometry pulse orb ─────────────────────────────────────────────────
 
-function PulseOrb({ color, size = 200, delay = 0 }: { color: string; size?: number; delay?: number }) {
+function PulseOrb({ color, size = 200, delay = 0, responsive = false }: { color: string; size?: number; delay?: number; responsive?: boolean }) {
+  const actualSize = responsive ? `clamp(${size * 0.5}px, ${size * 12.5}vw, ${size}px)` : size
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div className="relative flex items-center justify-center" style={{ width: actualSize, height: actualSize }}>
       {[0, 1, 2].map(i => (
         <motion.div key={i} className="absolute rounded-full"
-          style={{ border: `1px solid ${color}`, width: size - i * 30, height: size - i * 30 }}
+          style={{ border: `1px solid ${color}`, width: responsive ? `calc(${actualSize} - ${i * 30}px)` : size - i * 30, height: responsive ? `calc(${actualSize} - ${i * 30}px)` : size - i * 30 }}
           animate={{ scale: [1, 1.08, 1], opacity: [0.6 - i * 0.15, 0.9 - i * 0.15, 0.6 - i * 0.15] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: delay + i * 0.4 }} />
       ))}
@@ -162,7 +163,7 @@ export default function AltarPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
           className="relative inline-flex items-center justify-center gap-8">
           {/* Left orb */}
-          <PulseOrb color={VIOLET} size={64} delay={0} />
+          <PulseOrb color={VIOLET} size={64} delay={0} responsive />
 
           {/* Title block */}
           <div className="text-center">

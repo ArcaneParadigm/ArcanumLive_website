@@ -166,8 +166,8 @@ function AlbumCard({ album, isOpen, onToggle, playingTrack, onPlayTrack }: {
         transition={{ duration: 0.12 }}
       >
         <div className="shrink-0 rounded-lg flex items-center justify-center"
-          style={{ width: 56, height: 56, background: `radial-gradient(ellipse at 40% 40%, ${album.color}30, #08060e)`, border: `1px solid ${album.color}40` }}>
-          <span style={{ fontSize: 22, filter: `drop-shadow(0 0 8px ${album.color})` }}>{ICON}</span>
+          style={{ width: 'clamp(40px, 10vw, 56px)', height: 'clamp(40px, 10vw, 56px)', background: `radial-gradient(ellipse at 40% 40%, ${album.color}30, #08060e)`, border: `1px solid ${album.color}40` }}>
+          <span style={{ fontSize: 'clamp(14px, 3vw, 22px)', filter: `drop-shadow(0 0 8px ${album.color})` }}>{ICON}</span>
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-cinzel text-sm font-bold tracking-wide truncate"

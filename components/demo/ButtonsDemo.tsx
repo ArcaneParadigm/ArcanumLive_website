@@ -204,7 +204,7 @@ function PanelSectionFullBleed({ title, desc, color, btnA = 'Watch Now', btnB = 
   return (
     <motion.div
       className="relative rounded-2xl overflow-hidden border flex-1 cursor-pointer"
-      style={{ minHeight: 240, borderColor: `${color}40`, boxShadow: `0 0 40px ${color}12` }}
+      style={{ minHeight: 'clamp(180px, 45vh, 280px)', borderColor: `${color}40`, boxShadow: `0 0 40px ${color}12` }}
       whileHover={{ borderColor: `${color}80`, boxShadow: `0 8px 48px ${color}28`, transition: { duration: 0.2 } }}
       onMouseEnter={() => playCrystalBowl(color, 0.07)}
     >
@@ -230,19 +230,19 @@ function PanelSectionFullBleed({ title, desc, color, btnA = 'Watch Now', btnB = 
         style={{ borderBottom: `1px solid ${color}25`, borderRight: `1px solid ${color}25` }} />
 
       {/* Content row */}
-      <div className="relative z-10 flex items-stretch" style={{ minHeight: 260 }}>
+      <div className="relative z-10 flex items-stretch" style={{ minHeight: 'clamp(200px, 45vh, 320px)' }}>
         {/* Text column */}
-        <div className="flex flex-col justify-between p-6" style={{ minWidth: 280, maxWidth: 340 }}>
+        <div className="flex flex-col justify-between p-6" style={{ minWidth: 'clamp(220px, 35vw, 340px)', maxWidth: 'clamp(220px, 35vw, 340px)' }}>
           <div>
             <h3 className="font-cinzel text-2xl font-bold leading-tight mb-2" style={{ color: '#e8dcc8' }}>{title}</h3>
             {/* Double rule lines */}
-            <div className="flex flex-col gap-0.5 mb-3" style={{ width: 160 }}>
+            <div className="flex flex-col gap-0.5 mb-3" style={{ width: 'clamp(120px, 25vw, 160px)' }}>
               <div className="h-px" style={{ background: `linear-gradient(to right, ${color}80, transparent)` }} />
               <div className="h-px" style={{ background: `linear-gradient(to right, ${color}40, transparent)` }} />
             </div>
             <p className="text-white/55 text-sm leading-relaxed mb-6">{desc}</p>
           </div>
-          <div className="flex flex-col gap-2" style={{ width: 240 }}>
+          <div className="flex flex-col gap-2" style={{ width: 'clamp(180px, 30vw, 240px)' }}>
             <BtnPanelGold label={btnA} color={color} />
             <BtnPanelGhost label={btnB} color={color} />
           </div>
@@ -269,7 +269,7 @@ function PanelSectionFullBleed({ title, desc, color, btnA = 'Watch Now', btnB = 
                   <img src={(item as { src: string }).src} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 )}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span style={{ color: GALLERY_WORLDS[i % 6].color, opacity: 0.18, fontSize: 18 }}>✦</span>
+                  <span style={{ color: GALLERY_WORLDS[i % 6].color, opacity: 0.18, fontSize: 'clamp(14px, 3vw, 18px)' }}>✦</span>
                 </div>
                 <div className="absolute top-0 left-0 w-3 h-3" style={{ borderTop: `1px solid ${GOLD}60`, borderLeft: `1px solid ${GOLD}60` }} />
                 <div className="absolute bottom-0 right-0 w-3 h-3" style={{ borderBottom: `1px solid ${GOLD}40`, borderRight: `1px solid ${GOLD}40` }} />
@@ -297,7 +297,7 @@ function PanelSection({ title, desc, color, btnA = 'Watch Now', btnB = 'Learn Mo
   return (
     <motion.div
       className="relative rounded-2xl overflow-hidden border flex-1 cursor-pointer flex"
-      style={{ minHeight: 220, borderColor: `${color}35`, background: 'linear-gradient(135deg, #0d0a18 0%, #08060e 100%)', boxShadow: `0 0 40px ${color}10` }}
+      style={{ minHeight: 'clamp(160px, 35vh, 260px)', borderColor: `${color}35`, background: 'linear-gradient(135deg, #0d0a18 0%, #08060e 100%)', boxShadow: `0 0 40px ${color}10` }}
       whileHover={{ borderColor: `${color}65`, boxShadow: `0 8px 48px ${color}20`, transition: { duration: 0.2 } }}
       onMouseEnter={() => playCrystalBowl(color, 0.07)}
     >
@@ -322,21 +322,21 @@ function PanelSection({ title, desc, color, btnA = 'Watch Now', btnB = 'Learn Mo
       {/* RIGHT — framed image */}
       <div className="shrink-0 flex items-center pr-4 py-4" style={{ width: '44%' }}>
         <div className="relative w-full h-full rounded-xl overflow-hidden"
-          style={{ border: `1px solid ${color}40`, boxShadow: `0 0 24px ${color}20, inset 0 0 0 1px rgba(255,255,255,0.04)`, minHeight: 160 }}>
+          style={{ border: `1px solid ${color}40`, boxShadow: `0 0 24px ${color}20, inset 0 0 0 1px rgba(255,255,255,0.04)`, minHeight: 'clamp(120px, 25vh, 180px)' }}>
           {video ? (
             <video
               ref={videoRef}
               src={video}
               poster={image}
               className="w-full h-full object-cover object-center"
-              style={{ minHeight: 160 }}
+              style={{ minHeight: 'clamp(120px, 25vh, 180px)' }}
               loop
               playsInline
             />
           ) : image ? (
-            <img src={image} alt="" className="w-full h-full object-cover object-center" style={{ minHeight: 160 }} />
+            <img src={image} alt="" className="w-full h-full object-cover object-center" style={{ minHeight: 'clamp(120px, 25vh, 180px)' }} />
           ) : (
-            <div className="w-full h-full flex items-center justify-center" style={{ minHeight: 160, background: `radial-gradient(ellipse at 50% 40%, ${color}18, #08060e)` }}>
+            <div className="w-full h-full flex items-center justify-center" style={{ minHeight: 'clamp(120px, 25vh, 180px)', background: `radial-gradient(ellipse at 50% 40%, ${color}18, #08060e)` }}>
               <span className="text-white/10 text-xs tracking-widest uppercase">Drop trailer</span>
             </div>
           )}
@@ -349,7 +349,7 @@ function PanelSection({ title, desc, color, btnA = 'Watch Now', btnB = 'Learn Mo
               animate={{ opacity: playing ? 0 : 1 }}
               transition={{ duration: 0.15 }}
             >
-              <span style={{ color: '#e8dcc8', fontSize: 16, marginLeft: 3 }}>▶</span>
+              <span style={{ color: '#e8dcc8', fontSize: 'clamp(12px, 2vw, 16px)', marginLeft: 3 }}>▶</span>
             </motion.div>
           </div>
           {/* Corner accent lines on image frame */}
@@ -363,7 +363,7 @@ function PanelSection({ title, desc, color, btnA = 'Watch Now', btnB = 'Learn Mo
       {/* Pagination dots — bottom right */}
       <div className="absolute bottom-3 right-4 flex gap-1.5">
         {[0,1,2,3].map(i => (
-          <div key={i} className="rounded-full" style={{ width: i === 0 ? 16 : 6, height: 6, background: i === 0 ? color : `${color}35` }} />
+          <div key={i} className="rounded-full" style={{ width: i === 0 ? 'clamp(12px, 2vw, 16px)' : 'clamp(4px, 1vw, 6px)', height: 'clamp(4px, 1vw, 6px)', background: i === 0 ? color : `${color}35` }} />
         ))}
       </div>
 
@@ -428,7 +428,7 @@ function PanelModeChip({ label, symbol, desc, color }: { label: string; symbol: 
 function PanelPortalCard({ title, subtitle, symbol, color }: { title: string; subtitle: string; symbol: string; color: string }) {
   return (
     <motion.div className="rounded-2xl border p-5 flex flex-col items-center text-center cursor-pointer relative overflow-hidden"
-      style={{ borderColor: `${color}25`, background: `radial-gradient(ellipse at 50% 0%, ${color}10, rgba(8,6,14,0.95) 70%)`, minHeight: 160 }}
+      style={{ borderColor: `${color}25`, background: `radial-gradient(ellipse at 50% 0%, ${color}10, rgba(8,6,14,0.95) 70%)`, minHeight: 'clamp(120px, 25vh, 180px)' }}
       whileHover={{ y: -8, scale: 1.03, borderColor: `${color}70`, boxShadow: `0 16px 48px ${color}25`, transition: { type: 'spring', stiffness: 350, damping: 12 } }}
       onMouseEnter={() => playCrystalBowl(color, 0.09)}>
       <div className="absolute top-0 inset-x-0 h-16 pointer-events-none"
@@ -569,7 +569,7 @@ function PanelPortraitCardAlt({ title, subtitle, color }: { title: string; subti
         <p className="text-[8px] tracking-[0.4em] uppercase mb-1" style={{ color: `${color}70` }}>{subtitle}</p>
         <h4 className="font-cinzel text-base font-bold tracking-wide" style={{ color }}>{title}</h4>
         {/* Thin divider */}
-        <div className="mt-2 h-px w-8" style={{ background: `${color}50` }} />
+        <div className="mt-2 h-px" style={{ width: 'clamp(20px, 5vw, 32px)', background: `${color}50` }} />
       </div>
     </motion.div>
   )

@@ -84,7 +84,7 @@ function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean;
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-10 h-10 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(0,0,0,0.7)', border: `1px solid ${GOLD}80` }}>
-              <span style={{ color: GOLD, fontSize: 14, marginLeft: 2 }}>▶</span>
+              <span style={{ color: GOLD, fontSize: 'clamp(10px, 2vw, 14px)', marginLeft: 2 }}>▶</span>
             </div>
           </div>
         )}
