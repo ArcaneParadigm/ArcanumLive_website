@@ -85,16 +85,17 @@ export default function Home2Nav() {
       <nav className="flex items-center gap-2 z-10">
         {NAV_LINKS.map((link, i) => (
           <div key={link.label} className="flex items-center gap-2 relative group">
-            {/* Hover beveled button - gold gradient, within bar */}
-            <div className="absolute inset-y-0 -inset-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none rounded"
-              style={{
-                background: `linear-gradient(to right, ${GOLD}30 0%, ${GOLD}45 15%, ${GOLD}60 50%, ${GOLD}45 85%, ${GOLD}30 100%)`,
-                backdropFilter: 'blur(12px)',
-                border: `1px solid ${GOLD}50`,
-                boxShadow: `inset 0 1px 0 ${GOLD}70, inset 0 -1px 0 ${GOLD}15, inset 1px 0 0 ${GOLD}60, inset -1px 0 0 ${GOLD}25, 0 4px 12px rgba(0,0,0,0.5)`,
-              }} />
-
-            <Link href={link.href}>
+            <Link href={link.href} className="relative">
+              {/* Hover beveled button - gold gradient, full height within piping */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none rounded"
+                style={{
+                  top: '-26px',
+                  bottom: '-26px',
+                  background: `linear-gradient(to right, ${GOLD}30 0%, ${GOLD}45 15%, ${GOLD}60 50%, ${GOLD}45 85%, ${GOLD}30 100%)`,
+                  backdropFilter: 'blur(12px)',
+                  border: `1px solid ${GOLD}50`,
+                  boxShadow: `inset 0 1px 0 ${GOLD}70, inset 0 -1px 0 ${GOLD}15, inset 1px 0 0 ${GOLD}60, inset -1px 0 0 ${GOLD}25, 0 4px 12px rgba(0,0,0,0.5)`,
+                }} />
               <motion.span
                 className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer relative z-10 px-2"
                 style={{ color: i < 3 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)' }}
