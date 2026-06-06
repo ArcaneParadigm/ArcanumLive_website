@@ -159,13 +159,13 @@ export default function AiFilmsPage() {
                 key={film.id}
                 film={film}
                 isActive={selected.id === film.id}
-                onSelect={() => { setPremiereSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                onSelect={() => { setSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
               />
             ))}
           </div>
 
           {/* Divider */}
-          <div className="relative h-px bg-gradient-to-r from-transparent via-gold via-opacity-30 to-transparent my-10"
+          <div className="relative h-px my-10"
             style={{ background: `linear-gradient(90deg, transparent, ${GOLD}40, transparent)` }} />
         </div>
 
