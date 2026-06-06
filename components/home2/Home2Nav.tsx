@@ -56,16 +56,13 @@ export default function Home2Nav() {
       <div className="absolute top-0 left-8 right-8 h-px pointer-events-none"
         style={{ background: `linear-gradient(to right, transparent, ${GOLD}b3 20%, ${GOLD}d9 50%, ${GOLD}b3 80%, transparent)` }} />
 
-      {/* Purple light sweep */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
+      {/* Purple to cobalt gradient underlay */}
+      <div className="absolute inset-0 pointer-events-none"
         style={{
-          background: `linear-gradient(90deg, transparent 0%, rgba(139,46,226,0.8) 20%, rgba(139,46,226,1.0) 35%, rgba(0,0,0,0.95) 50%, rgba(139,46,226,1.0) 65%, rgba(139,46,226,0.8) 80%, transparent 100%)`,
-          opacity: 1.0,
-        }}
-        animate={{ x: ['-100%', '100%'] }}
-        transition={{ duration: 37.5, repeat: Infinity, ease: 'easeInOut' }}
-      />
+          background: `linear-gradient(90deg, rgba(139,46,226,0) 0%, rgba(139,46,226,0.35) 15%, rgba(75,0,130,0.48) 50%, rgba(65,105,225,0.35) 85%, rgba(65,105,225,0) 100%)`,
+          filter: 'blur(12px)',
+          opacity: 0.7,
+        }} />
 
       {/* Logo */}
       <Link href="/home2">
@@ -87,10 +84,19 @@ export default function Home2Nav() {
       {/* Nav */}
       <nav className="flex items-center gap-2 z-10">
         {NAV_LINKS.map((link, i) => (
-          <div key={link.label} className="flex items-center gap-2">
+          <div key={link.label} className="flex items-center gap-2 relative">
+            {/* Beveled glass button background */}
+            <div className="absolute inset-0 rounded px-2 pointer-events-none"
+              style={{
+                background: `linear-gradient(135deg, ${GOLD}25 0%, ${GOLD}15 50%, ${GOLD}10 100%)`,
+                border: `1px solid ${GOLD}40`,
+                boxShadow: `inset 0 1px 0 ${GOLD}50, inset 0 -1px 0 ${GOLD}20, 0 2px 4px rgba(0,0,0,0.4)`,
+                backdropFilter: 'blur(8px)',
+              }} />
+
             <Link href={link.href}>
               <motion.span
-                className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer"
+                className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer relative z-10 px-2"
                 style={{ color: i < 3 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)' }}
                 whileHover={{ color: '#e8dcc8' }}
                 transition={{ duration: 0.15 }}
