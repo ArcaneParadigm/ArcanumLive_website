@@ -60,11 +60,11 @@ export default function Home2Nav() {
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `linear-gradient(90deg, transparent, rgba(168,85,247,0.15) 25%, rgba(168,85,247,0.25) 50%, rgba(168,85,247,0.15) 75%, transparent)`,
-          opacity: 0.4,
+          background: `linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.4) 20%, rgba(168,85,247,0.6) 35%, rgba(0,0,0,0.9) 50%, rgba(168,85,247,0.6) 65%, rgba(168,85,247,0.4) 80%, transparent 100%)`,
+          opacity: 0.8,
         }}
         animate={{ x: ['-100%', '100%'] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Logo */}
@@ -100,7 +100,7 @@ export default function Home2Nav() {
               </motion.span>
             </Link>
             {i < NAV_LINKS.length - 1 && (
-              <div className="w-px h-3" style={{ background: `${GOLD}40` }} />
+              <div className="h-3" style={{ width: '2px', background: `${GOLD}cc` }} />
             )}
           </div>
         ))}
