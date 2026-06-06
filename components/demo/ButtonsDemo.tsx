@@ -667,7 +667,7 @@ function ScreensaverBanner({ image, video }: { image?: string; video?: string })
               animate={{ opacity: playing ? 0 : 1 }}
               transition={{ duration: 0.15 }}
             >
-              <span style={{ color: '#e8dcc8', fontSize: 14, marginLeft: 2 }}>▶</span>
+              <span style={{ color: '#e8dcc8', fontSize: 'clamp(10px, 2vw, 14px)', marginLeft: 2 }}>▶</span>
             </motion.div>
           </div>
           {/* Corner accents on frame */}
@@ -693,7 +693,7 @@ function ScreensaverBanner({ image, video }: { image?: string; video?: string })
             {/* Icon tile */}
             <div className="relative flex items-center justify-center rounded-xl"
               style={{
-                width: 60, height: 60,
+                width: 'clamp(50px, 12vw, 60px)', height: 'clamp(50px, 12vw, 60px)',
                 background: activeMode === i
                   ? `radial-gradient(ellipse at 50% 30%, ${m.color}35, ${m.color}10)`
                   : `radial-gradient(ellipse at 50% 30%, ${m.color}18, #08060e)`,
@@ -702,14 +702,14 @@ function ScreensaverBanner({ image, video }: { image?: string; video?: string })
                 transition: 'all 0.2s',
               }}>
               <motion.span
-                style={{ color: m.color, fontSize: 22 }}
+                style={{ color: m.color, fontSize: 'clamp(16px, 3vw, 22px)' }}
                 animate={{ scale: activeMode === i ? [1, 1.15, 1] : 1, opacity: activeMode === i ? [0.8, 1, 0.8] : 0.6 }}
                 transition={{ duration: 2.5, repeat: activeMode === i ? Infinity : 0, ease: 'easeInOut' }}
               >{m.symbol}</motion.span>
             </div>
             {/* Label */}
             <p className="text-center font-medium leading-tight whitespace-pre-line"
-              style={{ fontSize: 9, letterSpacing: '0.05em', color: activeMode === i ? '#e8dcc8' : 'rgba(255,255,255,0.4)' }}>
+              style={{ fontSize: 'clamp(7px, 1.5vw, 9px)', letterSpacing: '0.05em', color: activeMode === i ? '#e8dcc8' : 'rgba(255,255,255,0.4)' }}>
               {m.label}
             </p>
           </motion.button>
@@ -775,7 +775,7 @@ function SonicRealmsPanel() {
                 initial={{ opacity: 0 }} whileHover={{ opacity: 1 }} transition={{ duration: 0.15 }}>
                 <div className="w-9 h-9 rounded-full flex items-center justify-center"
                   style={{ background: 'rgba(0,0,0,0.6)', border: `1px solid ${r.color}80`, backdropFilter: 'blur(4px)' }}>
-                  <span style={{ color: '#e8dcc8', fontSize: 13, marginLeft: 2 }}>▶</span>
+                  <span style={{ color: '#e8dcc8', fontSize: 'clamp(9px, 1.8vw, 13px)', marginLeft: 2 }}>▶</span>
                 </div>
               </motion.div>
               {/* Corner accents */}
@@ -846,11 +846,11 @@ function WorldsExploreRail() {
       <div className="flex items-center justify-center gap-4 mb-8 px-6">
         <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${GOLD}50)` }} />
         <div className="flex items-center gap-3">
-          <span style={{ color: GOLD, fontSize: 12 }}>◆</span>
+          <span style={{ color: GOLD, fontSize: 'clamp(9px, 1.8vw, 12px)' }}>◆</span>
           <h2 className="font-cinzel text-lg font-bold tracking-[0.35em] uppercase" style={{ color: '#e8dcc8' }}>
             Explore the Worlds
           </h2>
-          <span style={{ color: GOLD, fontSize: 12 }}>◆</span>
+          <span style={{ color: GOLD, fontSize: 'clamp(9px, 1.8vw, 12px)' }}>◆</span>
         </div>
         <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
       </div>
@@ -860,7 +860,7 @@ function WorldsExploreRail() {
         {/* Left arrow */}
         <button
           className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center rounded-full"
-          style={{ width: 36, height: 36, background: 'rgba(8,6,14,0.85)', border: `1px solid ${GOLD}40`, color: '#e8dcc8', fontSize: 16 }}
+          style={{ width: 'clamp(28px, 8vw, 36px)', height: 'clamp(28px, 8vw, 36px)', background: 'rgba(8,6,14,0.85)', border: `1px solid ${GOLD}40`, color: '#e8dcc8', fontSize: 'clamp(12px, 2.5vw, 16px)' }}
           onClick={() => scroll(-1)}
         >‹</button>
 
@@ -876,7 +876,7 @@ function WorldsExploreRail() {
               key={w.title}
               className="shrink-0 relative rounded-xl overflow-hidden cursor-pointer"
               style={{
-                width: 108,
+                width: 'clamp(80px, 18vw, 108px)',
                 aspectRatio: '3/4',
                 border: `1px solid ${GOLD}45`,
                 background: `radial-gradient(ellipse at 50% 30%, ${w.color}20, #06040c 70%)`,
@@ -911,7 +911,7 @@ function WorldsExploreRail() {
         {/* Right arrow */}
         <button
           className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center rounded-full"
-          style={{ width: 36, height: 36, background: 'rgba(8,6,14,0.85)', border: `1px solid ${GOLD}40`, color: '#e8dcc8', fontSize: 16 }}
+          style={{ width: 'clamp(28px, 8vw, 36px)', height: 'clamp(28px, 8vw, 36px)', background: 'rgba(8,6,14,0.85)', border: `1px solid ${GOLD}40`, color: '#e8dcc8', fontSize: 'clamp(12px, 2.5vw, 16px)' }}
           onClick={() => scroll(1)}
         >›</button>
 
@@ -1046,9 +1046,9 @@ function ChoosePortalSection() {
       <div className="flex items-center justify-center gap-4 mb-8">
         <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${GOLD}50)` }} />
         <div className="flex items-center gap-3">
-          <span style={{ color: GOLD, fontSize: 12 }}>◆</span>
+          <span style={{ color: GOLD, fontSize: 'clamp(9px, 1.8vw, 12px)' }}>◆</span>
           <h2 className="font-cinzel text-lg font-bold tracking-[0.35em] uppercase" style={{ color: '#e8dcc8' }}>Choose Your Portal</h2>
-          <span style={{ color: GOLD, fontSize: 12 }}>◆</span>
+          <span style={{ color: GOLD, fontSize: 'clamp(9px, 1.8vw, 12px)' }}>◆</span>
         </div>
         <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
       </div>
@@ -1069,7 +1069,7 @@ function ChoosePortalSection() {
                 clipPath: 'polygon(16px 0%, calc(100% - 16px) 0%, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0% calc(100% - 16px), 0% 16px)',
               }}>
               {/* Glowing portal orb */}
-              <div className="relative mb-2" style={{ width: 80, height: 80 }}>
+              <div className="relative mb-2" style={{ width: 'clamp(60px, 15vw, 80px)', height: 'clamp(60px, 15vw, 80px)' }}>
                 {/* Outer ring */}
                 <div className="absolute inset-0 rounded-full"
                   style={{ border: `1px solid ${p.color}50`, boxShadow: `0 0 20px ${p.glow}30` }} />
@@ -1096,7 +1096,7 @@ function ChoosePortalSection() {
             {/* Label */}
             <p className="font-cinzel text-xs font-bold tracking-widest uppercase text-center" style={{ color: '#e8dcc8' }}>{p.label}</p>
             {p.sub && <p className="text-[9px] tracking-widest uppercase text-center mt-0.5" style={{ color: GOLD }}>{p.sub}</p>}
-            <p className="mt-1 text-white/40" style={{ fontSize: 12 }}>›</p>
+            <p className="mt-1 text-white/40" style={{ fontSize: 'clamp(9px, 1.8vw, 12px)' }}>›</p>
           </motion.div>
         ))}
       </div>
@@ -1182,13 +1182,13 @@ function SiteHeader() {
       {/* Sound toggle */}
       <motion.button
         className="flex items-center gap-1.5 z-10 select-none"
-        style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.35)', fontSize: 11, letterSpacing: '0.15em' }}
+        style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.35)', fontSize: 'clamp(8px, 1.5vw, 11px)', letterSpacing: '0.15em' }}
         whileHover={{ color: soundOn ? GOLD : 'rgba(255,255,255,0.6)' }}
         transition={{ duration: 0.15 }}
         onClick={() => setSoundOn(s => !s)}
         onMouseEnter={() => playCrystalBowl(GOLD, 0.04)}
       >
-        <span style={{ fontSize: 14 }}>{soundOn ? '🔊' : '🔇'}</span>
+        <span style={{ fontSize: 'clamp(10px, 2vw, 14px)' }}>{soundOn ? '🔊' : '🔇'}</span>
         <span className="uppercase tracking-widest text-[9px]">{soundOn ? 'Sound On' : 'Sound Off'}</span>
       </motion.button>
     </motion.header>
@@ -1289,7 +1289,7 @@ function SiteFooter() {
               type="email"
               placeholder="Your email address"
               className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md outline-none text-white/70 placeholder-white/25"
-              style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${GOLD}30`, fontSize: 10 }}
+              style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${GOLD}30`, fontSize: 'clamp(8px, 1.5vw, 10px)' }}
             />
             <motion.button
               className="px-3 py-1.5 rounded-md text-[9px] font-semibold tracking-widest uppercase text-white whitespace-nowrap shrink-0"

@@ -285,7 +285,7 @@ function PanelWithVideo({
                   animate={{ opacity: playing ? 0 : 1 }} transition={{ duration: 0.3 }}>
                   <div className="w-14 h-14 rounded-full flex items-center justify-center"
                     style={{ background: `${color}30`, border: `1px solid ${color}60`, backdropFilter: 'blur(4px)' }}>
-                    <span style={{ color, fontSize: 20 }}>▶</span>
+                    <span style={{ color, fontSize: 'clamp(14px, 3vw, 20px)' }}>▶</span>
                   </div>
                 </motion.div>
               </>
@@ -517,7 +517,7 @@ function ScreensaverBanner() {
                   onHoverStart={() => S.solfeggio(m.hz)}
                   whileHover={{ background: `${m.color}99`, boxShadow: `0 0 16px ${m.color}90, inset 0 0 10px ${m.color}40` }}
                   transition={{ duration: 0.15 }}>
-                  <span style={{ color: active === i ? '#fff' : m.color, fontSize: 16, lineHeight: 1, filter: `drop-shadow(0 0 4px ${m.color})` }}>{m.symbol}</span>
+                  <span style={{ color: active === i ? '#fff' : m.color, fontSize: 'clamp(12px, 2.5vw, 16px)', lineHeight: 1, filter: `drop-shadow(0 0 4px ${m.color})` }}>{m.symbol}</span>
                   <div className="flex flex-col min-w-0">
                     <span className="text-[9px] tracking-wider uppercase whitespace-pre-line leading-tight font-semibold"
                       style={{ color: active === i ? '#fff' : '#e8dcc8', textShadow: `0 0 8px ${m.color}` }}>
@@ -1127,7 +1127,7 @@ function SiteFooter() {
             <div className="flex gap-1.5">
               <input type="email" placeholder="Your email address"
                 className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md outline-none text-white/70 placeholder-white/25"
-                style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${GOLD}30`, fontSize: 10 }} />
+                style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${GOLD}30`, fontSize: 'clamp(8px, 1.5vw, 10px)' }} />
               <motion.button
                 className="px-3 py-1.5 rounded-md text-[9px] font-semibold tracking-widest uppercase text-white whitespace-nowrap shrink-0"
                 style={{ background: 'linear-gradient(135deg, #4a3008, #a87828, #4a3008)', border: '1px solid #9a7030' }}

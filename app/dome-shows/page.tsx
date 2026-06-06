@@ -128,7 +128,7 @@ function FestivalBadge({ fest, color }: { fest: Festival; color: string }) {
       }}>
       <div className="w-5 h-5 rounded-full mb-1 flex items-center justify-center"
         style={{ border: `1px solid ${color}`, background: `${color}30` }}>
-        <span style={{ fontSize: 9, color }}>✦</span>
+        <span style={{ fontSize: 'clamp(7px, 1.5vw, 9px)', color }}>✦</span>
       </div>
       {fest.award && (
         <p className="text-[7px] tracking-wider uppercase leading-tight" style={{ color: 'white' }}>
@@ -282,7 +282,7 @@ function ShowStrip({ show, index }: { show: DomeShow; index: number }) {
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center"
                   style={{ background: `${color}25`, border: `1px solid ${color}` }}>
-                  <span style={{ fontSize: 22, color: color }}>▶</span>
+                  <span style={{ fontSize: 'clamp(16px, 3vw, 22px)', color: color }}>▶</span>
                 </div>
                 <p className="text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>
                   Trailer Coming Soon

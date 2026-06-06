@@ -193,12 +193,12 @@ export default function AltarPage() {
           <div className="flex items-center gap-4 mb-2">
             <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, transparent, ${VIOLET}50)` }} />
             <div className="flex items-center gap-3">
-              <motion.span style={{ fontSize: 18, color: VIOLET, filter: `drop-shadow(0 0 8px ${VIOLET})` }}
+              <motion.span style={{ fontSize: 'clamp(14px, 2.5vw, 18px)', color: VIOLET, filter: `drop-shadow(0 0 8px ${VIOLET})` }}
                 animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2.5, repeat: Infinity }}>✦</motion.span>
               <h2 className="font-cinzel text-xl font-bold tracking-widest" style={{ color: '#e8dcc8' }}>
                 Anuhazi Light Codes
               </h2>
-              <motion.span style={{ fontSize: 18, color: VIOLET, filter: `drop-shadow(0 0 8px ${VIOLET})` }}
+              <motion.span style={{ fontSize: 'clamp(14px, 2.5vw, 18px)', color: VIOLET, filter: `drop-shadow(0 0 8px ${VIOLET})` }}
                 animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2.5, repeat: Infinity, delay: 1.25 }}>✦</motion.span>
             </div>
             <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${VIOLET}50, transparent)` }} />

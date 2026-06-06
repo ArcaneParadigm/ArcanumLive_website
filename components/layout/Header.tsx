@@ -90,13 +90,13 @@ export default function Header() {
       {/* Sound toggle */}
       <motion.button
         className="flex items-center gap-1.5 z-10 select-none cursor-pointer"
-        style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.35)', fontSize: 11, letterSpacing: '0.15em' }}
+        style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.35)', fontSize: 'clamp(8px, 1.5vw, 11px)', letterSpacing: '0.15em' }}
         whileHover={{ color: soundOn ? GOLD : 'rgba(255,255,255,0.6)' }}
         transition={{ duration: 0.15 }}
         onClick={() => { setSoundOn(s => !s); unlockAudio() }}
         onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
       >
-        <span style={{ fontSize: 14 }}>{soundOn ? '🔊' : '🔇'}</span>
+        <span style={{ fontSize: 'clamp(10px, 2vw, 14px)' }}>{soundOn ? '🔊' : '🔇'}</span>
         <span className="uppercase tracking-widest text-[9px] hidden sm:inline">
           {soundOn ? 'Sound On' : 'Sound Off'}
         </span>
