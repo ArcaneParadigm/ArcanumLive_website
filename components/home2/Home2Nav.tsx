@@ -84,14 +84,14 @@ export default function Home2Nav() {
       {/* Nav */}
       <nav className="flex items-center gap-2 z-10">
         {NAV_LINKS.map((link, i) => (
-          <div key={link.label} className="flex items-center gap-2 relative">
-            {/* Beveled glass button background */}
-            <div className="absolute inset-0 rounded px-2 pointer-events-none"
+          <div key={link.label} className="flex items-center gap-2 relative group">
+            {/* Hover glass box button - full height */}
+            <div className="absolute -inset-y-6 -inset-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none rounded"
               style={{
-                background: `linear-gradient(135deg, ${GOLD}25 0%, ${GOLD}15 50%, ${GOLD}10 100%)`,
-                border: `1px solid ${GOLD}40`,
-                boxShadow: `inset 0 1px 0 ${GOLD}50, inset 0 -1px 0 ${GOLD}20, 0 2px 4px rgba(0,0,0,0.4)`,
+                background: `linear-gradient(90deg, rgba(139,46,226,0.3) 0%, rgba(139,46,226,0.45) 25%, rgba(75,0,130,0.55) 50%, rgba(65,105,225,0.45) 75%, rgba(65,105,225,0.3) 100%)`,
                 backdropFilter: 'blur(8px)',
+                border: `1px solid ${GOLD}25`,
+                boxShadow: `inset 0 0 20px rgba(139,46,226,0.2), 0 4px 12px rgba(0,0,0,0.3)`,
               }} />
 
             <Link href={link.href}>
@@ -106,7 +106,7 @@ export default function Home2Nav() {
               </motion.span>
             </Link>
             {i < NAV_LINKS.length - 1 && (
-              <div className="h-3" style={{ width: '2px', background: `${GOLD}cc` }} />
+              <div className="h-3 relative z-20" style={{ width: '2px', background: `${GOLD}cc` }} />
             )}
           </div>
         ))}
