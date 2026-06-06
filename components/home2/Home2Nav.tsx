@@ -60,8 +60,8 @@ export default function Home2Nav() {
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.4) 20%, rgba(168,85,247,0.6) 35%, rgba(0,0,0,0.9) 50%, rgba(168,85,247,0.6) 65%, rgba(168,85,247,0.4) 80%, transparent 100%)`,
-          opacity: 0.8,
+          background: `linear-gradient(90deg, transparent 0%, rgba(139,46,226,0.8) 20%, rgba(139,46,226,1.0) 35%, rgba(0,0,0,0.95) 50%, rgba(139,46,226,1.0) 65%, rgba(139,46,226,0.8) 80%, transparent 100%)`,
+          opacity: 1.0,
         }}
         animate={{ x: ['-100%', '100%'] }}
         transition={{ duration: 37.5, repeat: Infinity, ease: 'easeInOut' }}
