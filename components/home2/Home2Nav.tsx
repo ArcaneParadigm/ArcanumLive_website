@@ -85,13 +85,13 @@ export default function Home2Nav() {
       <nav className="flex items-center gap-2 z-10">
         {NAV_LINKS.map((link, i) => (
           <div key={link.label} className="flex items-center gap-2 relative group">
-            {/* Hover glass box button - full height */}
-            <div className="absolute -inset-y-6 -inset-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none rounded"
+            {/* Hover glass box button - gold gradient, within bar */}
+            <div className="absolute inset-y-0 -inset-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none rounded-lg"
               style={{
-                background: `linear-gradient(90deg, rgba(139,46,226,0.3) 0%, rgba(139,46,226,0.45) 25%, rgba(75,0,130,0.55) 50%, rgba(65,105,225,0.45) 75%, rgba(65,105,225,0.3) 100%)`,
-                backdropFilter: 'blur(8px)',
-                border: `1px solid ${GOLD}25`,
-                boxShadow: `inset 0 0 20px rgba(139,46,226,0.2), 0 4px 12px rgba(0,0,0,0.3)`,
+                background: `linear-gradient(to right, ${GOLD}25 0%, ${GOLD}40 20%, ${GOLD}50 50%, ${GOLD}40 80%, ${GOLD}25 100%)`,
+                backdropFilter: 'blur(10px)',
+                border: `1px solid ${GOLD}35`,
+                boxShadow: `inset 0 0 15px ${GOLD}20, 0 2px 8px rgba(0,0,0,0.4)`,
               }} />
 
             <Link href={link.href}>
