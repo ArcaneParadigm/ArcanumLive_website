@@ -51,7 +51,7 @@ const PREMIERE_FILMS: Film[] = [
   { id: 'premiere-5', title: 'The Descent', youtubeId: 'lcn9DCqwA5U', desc: 'A dive into the depths of the underworld\'s mysteries.' },
   { id: 'premiere-6', title: 'Ethereal Dance', youtubeId: '9lQpOu5Rm1E', desc: 'Movement through dimensions of pure energy and form.' },
   { id: 'premiere-7', title: 'The Convergence', youtubeId: 'ONLCEq7HXSA', desc: 'All timelines intersect at the eternal now.' },
-  { id: 'premiere-8', title: 'Infinite Recursion', youtubeId: 'wn55IMZeT24', desc: 'Each layer of consciousness reflecting all others endlessly.' },
+  { id: 'premiere-8', title: 'Infinite Recursion', youtubeId: 'jNcOT5fKMQk', desc: 'Each layer of consciousness reflecting all others endlessly.' },
 ]
 
 function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean; onSelect: () => void }) {
