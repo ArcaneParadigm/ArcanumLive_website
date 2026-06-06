@@ -13,6 +13,22 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: 'architecture-of-control',
+    realmSlug: 'philosophy',
+    title: 'The Architecture of Control and the Hijacking of Spiritual Pathways',
+    category: 'Philosophy',
+    date: '2025-06-06',
+    excerpt: 'Long before there were banks or bloodlines, the old stories warned us: there are forces that feed on fear. The Gnostics called them Archons. This is the map of their machinery—and the doorway to escape.',
+    color: '#a855f7',
+    body: [
+      'Long before there were banks or bloodlines or Bilderberg, the old stories warned us: there are forces that feed on fear. The Gnostics called them Archons—rulers of this dark age who cannot create, only consume. The Hebrews named them Watchers—beings who traded their divine station for dominion over flesh and bone. The Hindus knew them as Asuras, the Buddhists as Māra's legions.',
+      'The names shift, but the pattern holds: something has hijacked this world and installed a management team of the spiritually dead. Sociopaths. Psychopaths. Narcissists. Humans who do not feel what you feel, who do not love as you love, who rise through hierarchies not despite their emptiness but because of it. They marry their own kind, raise children in the cold, and pass down wealth like a curse.',
+      'And beneath them, the rest of us—awake or half-asleep—generate the only thing they truly need: loosh. Fear. Rage. Grief. Addiction. Outrage. The harvest never ends because the fear never stops. But what if the old scriptures were instructions, not warnings? What if the Kingdom of Heaven is not a place you go after you die, but a frequency you reclaim while you live?',
+      'This is not about conspiracy. It is about sovereignty. And it begins with a single question: what happens when you stop feeding the machine?',
+    ],
+    tags: ['control', 'spirituality', 'gnostic', 'archons', 'sovereignty'],
+  },
+  {
     slug: 'girls-of-the-multiverse-fracture',
     realmSlug: 'girls-of-the-multiverse',
     title: 'When the Fracture Opened: Origins of the Girls of the Multiverse',
