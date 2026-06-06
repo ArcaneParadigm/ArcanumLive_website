@@ -74,19 +74,24 @@ export default function Home2Nav() {
       </Link>
 
       {/* Nav */}
-      <nav className="flex items-center gap-6 z-10">
-        {NAV_LINKS.map(link => (
-          <Link key={link.label} href={link.href}>
-            <motion.span
-              className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer"
-              style={{ color: 'rgba(255,255,255,0.6)' }}
-              whileHover={{ color: '#e8dcc8' }}
-              transition={{ duration: 0.15 }}
-              onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
-            >
-              {link.label}
-            </motion.span>
-          </Link>
+      <nav className="flex items-center gap-2 z-10">
+        {NAV_LINKS.map((link, i) => (
+          <div key={link.label} className="flex items-center gap-2">
+            <Link href={link.href}>
+              <motion.span
+                className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer"
+                style={{ color: 'rgba(255,255,255,0.6)' }}
+                whileHover={{ color: '#e8dcc8' }}
+                transition={{ duration: 0.15 }}
+                onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
+              >
+                {link.label}
+              </motion.span>
+            </Link>
+            {i < NAV_LINKS.length - 1 && (
+              <div className="w-px h-3" style={{ background: `${GOLD}40` }} />
+            )}
+          </div>
         ))}
       </nav>
 

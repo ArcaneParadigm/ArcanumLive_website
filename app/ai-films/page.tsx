@@ -100,8 +100,7 @@ function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean;
 }
 
 export default function AiFilmsPage() {
-  const [selected, setSelected] = useState<Film>(FILMS[0])
-  const [premiereSelected, setPremiereSelected] = useState<Film>(PREMIERE_FILMS[0])
+  const [selected, setSelected] = useState<Film>(PREMIERE_FILMS[0])
 
   return (
     <div className="min-h-screen" style={{ background: '#08060e' }}>
@@ -131,22 +130,22 @@ export default function AiFilmsPage() {
               style={{ boxShadow: `inset 0 0 0 1px rgba(201,151,58,0.15), 0 16px 64px rgba(0,0,0,0.8)` }}>
               <div style={{ position: 'relative', paddingBottom: '56.25%' }}>
                 <iframe
-                  key={premiereSelected.youtubeId}
-                  src={`https://www.youtube.com/embed/${premiereSelected.youtubeId}?rel=0&modestbranding=1`}
+                  key={selected.youtubeId}
+                  src={`https://www.youtube.com/embed/${selected.youtubeId}?rel=0&modestbranding=1`}
                   className="absolute inset-0 w-full h-full rounded-2xl"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title={premiereSelected.title}
+                  title={selected.title}
                   style={{ border: 'none' }}
                 />
               </div>
             </div>
             <div className="flex items-center justify-between mt-3 px-1">
               <div>
-                <h3 className="font-cinzel text-lg font-bold" style={{ color: '#e8dcc8' }}>{premiereSelected.title}</h3>
-                <p className="text-xs mt-0.5 max-w-2xl" style={{ color: 'rgba(255,255,255,0.55)' }}>{premiereSelected.desc}</p>
+                <h3 className="font-cinzel text-lg font-bold" style={{ color: '#e8dcc8' }}>{selected.title}</h3>
+                <p className="text-xs mt-0.5 max-w-2xl" style={{ color: 'rgba(255,255,255,0.55)' }}>{selected.desc}</p>
               </div>
-              <a href={`https://youtu.be/${premiereSelected.youtubeId}`} target="_blank" rel="noopener noreferrer"
+              <a href={`https://youtu.be/${selected.youtubeId}`} target="_blank" rel="noopener noreferrer"
                 className="text-[10px] tracking-widest uppercase shrink-0 ml-4" style={{ color: `${GOLD}70` }}>
                 Open on YouTube ↗
               </a>
@@ -159,7 +158,7 @@ export default function AiFilmsPage() {
               <FilmCard
                 key={film.id}
                 film={film}
-                isActive={premiereSelected.id === film.id}
+                isActive={selected.id === film.id}
                 onSelect={() => { setPremiereSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
               />
             ))}
@@ -170,35 +169,7 @@ export default function AiFilmsPage() {
             style={{ background: `linear-gradient(90deg, transparent, ${GOLD}40, transparent)` }} />
         </div>
 
-        {/* Big player */}
-        <div className="mb-5 px-2">
-          <div className="relative overflow-hidden rounded-2xl"
-            style={{ boxShadow: `inset 0 0 0 1px rgba(201,151,58,0.15), 0 16px 64px rgba(0,0,0,0.8)` }}>
-            <div style={{ position: 'relative', paddingBottom: '56.25%' }}>
-              <iframe
-                key={selected.youtubeId}
-                src={`https://www.youtube.com/embed/${selected.youtubeId}?rel=0&modestbranding=1`}
-                className="absolute inset-0 w-full h-full rounded-2xl"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={selected.title}
-                style={{ border: 'none' }}
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-3 px-1">
-            <div>
-              <h2 className="font-cinzel text-lg font-bold" style={{ color: '#e8dcc8' }}>{selected.title}</h2>
-              <p className="text-xs mt-0.5 max-w-2xl" style={{ color: 'rgba(255,255,255,0.55)' }}>{selected.desc}</p>
-            </div>
-            <a href={`https://youtu.be/${selected.youtubeId}`} target="_blank" rel="noopener noreferrer"
-              className="text-[10px] tracking-widest uppercase shrink-0 ml-4" style={{ color: `${GOLD}70` }}>
-              Open on YouTube ↗
-            </a>
-          </div>
-        </div>
-
-        {/* Grid */}
+        {/* All Films Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
           {FILMS.map((film, i) => (
             <FilmCard
