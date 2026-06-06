@@ -82,11 +82,11 @@ function RealmCard({
         transition={{ duration: 0.25 }}
       />
 
-      {/* TOP ZONE — click to open gallery */}
+      {/* TOP ZONE — click to navigate to full realm page */}
       <div
         className="relative flex-1 cursor-pointer"
         style={{ minHeight: 0 }}
-        onClick={onOpenGallery}
+        onClick={() => router.push(`/realms/${world.slug}`)}
       >
         {cardImage && (
           <img src={cardImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center" />

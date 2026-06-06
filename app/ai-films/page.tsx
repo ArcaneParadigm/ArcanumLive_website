@@ -43,6 +43,17 @@ const FILMS: Film[] = [
   { id: 'singularity-ep1', title: 'Singularity Episode 1', youtubeId: '8ydaApH6_a4', desc: 'As civilization rides toward the singularity, the world transforms in unprecedented ways.' },
 ]
 
+const PREMIERE_FILMS: Film[] = [
+  { id: 'premiere-1', title: 'Ascension Chamber', youtubeId: '4MRrrkrBn_c', desc: 'Entry gateway into the mystical chambers of consciousness.' },
+  { id: 'premiere-2', title: 'Galactika', youtubeId: 'P0uVoINJNPc', desc: 'A journey through the cosmic architecture of galactic consciousness.' },
+  { id: 'premiere-3', title: 'Sacred Transmissions', youtubeId: 'VwTlGogpQ04', desc: 'Divine frequencies encoded in light and sound.' },
+  { id: 'premiere-4', title: 'Quantum Convergence', youtubeId: 'dmifMUZyEm4', desc: 'Where all possibilities collapse into singular moments of creation.' },
+  { id: 'premiere-5', title: 'The Descent', youtubeId: 'lcn9DCqwA5U', desc: 'A dive into the depths of the underworld\'s mysteries.' },
+  { id: 'premiere-6', title: 'Ethereal Dance', youtubeId: '9lQpOu5Rm1E', desc: 'Movement through dimensions of pure energy and form.' },
+  { id: 'premiere-7', title: 'The Convergence', youtubeId: 'ONLCEq7HXSA', desc: 'All timelines intersect at the eternal now.' },
+  { id: 'premiere-8', title: 'Infinite Recursion', youtubeId: 'wn55IMZeT24', desc: 'Each layer of consciousness reflecting all others endlessly.' },
+]
+
 function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean; onSelect: () => void }) {
   const [hovered, setHovered] = useState(false)
   return (
@@ -90,6 +101,7 @@ function FilmCard({ film, isActive, onSelect }: { film: Film; isActive: boolean;
 
 export default function AiFilmsPage() {
   const [selected, setSelected] = useState<Film>(FILMS[0])
+  const [premiereSelected, setPremiereSelected] = useState<Film>(PREMIERE_FILMS[0])
 
   return (
     <div className="min-h-screen" style={{ background: '#08060e' }}>
@@ -107,6 +119,55 @@ export default function AiFilmsPage() {
             }}>
             AI Films
           </h1>
+        </div>
+
+        {/* ═══ PREMIERE SECTION ═══ */}
+        <div className="mb-10">
+          <h2 className="font-cinzel text-lg tracking-widest mb-4 text-center" style={{ color: `${GOLD}cc` }}>PREMIERE</h2>
+
+          {/* Premier player */}
+          <div className="mb-5 px-2">
+            <div className="relative overflow-hidden rounded-2xl"
+              style={{ boxShadow: `inset 0 0 0 1px rgba(201,151,58,0.15), 0 16px 64px rgba(0,0,0,0.8)` }}>
+              <div style={{ position: 'relative', paddingBottom: '56.25%' }}>
+                <iframe
+                  key={premiereSelected.youtubeId}
+                  src={`https://www.youtube.com/embed/${premiereSelected.youtubeId}?rel=0&modestbranding=1`}
+                  className="absolute inset-0 w-full h-full rounded-2xl"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={premiereSelected.title}
+                  style={{ border: 'none' }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-3 px-1">
+              <div>
+                <h3 className="font-cinzel text-lg font-bold" style={{ color: '#e8dcc8' }}>{premiereSelected.title}</h3>
+                <p className="text-xs mt-0.5 max-w-2xl" style={{ color: 'rgba(255,255,255,0.55)' }}>{premiereSelected.desc}</p>
+              </div>
+              <a href={`https://youtu.be/${premiereSelected.youtubeId}`} target="_blank" rel="noopener noreferrer"
+                className="text-[10px] tracking-widest uppercase shrink-0 ml-4" style={{ color: `${GOLD}70` }}>
+                Open on YouTube ↗
+              </a>
+            </div>
+          </div>
+
+          {/* Premier grid — 2 rows of 4 */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 mb-8">
+            {PREMIERE_FILMS.map((film, i) => (
+              <FilmCard
+                key={film.id}
+                film={film}
+                isActive={premiereSelected.id === film.id}
+                onSelect={() => { setPremiereSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+              />
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div className="relative h-px bg-gradient-to-r from-transparent via-gold via-opacity-30 to-transparent my-10"
+            style={{ background: `linear-gradient(90deg, transparent, ${GOLD}40, transparent)` }} />
         </div>
 
         {/* Big player */}
