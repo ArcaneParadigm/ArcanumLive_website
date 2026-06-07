@@ -206,28 +206,20 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
             >
               <motion.button
-                onClick={() => {
-                  if (audio.playing) { audio.pause() } else { audio.play() }
-                }}
+                onClick={() => { if (audio.playing) { audio.pause() } else { audio.play() } }}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-1 rounded-md text-[10px] font-semibold tracking-wider uppercase text-white whitespace-nowrap cursor-pointer"
                 style={{
-                  width: BTN_W, height: 72,
-                  background: 'linear-gradient(135deg, rgba(10,6,20,0.92) 0%, rgba(20,12,38,0.95) 100%)',
-                  border: '1px solid rgba(201,151,58,0.55)',
-                  borderRadius: 6,
-                  boxShadow: '0 0 18px rgba(201,151,58,0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
-                  cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  color: '#c9973a',
-                  fontFamily: 'var(--font-cinzel, serif)',
-                  fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase',
-                  fontWeight: 600,
+                  background: 'linear-gradient(135deg, #4a3008 0%, #7a5518 30%, #a87828 55%, #7a5518 75%, #4a3008 100%)',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)',
+                  border: '1px solid #9a7030',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.8)',
                 }}
-                whileHover={{ borderColor: 'rgba(201,151,58,0.9)', boxShadow: '0 0 30px rgba(201,151,58,0.35), inset 0 1px 0 rgba(255,255,255,0.10)' }}
+                whileHover={{ scale: 1.03, boxShadow: '0 4px 20px rgba(160,110,40,0.5)' }}
                 whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.12 }}
+                transition={{ duration: 0.15 }}
               >
-                <span style={{ fontSize: 18, lineHeight: 1 }}>{audio.playing ? '⏸' : '♪'}</span>
-                <span>{audio.playing ? 'Pause\nMusic' : 'Play\nMusic'}</span>
+                <span>{audio.playing ? '⏸' : '♪'}</span>
+                <span>{audio.playing ? 'Pause Music' : 'Play Music'}</span>
               </motion.button>
             </motion.div>
           )}
