@@ -149,12 +149,18 @@ export default function AstrolabeOrb({
       ringMeshes.push({ mesh, mat, speed: def.speed, axis: def.axis })
     }
 
-    // ── Inner orb ─────────────────────────────────────────────────────────────
+    // ── Inner orb — semi-transparent refractive crystal ───────────────────────
     const orbGeo = new THREE.SphereGeometry(0.52, 64, 64)
-    const orbMat = new THREE.MeshStandardMaterial({
-      color: 0x050308,
-      metalness: 1.0,
-      roughness: 0.0,
+    const orbMat = new THREE.MeshPhysicalMaterial({
+      color: 0x1a0a28,
+      transmission: 0.82,
+      thickness: 1.4,
+      roughness: 0.04,
+      metalness: 0.0,
+      ior: 1.65,
+      transparent: true,
+      opacity: 0.92,
+      envMapIntensity: 0.5,
     })
     const orbMesh = new THREE.Mesh(orbGeo, orbMat)
     tiltGroup.add(orbMesh)
@@ -185,8 +191,14 @@ export default function AstrolabeOrb({
     tiltGroup.add(particles)
 
     // ── Fire emitter ──────────────────────────────────────────────────────────
-    const FIRE_COUNT = 180
-    type FireParticle = { x: number; y: number; z: number; vx: number; vy: number; vz: number; life: number; maxLife: number; seed: number }
+    const FIRE_COUNT = 320
+    type FireParticle = {
+      x: number; y: number; z: number
+      vx: number; vy: number; vz: number
+      life: number; maxLife: number; seed: number
+      // tendril: fixed angular offset gives spiral stream effect
+      tanX: number; tanZ: number
+    }
     const firePool: FireParticle[] = []
     function spawnFire(): FireParticle {
       const phi   = Math.random() * Math.PI * 2
@@ -195,29 +207,31 @@ export default function AstrolabeOrb({
       const nx    = Math.sin(theta) * Math.cos(phi)
       const ny    = Math.sin(theta) * Math.sin(phi)
       const nz    = Math.cos(theta)
-      const spd   = 0.35 + Math.random() * 0.55
+      const spd   = 0.20 + Math.random() * 0.35   // slower = more tendril
+      // tangent vector for spiral curl
+      const tanX  = (Math.random() - 0.5) * 0.4
+      const tanZ  = (Math.random() - 0.5) * 0.4
       return {
         x: nx * r, y: ny * r, z: nz * r,
-        vx: nx * spd, vy: ny * spd + 0.2, vz: nz * spd,
-        life: 0, maxLife: 0.6 + Math.random() * 0.8,
+        vx: nx * spd + tanX, vy: ny * spd + 0.15, vz: nz * spd + tanZ,
+        life: 0, maxLife: 0.9 + Math.random() * 1.1,
         seed: Math.random() * 100,
+        tanX, tanZ,
       }
     }
     for (let i = 0; i < FIRE_COUNT; i++) {
       const p = spawnFire()
-      p.life = Math.random() * p.maxLife   // stagger initial ages
+      p.life = Math.random() * p.maxLife
       firePool.push(p)
     }
-    const firePosArr  = new Float32Array(FIRE_COUNT * 3)
-    const fireColArr  = new Float32Array(FIRE_COUNT * 3)
-    const fireSizeArr = new Float32Array(FIRE_COUNT)
+    const firePosArr = new Float32Array(FIRE_COUNT * 3)
+    const fireColArr = new Float32Array(FIRE_COUNT * 3)
     const fireGeo = new THREE.BufferGeometry()
-    fireGeo.setAttribute('position', new THREE.BufferAttribute(firePosArr,  3))
-    fireGeo.setAttribute('color',    new THREE.BufferAttribute(fireColArr,  3))
-    fireGeo.setAttribute('size',     new THREE.BufferAttribute(fireSizeArr, 1))
+    fireGeo.setAttribute('position', new THREE.BufferAttribute(firePosArr, 3))
+    fireGeo.setAttribute('color',    new THREE.BufferAttribute(fireColArr, 3))
     const fireMat = new THREE.PointsMaterial({
-      size: 0.07, vertexColors: true, transparent: true,
-      opacity: 1, depthWrite: false, sizeAttenuation: true,
+      size: 0.055, vertexColors: true, transparent: true,
+      opacity: 0.9, depthWrite: false, sizeAttenuation: true,
     })
     const fireMesh = new THREE.Points(fireGeo, fireMat)
     tiltGroup.add(fireMesh)
@@ -271,22 +285,29 @@ export default function AstrolabeOrb({
         p.life += dt
         if (p.life >= p.maxLife) { Object.assign(p, spawnFire()); continue }
         const t = p.life / p.maxLife   // 0→1
-        // turbulence: cheap curl via sin offsets
-        const turb = 0.45 * (1 - t)
-        p.x += (p.vx + Math.sin(p.life * 3.1 + p.seed) * turb) * dt * beatFire
-        p.y += (p.vy + Math.cos(p.life * 2.7 + p.seed) * turb * 0.5) * dt * beatFire
-        p.z += (p.vz + Math.sin(p.life * 2.3 + p.seed + 1) * turb) * dt * beatFire
+        // tendril curl: persistent tangent + decaying sin turbulence
+        const turb = 0.55 * Math.exp(-t * 1.8)
+        const curlX = Math.sin(p.life * 4.2 + p.seed) * turb + p.tanX * (1 - t) * 0.3
+        const curlY = Math.cos(p.life * 3.1 + p.seed) * turb * 0.4
+        const curlZ = Math.sin(p.life * 3.7 + p.seed + 2) * turb + p.tanZ * (1 - t) * 0.3
+        p.x += (p.vx + curlX) * dt * beatFire
+        p.y += (p.vy + curlY) * dt * beatFire
+        p.z += (p.vz + curlZ) * dt * beatFire
         // drag
-        p.vx *= 0.985; p.vy *= 0.985; p.vz *= 0.985
-        // color: white→yellow→orange→red, fade out after 60%
-        const fade = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4
-        const r2 = Math.min(1, t * 2.5)
-        const g2 = Math.max(0, 0.75 - t * 1.2)
-        const b2 = Math.max(0, 0.3 - t * 0.6)
+        p.vx *= 0.982; p.vy *= 0.982; p.vz *= 0.982
+        // color: yellow→orange→red only, no blue/green
+        // t=0: bright yellow (1, 0.85, 0.1)
+        // t=0.4: orange     (1, 0.35, 0)
+        // t=0.7: deep red   (0.75, 0.05, 0)
+        // t=1: fade out
+        const fade = t < 0.65 ? 1.0 : 1.0 - (t - 0.65) / 0.35
+        const rc = 1.0
+        const gc = Math.max(0, 0.85 - t * 1.6)
+        const bc = Math.max(0, 0.1 - t * 0.5)
         firePosArr[i*3]   = p.x; firePosArr[i*3+1] = p.y; firePosArr[i*3+2] = p.z
-        fireColArr[i*3]   = r2 * fade
-        fireColArr[i*3+1] = g2 * fade
-        fireColArr[i*3+2] = b2 * fade
+        fireColArr[i*3]   = rc * fade
+        fireColArr[i*3+1] = gc * fade
+        fireColArr[i*3+2] = bc * fade
       }
       fireGeo.attributes.position.needsUpdate = true
       fireGeo.attributes.color.needsUpdate = true
