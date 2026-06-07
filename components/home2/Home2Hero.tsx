@@ -197,7 +197,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       {mounted && (
         <motion.div
           className="absolute z-20"
-          style={{ left: 24, top: '72%' }}
+          style={{ left: '12%', top: '72%' }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
