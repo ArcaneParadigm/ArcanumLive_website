@@ -190,51 +190,76 @@ export default function AstrolabeOrb({
     const particles = new THREE.Points(ptGeo, ptMat)
     tiltGroup.add(particles)
 
-    // ── Fire emitter ──────────────────────────────────────────────────────────
-    const FIRE_COUNT = 320
-    type FireParticle = {
-      x: number; y: number; z: number
-      vx: number; vy: number; vz: number
-      life: number; maxLife: number; seed: number
-      // tendril: fixed angular offset gives spiral stream effect
-      tanX: number; tanZ: number
-    }
-    const firePool: FireParticle[] = []
-    function spawnFire(): FireParticle {
-      const phi   = Math.random() * Math.PI * 2
-      const theta = Math.random() * Math.PI
-      const r     = 0.52
-      const nx    = Math.sin(theta) * Math.cos(phi)
-      const ny    = Math.sin(theta) * Math.sin(phi)
-      const nz    = Math.cos(theta)
-      const spd   = 0.20 + Math.random() * 0.35   // slower = more tendril
-      // tangent vector for spiral curl
-      const tanX  = (Math.random() - 0.5) * 0.4
-      const tanZ  = (Math.random() - 0.5) * 0.4
+    // ── Fire emitter — ring emission + secondary sparks ───────────────────────
+    // Particles spawn from a ring at the orb equator (r=0.56) and fly outward.
+    // Secondaries (sparks) spawn near active primaries → 6x density cascade.
+    const RING_R  = 0.56   // emission ring radius = just outside orb surface
+    const PRI_N   = 90     // primary emitters on ring
+    const SPK_N   = 540    // spark secondaries (6 per primary slot)
+    const TOTAL_F = PRI_N + SPK_N
+
+    type FP = { x:number; y:number; z:number; vx:number; vy:number; vz:number; life:number; maxLife:number; seed:number; sz:number }
+
+    // Spawn primary on emission ring, velocity strictly outward
+    function spawnPrimary(): FP {
+      const a   = Math.random() * Math.PI * 2
+      const spd = 0.22 + Math.random() * 0.32
+      const vup = (Math.random() - 0.5) * 0.18
       return {
-        x: nx * r, y: ny * r, z: nz * r,
-        vx: nx * spd + tanX, vy: ny * spd + 0.15, vz: nz * spd + tanZ,
-        life: 0, maxLife: 0.9 + Math.random() * 1.1,
+        x: Math.cos(a) * RING_R, y: (Math.random() - 0.5) * 0.06, z: Math.sin(a) * RING_R,
+        vx: Math.cos(a) * spd, vy: vup, vz: Math.sin(a) * spd,
+        life: 0, maxLife: 1.2 + Math.random() * 1.1,
         seed: Math.random() * 100,
-        tanX, tanZ,
+        sz: 0.06 + Math.random() * 0.07,  // size variance
       }
     }
-    for (let i = 0; i < FIRE_COUNT; i++) {
-      const p = spawnFire()
-      p.life = Math.random() * p.maxLife
-      firePool.push(p)
+
+    // Spawn spark near a given world position, scatter outward
+    function spawnSpark(px: number, py: number, pz: number): FP {
+      const a   = Math.random() * Math.PI * 2
+      const el  = (Math.random() - 0.5) * 0.8
+      const spd = 0.08 + Math.random() * 0.18
+      return {
+        x: px + (Math.random()-0.5)*0.06, y: py + (Math.random()-0.5)*0.06, z: pz + (Math.random()-0.5)*0.06,
+        vx: Math.cos(el)*Math.cos(a)*spd, vy: Math.sin(el)*spd + 0.06, vz: Math.cos(el)*Math.sin(a)*spd,
+        life: 0, maxLife: 0.25 + Math.random() * 0.45,
+        seed: Math.random() * 100,
+        sz: 0.022 + Math.random() * 0.03,
+      }
     }
-    const firePosArr = new Float32Array(FIRE_COUNT * 3)
-    const fireColArr = new Float32Array(FIRE_COUNT * 3)
-    const fireGeo = new THREE.BufferGeometry()
-    fireGeo.setAttribute('position', new THREE.BufferAttribute(firePosArr, 3))
-    fireGeo.setAttribute('color',    new THREE.BufferAttribute(fireColArr, 3))
-    const fireMat = new THREE.PointsMaterial({
-      size: 0.055, vertexColors: true, transparent: true,
-      opacity: 0.9, depthWrite: false, sizeAttenuation: true,
-    })
-    const fireMesh = new THREE.Points(fireGeo, fireMat)
-    tiltGroup.add(fireMesh)
+
+    const priPool: FP[] = []
+    const spkPool: FP[] = []
+    for (let i = 0; i < PRI_N; i++) { const p = spawnPrimary(); p.life = Math.random() * p.maxLife; priPool.push(p) }
+    for (let i = 0; i < SPK_N; i++) { const p = spawnSpark(0, 0, 0); p.life = p.maxLife; spkPool.push(p) }  // start dead
+
+    // Two sizes via two meshes
+    const priPosArr = new Float32Array(PRI_N * 3)
+    const priColArr = new Float32Array(PRI_N * 3)
+    const spkPosArr = new Float32Array(SPK_N * 3)
+    const spkColArr = new Float32Array(SPK_N * 3)
+    const priGeo = new THREE.BufferGeometry()
+    priGeo.setAttribute('position', new THREE.BufferAttribute(priPosArr, 3))
+    priGeo.setAttribute('color',    new THREE.BufferAttribute(priColArr, 3))
+    const spkGeo = new THREE.BufferGeometry()
+    spkGeo.setAttribute('position', new THREE.BufferAttribute(spkPosArr, 3))
+    spkGeo.setAttribute('color',    new THREE.BufferAttribute(spkColArr, 3))
+    const priMat = new THREE.PointsMaterial({ size: 0.09, vertexColors: true, transparent: true, opacity: 0.92, depthWrite: false, sizeAttenuation: true })
+    const spkMat = new THREE.PointsMaterial({ size: 0.038, vertexColors: true, transparent: true, opacity: 0.85, depthWrite: false, sizeAttenuation: true })
+    const priMesh = new THREE.Points(priGeo, priMat)
+    const spkMesh = new THREE.Points(spkGeo, spkMat)
+    tiltGroup.add(priMesh)
+    tiltGroup.add(spkMesh)
+
+    // helper: fire color with fade-in + fade-out
+    function fireColor(t: number, outArr: Float32Array, base: number) {
+      const fadeIn  = t < 0.12 ? t / 0.12 : 1.0
+      const fadeOut = t > 0.68 ? 1.0 - (t - 0.68) / 0.32 : 1.0
+      const fade = fadeIn * fadeOut
+      outArr[base]   = 1.0 * fade
+      outArr[base+1] = Math.max(0, 0.88 - t * 1.7) * fade
+      outArr[base+2] = Math.max(0, 0.12 - t * 0.5) * fade
+    }
 
     // ── Animation ─────────────────────────────────────────────────────────────
     let rafId = 0
@@ -278,39 +303,45 @@ export default function AstrolabeOrb({
       const ps = 1 + a.energy * 0.4 * pm
       particles.scale.setScalar(ps)
 
-      // Fire emitter update
-      const beatFire = a.beat ? 1.8 : 1
-      for (let i = 0; i < FIRE_COUNT; i++) {
-        const p = firePool[i]
+      // Fire — primary ring emitters
+      const beatFire = 1 + (a.beat ? 0.9 : 0) + a.bass * 0.4
+      for (let i = 0; i < PRI_N; i++) {
+        const p = priPool[i]
         p.life += dt
-        if (p.life >= p.maxLife) { Object.assign(p, spawnFire()); continue }
-        const t = p.life / p.maxLife   // 0→1
-        // tendril curl: persistent tangent + decaying sin turbulence
-        const turb = 0.55 * Math.exp(-t * 1.8)
-        const curlX = Math.sin(p.life * 4.2 + p.seed) * turb + p.tanX * (1 - t) * 0.3
-        const curlY = Math.cos(p.life * 3.1 + p.seed) * turb * 0.4
-        const curlZ = Math.sin(p.life * 3.7 + p.seed + 2) * turb + p.tanZ * (1 - t) * 0.3
-        p.x += (p.vx + curlX) * dt * beatFire
-        p.y += (p.vy + curlY) * dt * beatFire
-        p.z += (p.vz + curlZ) * dt * beatFire
-        // drag
-        p.vx *= 0.982; p.vy *= 0.982; p.vz *= 0.982
-        // color: yellow→orange→red only, no blue/green
-        // t=0: bright yellow (1, 0.85, 0.1)
-        // t=0.4: orange     (1, 0.35, 0)
-        // t=0.7: deep red   (0.75, 0.05, 0)
-        // t=1: fade out
-        const fade = t < 0.65 ? 1.0 : 1.0 - (t - 0.65) / 0.35
-        const rc = 1.0
-        const gc = Math.max(0, 0.85 - t * 1.6)
-        const bc = Math.max(0, 0.1 - t * 0.5)
-        firePosArr[i*3]   = p.x; firePosArr[i*3+1] = p.y; firePosArr[i*3+2] = p.z
-        fireColArr[i*3]   = rc * fade
-        fireColArr[i*3+1] = gc * fade
-        fireColArr[i*3+2] = bc * fade
+        if (p.life >= p.maxLife) { Object.assign(p, spawnPrimary()); }
+        const t = p.life / p.maxLife
+        // turbulence field on primaries
+        const turb = 0.38 * Math.exp(-t * 1.4)
+        p.x += (p.vx + Math.sin(p.life * 3.8 + p.seed)         * turb) * dt * beatFire
+        p.y += (p.vy + Math.cos(p.life * 2.9 + p.seed + 1)     * turb * 0.5) * dt * beatFire
+        p.z += (p.vz + Math.sin(p.life * 3.3 + p.seed + 2)     * turb) * dt * beatFire
+        p.vx *= 0.984; p.vy *= 0.984; p.vz *= 0.984
+        priPosArr[i*3] = p.x; priPosArr[i*3+1] = p.y; priPosArr[i*3+2] = p.z
+        fireColor(t, priColArr, i*3)
       }
-      fireGeo.attributes.position.needsUpdate = true
-      fireGeo.attributes.color.needsUpdate = true
+      priGeo.attributes.position.needsUpdate = true
+      priGeo.attributes.color.needsUpdate = true
+
+      // Fire — secondary sparks spawn near active primaries
+      for (let i = 0; i < SPK_N; i++) {
+        const p = spkPool[i]
+        p.life += dt
+        if (p.life >= p.maxLife) {
+          // pick random active primary as parent
+          const parent = priPool[Math.floor(Math.random() * PRI_N)]
+          Object.assign(p, spawnSpark(parent.x, parent.y, parent.z))
+        }
+        const t = p.life / p.maxLife
+        const turb2 = 0.28 * Math.exp(-t * 2.2)
+        p.x += (p.vx + Math.sin(p.life * 5.1 + p.seed) * turb2) * dt * beatFire
+        p.y += (p.vy + Math.cos(p.life * 4.3 + p.seed) * turb2 * 0.4) * dt * beatFire
+        p.z += (p.vz + Math.sin(p.life * 4.7 + p.seed + 3) * turb2) * dt * beatFire
+        p.vx *= 0.978; p.vy *= 0.978; p.vz *= 0.978
+        spkPosArr[i*3] = p.x; spkPosArr[i*3+1] = p.y; spkPosArr[i*3+2] = p.z
+        fireColor(t, spkColArr, i*3)
+      }
+      spkGeo.attributes.position.needsUpdate = true
+      spkGeo.attributes.color.needsUpdate = true
 
       // Point lights beat
       pointA.intensity = 3 * (1 + a.bass * gs * 0.5)
@@ -343,7 +374,8 @@ export default function AstrolabeOrb({
       orbGeo.dispose(); orbMat.dispose()
       haloGeo.dispose(); haloMat.dispose()
       ptGeo.dispose(); ptMat.dispose()
-      fireGeo.dispose(); fireMat.dispose()
+      priGeo.dispose(); priMat.dispose()
+      spkGeo.dispose(); spkMat.dispose()
     }
   }, []) // init once
 
