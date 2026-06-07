@@ -7,6 +7,13 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      sm:  '640px',
+      md:  '1024px',   // tablet portrait stays on mobile layout; desktop at 1024px+
+      lg:  '1280px',
+      xl:  '1440px',
+      '2xl': '1600px',
+    },
     extend: {
       colors: {
         obsidian: {
