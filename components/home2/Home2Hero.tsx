@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } fr
 import { BtnOrnate } from '@/components/ui/BtnOrnate'
 import { useAstrolabeAudio } from '@/lib/hooks/useAstrolabeAudio'
 import type { AstrolabeTrack } from '@/lib/hooks/useAstrolabeAudio'
+import { useImagePoint } from '@/lib/hooks/useImagePoint'
 
 // No SSR — Three.js + Web Audio are client-only
 const AstrolabeOrb      = dynamic(() => import('./AstrolabeOrb'),      { ssr: false })
@@ -52,6 +53,10 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
+
+  // Orb position locked to image content (arcanum-portal-v1.jpg is 1248×832)
+  // fx=0.50, fy=0.247 = center of the arcanum circle in the image
+  const orbPt = useImagePoint(1248, 832, 0.50, 0.247)
 
   // Sound On/Off nav button toggles music
   useEffect(() => {
@@ -121,7 +126,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       {mounted && (
         <div
           className="absolute pointer-events-none"
-          style={{ left: 'calc(50vw + 0px)', top: 'calc(26vh - 27px)', transform: 'translateX(-50%)', width: '29vw', height: '29vw', zIndex: 15 }}
+          style={{ left: orbPt.x, top: orbPt.y, transform: 'translate(-50%, -50%)', width: '29vw', height: '29vw', zIndex: 15 }}
         >
           <motion.div
             style={{ opacity: fade, width: '100%', height: '100%' }}
