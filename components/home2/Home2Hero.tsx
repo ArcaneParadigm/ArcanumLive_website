@@ -193,36 +193,38 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
         </motion.div>
       </div>
 
-      {/* LAYER 4 — portal buttons + music button */}
+      {/* Music button — floating top-left, independent of portal buttons */}
+      {mounted && (
+        <motion.div
+          className="absolute z-20"
+          style={{ left: 24, top: '72%' }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
+        >
+          <motion.button
+            onClick={() => { if (audio.playing) { audio.pause() } else { audio.play() } }}
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-1 rounded-md text-[10px] font-semibold tracking-wider uppercase text-white whitespace-nowrap cursor-pointer"
+            style={{
+              background: 'linear-gradient(135deg, #4a3008 0%, #7a5518 30%, #a87828 55%, #7a5518 75%, #4a3008 100%)',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)',
+              border: '1px solid #9a7030',
+              textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+            }}
+            whileHover={{ scale: 1.03, boxShadow: '0 4px 20px rgba(160,110,40,0.5)' }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+          >
+            <span>{audio.playing ? '⏸' : '♪'}</span>
+            <span>{audio.playing ? 'Pause Music' : 'Play Music'}</span>
+          </motion.button>
+        </motion.div>
+      )}
+
+      {/* LAYER 4 — 4 ornate portal buttons */}
       <div className="absolute inset-x-0 z-20 flex justify-center"
         style={{ top: `${BTN_Y}%`, transform: 'translateY(-50%)' }}>
         <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center w-full px-4 md:px-0 md:w-auto md:justify-center">
-
-          {/* Music play/pause button — leftmost */}
-          {mounted && (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
-            >
-              <motion.button
-                onClick={() => { if (audio.playing) { audio.pause() } else { audio.play() } }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-1 rounded-md text-[10px] font-semibold tracking-wider uppercase text-white whitespace-nowrap cursor-pointer"
-                style={{
-                  background: 'linear-gradient(135deg, #4a3008 0%, #7a5518 30%, #a87828 55%, #7a5518 75%, #4a3008 100%)',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)',
-                  border: '1px solid #9a7030',
-                  textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-                }}
-                whileHover={{ scale: 1.03, boxShadow: '0 4px 20px rgba(160,110,40,0.5)' }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15 }}
-              >
-                <span>{audio.playing ? '⏸' : '♪'}</span>
-                <span>{audio.playing ? 'Pause Music' : 'Play Music'}</span>
-              </motion.button>
-            </motion.div>
-          )}
 
           {HERO_BTNS.map((btn, i) => (
             <motion.div
