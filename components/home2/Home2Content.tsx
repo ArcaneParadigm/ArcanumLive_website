@@ -238,9 +238,9 @@ function PanelWithVideo({
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(6,4,12,0.73) 35%, rgba(6,4,12,0.63) 50%, rgba(6,4,12,0.33) 70%, transparent 100%)' }} />
       <Corners color={color} />
 
-      <div className="relative z-10 p-6 flex gap-4 h-full" style={{ minHeight: 260 }}>
+      <div className="relative z-10 p-4 md:p-6 flex flex-col lg:flex-row gap-4 h-full" style={{ minHeight: 260 }}>
         {/* Text */}
-        <div className="flex flex-col justify-between" style={{ minWidth: 190, maxWidth: 220 }}>
+        <div className="flex flex-col justify-between lg:min-w-[190px] lg:max-w-[220px]">
           <div>
             <h2 className="font-cinzel text-xl font-bold leading-tight mb-2" style={{
               color: '#fff',
@@ -480,7 +480,7 @@ function ScreensaverBanner() {
             </div>
 
             {/* Center video — YouTube embed */}
-            <div className="hidden lg:flex flex-1 items-center self-stretch">
+            <div className="flex flex-1 items-center self-stretch">
               <div
                 className="relative w-full rounded-xl overflow-hidden"
                 style={{ aspectRatio: '16/9', border: `1px solid ${VIOLET}35` }}
@@ -502,8 +502,8 @@ function ScreensaverBanner() {
               </div>
             </div>
 
-            {/* Right mode tiles */}
-            <div className="hidden lg:flex flex-col gap-1.5 justify-center" style={{ minWidth: 220 }}>
+            {/* Right mode tiles — horizontal scroll on mobile, vertical on lg */}
+            <div className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible lg:justify-center pb-1 lg:pb-0" style={{ minWidth: 0 }}>
               {SCREENSAVER_MODES.map((m, i) => (
                 <motion.div key={i}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer"
@@ -1077,14 +1077,14 @@ const SOCIALS = [
 function SiteFooter() {
   return (
     <footer style={{ background: '#06040c', borderTop: `1px solid ${GOLD}20` }}>
-      <div className="max-w-6xl mx-auto px-8 py-2">
-        <div className="grid" style={{ gridTemplateColumns: '150px 1fr 1fr 1fr 220px', gap: '0 24px' }}>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-2">
+        <div className="flex flex-col md:grid gap-6 md:gap-0" style={{ gridTemplateColumns: '150px 1fr 1fr 1fr 220px', columnGap: '24px' }}>
           {/* Logo + tagline + socials */}
           <div>
             <Link href="/home2">
               <div className="mb-3 rounded-lg flex items-center justify-center cursor-pointer"
                 style={{ width: 130, height: 40, background: `${GOLD}12`, border: `1px solid ${GOLD}25` }}>
-                <span className="font-cinzel text-xs font-bold tracking-widest" style={{ color: `${GOLD}80` }}>THE ARCANUM</span>
+                <span className="font-cinzel text-xs font-bold tracking-widest" style={{ color: GOLD }}>THE ARCANUM</span>
               </div>
             </Link>
             <p className="text-white/80 text-[10px] leading-relaxed mb-4">Mythic worlds. Immersive stories. Infinite portals.</p>
@@ -1141,7 +1141,7 @@ function SiteFooter() {
 
       {/* Bottom bar */}
       <div className="border-t" style={{ borderColor: `${GOLD}15` }}>
-        <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row items-center gap-2 md:justify-between">
           <p className="text-white/80 text-[10px]">© 2025 Arcanum.Live. All rights reserved.</p>
           <div className="flex gap-6">
             {['Privacy Policy', 'Terms of Use'].map(t => (

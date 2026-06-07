@@ -128,7 +128,6 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
           {HERO_BTNS.map((btn, i) => (
             <motion.div
               key={btn.label}
-              className="w-full md:w-auto"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 + i * 0.12, ease: 'easeOut' }}
