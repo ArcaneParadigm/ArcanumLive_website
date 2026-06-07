@@ -55,8 +55,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
   // Orb position locked to image content (arcanum-portal-v1.jpg is 1248×832)
-  // fx=0.50, fy=0.247 = center of the arcanum circle in the image
-  const orbPt = useImagePoint(1248, 832, 0.50, 0.48)
+  // fx=0.50, fy=0.48 = center of the arcanum circle in the image
+  const orbPt = useImagePoint(containerRef, 1248, 832, 0.50, 0.48)
 
   // Sound On/Off nav button toggles music
   useEffect(() => {
