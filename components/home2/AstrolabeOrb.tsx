@@ -123,14 +123,15 @@ export default function AstrolabeOrb({
     const ORANGE = new THREE.Color('#ff9933')
     const PURPLE = new THREE.Color('#a855f7')
 
+    // axis: which local axis each ring spins on — gives divergent motion
     const ringDefs = [
-      { r: 1.72, tube: 0.084, tilt: [0, 0, 0],                          speed: 0.38,  color: GOLD,   emit: BRIGHT  },
-      { r: 1.55, tube: 0.096, tilt: [Math.PI*0.3, 0, Math.PI*0.15],     speed: -0.55, color: PALE,   emit: BRIGHT  },
-      { r: 1.32, tube: 0.108, tilt: [Math.PI*0.44, Math.PI*0.1, 0],     speed: 0.72,  color: GOLD,   emit: ORANGE  },
-      { r: 1.85, tube: 0.042, tilt: [Math.PI*0.08, 0, 0],               speed: -0.18, color: PURPLE, emit: new THREE.Color('#d08fff') },
+      { r: 1.72, tube: 0.084, tilt: [0, 0, 0],                          speed:  0.13, axis: 'z' as const, color: GOLD,   emit: BRIGHT  },
+      { r: 1.55, tube: 0.096, tilt: [Math.PI*0.3, 0, Math.PI*0.15],    speed: -0.19, axis: 'x' as const, color: PALE,   emit: BRIGHT  },
+      { r: 1.32, tube: 0.108, tilt: [Math.PI*0.44, Math.PI*0.1, 0],    speed:  0.24, axis: 'y' as const, color: GOLD,   emit: ORANGE  },
+      { r: 1.85, tube: 0.042, tilt: [Math.PI*0.08, 0, 0],              speed: -0.08, axis: 'z' as const, color: PURPLE, emit: new THREE.Color('#d08fff') },
     ]
 
-    const ringMeshes: { mesh: THREE.Mesh; mat: THREE.MeshStandardMaterial; speed: number }[] = []
+    const ringMeshes: { mesh: THREE.Mesh; mat: THREE.MeshStandardMaterial; speed: number; axis: 'x'|'y'|'z' }[] = []
     for (const def of ringDefs) {
       const geo = new THREE.TorusGeometry(def.r, def.tube, 32, 180)
       const tex = makeRuneTexture('#' + def.emit.getHexString())
@@ -145,7 +146,7 @@ export default function AstrolabeOrb({
       const mesh = new THREE.Mesh(geo, mat)
       mesh.rotation.set(def.tilt[0], def.tilt[1], def.tilt[2])
       tiltGroup.add(mesh)
-      ringMeshes.push({ mesh, mat, speed: def.speed })
+      ringMeshes.push({ mesh, mat, speed: def.speed, axis: def.axis })
     }
 
     // ── Inner orb ─────────────────────────────────────────────────────────────
@@ -204,8 +205,8 @@ export default function AstrolabeOrb({
       tiltGroup.rotation.y += (ty - tiltGroup.rotation.y) * 0.06
 
       const beatBoost = a.beat ? 1.6 : 1
-      for (const { mesh, mat, speed } of ringMeshes) {
-        mesh.rotation.z += dt * speed * sm * beatBoost
+      for (const { mesh, mat, speed, axis } of ringMeshes) {
+        mesh.rotation[axis] += dt * speed * sm * beatBoost
         const bassBoost = 1 + a.bass * 1.2 * pm
         const s = 1 + (bassBoost - 1) * 0.18
         mesh.scale.setScalar(s)
