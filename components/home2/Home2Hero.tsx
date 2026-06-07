@@ -56,18 +56,16 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
-  // Auto-play — wait for audio element to be ready, then play; fall back to first tap
+  // Play/pause music via SOUND ON nav button
   useEffect(() => {
     if (!mounted || FRONT_PAGE_TRACKS.length === 0) return
-    const el = audio.audioRef.current
-    if (!el) return
-    const doPlay = () => audio.play().catch(() => {
-      const onTap = () => { audio.play(); window.removeEventListener('pointerdown', onTap) }
-      window.addEventListener('pointerdown', onTap, { once: true })
-    })
-    if (el.readyState >= 3) { doPlay() }
-    else { el.addEventListener('canplaythrough', doPlay, { once: true }) }
-  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
+    const onToggle = (e: Event) => {
+      const on = (e as CustomEvent).detail?.on
+      if (on) audio.play(); else audio.pause()
+    }
+    window.addEventListener('arcanum:music-toggle', onToggle)
+    return () => window.removeEventListener('arcanum:music-toggle', onToggle)
+  }, [mounted, audio.play, audio.pause]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade audio when other panels signal hover (fire 'arcanum:audiofade' custom event)
   useEffect(() => {

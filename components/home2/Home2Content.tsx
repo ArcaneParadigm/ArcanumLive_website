@@ -191,9 +191,10 @@ function PanelWithVideo({
     setYtLoaded(true)   // load iframe on first hover
     // slight delay so iframe has time to init before unmuting
     setTimeout(() => {
+      ytCmd(ytRef.current, 'playVideo')
       ytCmd(ytRef.current, 'unMute')
       ytCmd(ytRef.current, 'setVolume', [60])
-    }, 800)
+    }, 900)
   }, [youtube])
 
   const handlePanelLeave = useCallback(() => {
@@ -282,7 +283,7 @@ function PanelWithVideo({
                   <iframe
                     ref={ytRef}
                     className="absolute inset-0 w-full h-full"
-                    src={`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1`}
+                    src={`https://www.youtube-nocookie.com/embed/${youtube}?mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                     title={title}
@@ -465,9 +466,10 @@ function ScreensaverBanner() {
     window.dispatchEvent(new Event('arcanum:audiofade:on'))
     setYtLoaded(true)
     setTimeout(() => {
+      ytCmd(ytRef.current, 'playVideo')
       ytCmd(ytRef.current, 'unMute')
       ytCmd(ytRef.current, 'setVolume', [60])
-    }, 800)
+    }, 900)
   }
   function onVideoLeave() {
     window.dispatchEvent(new Event('arcanum:audiofade:off'))
@@ -517,7 +519,7 @@ function ScreensaverBanner() {
                 {ytLoaded && <iframe
                   ref={ytRef}
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube-nocookie.com/embed/4MRrrkrBn_c?autoplay=1&mute=1&loop=1&playlist=4MRrrkrBn_c&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
+                  src="https://www.youtube-nocookie.com/embed/4MRrrkrBn_c?mute=1&loop=1&playlist=4MRrrkrBn_c&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   title="Ascension Chamber Preview"

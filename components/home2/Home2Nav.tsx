@@ -97,7 +97,10 @@ export default function Home2Nav() {
           style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.6)', fontSize: 11, letterSpacing: '0.15em' }}
           whileHover={{ color: soundOn ? GOLD : 'rgba(255,255,255,0.85)' }}
           transition={{ duration: 0.15 }}
-          onClick={() => { setSoundOn(s => !s); unlockAudio() }}
+          onClick={() => {
+            const next = !soundOn; setSoundOn(next); unlockAudio()
+            window.dispatchEvent(new CustomEvent('arcanum:music-toggle', { detail: { on: next } }))
+          }}
           onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
         >
           <span style={{ fontSize: 14 }}>{soundOn ? '🔊' : '🔇'}</span>
@@ -109,7 +112,10 @@ export default function Home2Nav() {
           <motion.button
             className="flex items-center gap-1 select-none cursor-pointer"
             style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.6)', fontSize: 10 }}
-            onClick={() => { setSoundOn(s => !s); unlockAudio() }}
+            onClick={() => {
+              const next = !soundOn; setSoundOn(next); unlockAudio()
+              window.dispatchEvent(new CustomEvent('arcanum:music-toggle', { detail: { on: next } }))
+            }}
           >
             <span style={{ fontSize: 14 }}>{soundOn ? '🔊' : '🔇'}</span>
           </motion.button>
