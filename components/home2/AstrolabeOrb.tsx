@@ -194,8 +194,8 @@ export default function AstrolabeOrb({
     // Particles spawn from a ring at the orb equator (r=0.56) and fly outward.
     // Secondaries (sparks) spawn near active primaries → 6x density cascade.
     const RING_R  = 0.56   // emission ring radius = just outside orb surface
-    const PRI_N   = 90     // primary emitters on ring
-    const SPK_N   = 540    // spark secondaries (6 per primary slot)
+    const PRI_N   = 300    // primary emitters on ring
+    const SPK_N   = 3900   // spark secondaries (13 per primary slot)
     const TOTAL_F = PRI_N + SPK_N
 
     type FP = { x:number; y:number; z:number; vx:number; vy:number; vz:number; life:number; maxLife:number; seed:number; sz:number }
