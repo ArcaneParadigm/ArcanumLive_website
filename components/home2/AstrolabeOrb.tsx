@@ -200,17 +200,16 @@ export default function AstrolabeOrb({
 
     type FP = { x:number; y:number; z:number; vx:number; vy:number; vz:number; life:number; maxLife:number; seed:number; sz:number }
 
-    // Spawn primary on emission ring, velocity strictly outward
+    // Spawn primary on emission ring in XY plane — faces camera (camera at z=9)
     function spawnPrimary(): FP {
       const a   = Math.random() * Math.PI * 2
       const spd = 0.22 + Math.random() * 0.32
-      const vup = (Math.random() - 0.5) * 0.18
       return {
-        x: Math.cos(a) * RING_R, y: (Math.random() - 0.5) * 0.06, z: Math.sin(a) * RING_R,
-        vx: Math.cos(a) * spd, vy: vup, vz: Math.sin(a) * spd,
+        x: Math.cos(a) * RING_R, y: Math.sin(a) * RING_R, z: (Math.random() - 0.5) * 0.06,
+        vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, vz: (Math.random() - 0.5) * 0.18,
         life: 0, maxLife: 1.2 + Math.random() * 1.1,
         seed: Math.random() * 100,
-        sz: 0.06 + Math.random() * 0.07,  // size variance
+        sz: 0.06 + Math.random() * 0.07,
       }
     }
 
