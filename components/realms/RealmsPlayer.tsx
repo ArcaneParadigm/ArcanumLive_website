@@ -291,27 +291,22 @@ export default function RealmsPlayer({ audioMap, compact, activeSlug }: RealmsPl
       />
 
       {/* ── Header ── */}
-      <div className={`relative z-10 ${compact ? 'pt-3 pb-3' : 'pt-8 pb-5'} text-center px-6`}>
+      <div className={`relative z-10 ${compact ? 'pt-3 pb-3' : 'pt-4 pb-5'} text-center px-6`}>
         {!compact && (
-          <>
-            <div className="absolute left-6 top-8">
-              <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
-                style={{ color: 'rgba(255,255,255,0.82)' }}>
-                ← Home
-              </Link>
-            </div>
-            <div className="absolute right-6 top-8">
-              <Link href="/ascension" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
-                style={{
-                  background: 'linear-gradient(135deg, #8a6020, #c9973a 40%, #f0c84a 60%, #c9973a 80%, #8a6020)',
-                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                  filter: 'drop-shadow(0 0 8px rgba(201,151,58,0.35))',
-                }}>
-                Ascension Chamber
-              </Link>
-            </div>
-            <p className="text-[9px] tracking-[0.5em] uppercase mb-2" style={{ color: `${accent}90` }}>The Arcanum</p>
-          </>
+          <div className="flex items-center justify-between mb-3">
+            <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
+              style={{ color: 'rgba(255,255,255,0.82)' }}>
+              ← Home
+            </Link>
+            <Link href="/ascension" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
+              style={{
+                background: 'linear-gradient(135deg, #8a6020, #c9973a 40%, #f0c84a 60%, #c9973a 80%, #8a6020)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                filter: 'drop-shadow(0 0 8px rgba(201,151,58,0.35))',
+              }}>
+              Ascension Chamber
+            </Link>
+          </div>
         )}
         <h1
           className={`font-cinzel font-bold tracking-widest leading-none ${compact ? 'text-2xl mb-1' : 'text-3xl md:text-4xl mb-2'}`}
