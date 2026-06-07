@@ -108,8 +108,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               fontSize: 'clamp(0.81rem, 1.35vw, 0.97rem)',
               letterSpacing: '0.12em',
               lineHeight: 1.8,
-              color: '#000000',
-              textShadow: 'none',
+              color: '#f5d06e',
+              textShadow: '0 2px 4px rgba(0,0,0,0.9)',
             }}>
             <span style={{ display: 'block' }}>
               A cinematic universe of immersive domeshows &amp; forbidden archives
