@@ -119,26 +119,24 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
       {/* LAYER 2b — 3D Astrolabe Orb */}
       {mounted && (
-        <motion.div
+        <div
           className="absolute pointer-events-none"
-          style={{
-            opacity: fade,
-            left: '50%', top: '23%',
-            transform: 'translateX(-50%)',
-            width: '29%', height: '29vw',
-            zIndex: 15,
-          }}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2, delay: 0.8 }}
+          style={{ left: '50%', top: '18%', transform: 'translateX(-50%)', width: '29%', height: '29vw', zIndex: 15 }}
         >
-          <AstrolabeOrb
-            audio={audio.analysis}
-            speedMult={speedMult}
-            pulseMult={pulseMult}
-            glowStrength={glowStrength}
-            mousePos={mousePos}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </motion.div>
+          <motion.div
+            style={{ opacity: fade, width: '100%', height: '100%' }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2, delay: 0.8 }}
+          >
+            <AstrolabeOrb
+              audio={audio.analysis}
+              speedMult={speedMult}
+              pulseMult={pulseMult}
+              glowStrength={glowStrength}
+              mousePos={mousePos}
+              style={{ width: '100%', height: '100%' }}
+            />
+          </motion.div>
+        </div>
       )}
 
       {/* Hidden audio element */}
