@@ -87,7 +87,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
       {/* LAYER 3 — Title + subtitle just below the nav header */}
       <div className="absolute inset-x-0 z-20 flex flex-col items-center text-center pointer-events-none"
-        style={{ top: 32 }}>
+        style={{ top: 8 }}>
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -108,8 +108,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               fontSize: 'clamp(0.81rem, 1.35vw, 0.97rem)',
               letterSpacing: '0.12em',
               lineHeight: 1.8,
-              color: '#f0c050',
-              textShadow: '0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(201,151,58,0.8), 0 0 50px rgba(180,120,20,0.5)',
+              color: '#000000',
+              textShadow: 'none',
             }}>
             <span style={{ display: 'block' }}>
               A cinematic universe of immersive domeshows &amp; forbidden archives
