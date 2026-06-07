@@ -14,7 +14,7 @@ const AstrolabeControls = dynamic(() => import('./AstrolabeControls'), { ssr: fa
 
 // ── Front-page playlist — swap in real tracks when ready ──────────────────────
 const FRONT_PAGE_TRACKS: AstrolabeTrack[] = [
-  // { title: 'Track Name', src: '/audio/track.mp3' }
+  { title: 'BTTH Ascent', src: '/audio/home_main.wav' },
 ]
 
 interface Home2HeroProps {
@@ -44,6 +44,9 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   const [imgIdx, setImgIdx] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
 
+  // Hover fade
+  const [hoverFade, setHoverFade] = useState(false)
+
   // Astrolabe controls
   const [speedMult,       setSpeedMult]       = useState(1.0)
   const [pulseMult,       setPulseMult]       = useState(1.0)
@@ -52,6 +55,11 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
+
+  // Fade audio volume on button hover
+  useEffect(() => {
+    audio.setVolume(hoverFade ? 0.18 : 1.0)
+  }, [hoverFade]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -176,6 +184,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 + i * 0.12, ease: 'easeOut' }}
+              onMouseEnter={() => setHoverFade(true)}
+              onMouseLeave={() => setHoverFade(false)}
             >
               <BtnOrnate label={btn.label} href={btn.href} width={BTN_W} height={72} />
             </motion.div>
