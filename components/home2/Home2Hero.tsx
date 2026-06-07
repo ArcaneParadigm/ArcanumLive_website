@@ -56,16 +56,31 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
-  // Play/pause music via SOUND ON nav button
+  // Play music on first user interaction anywhere (browser autoplay policy)
+  useEffect(() => {
+    if (!mounted || FRONT_PAGE_TRACKS.length === 0) return
+    const el = audio.audioRef.current
+    if (!el) return
+    const onFirstInteraction = () => {
+      el.play().catch(() => {})
+      document.removeEventListener('pointerdown', onFirstInteraction)
+    }
+    document.addEventListener('pointerdown', onFirstInteraction)
+    return () => document.removeEventListener('pointerdown', onFirstInteraction)
+  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sound On/Off nav button toggles music
   useEffect(() => {
     if (!mounted || FRONT_PAGE_TRACKS.length === 0) return
     const onToggle = (e: Event) => {
       const on = (e as CustomEvent).detail?.on
-      if (on) audio.play(); else audio.pause()
+      const el = audio.audioRef.current
+      if (!el) return
+      if (on) el.play().catch(() => {}); else el.pause()
     }
     window.addEventListener('arcanum:music-toggle', onToggle)
     return () => window.removeEventListener('arcanum:music-toggle', onToggle)
-  }, [mounted, audio.play, audio.pause]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade audio when other panels signal hover (fire 'arcanum:audiofade' custom event)
   useEffect(() => {
