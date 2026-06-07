@@ -28,7 +28,7 @@ export function useAstrolabeAudio(tracks: AstrolabeTrack[], sensitivity = 1.4) {
   const [analysis, setAnalysis]   = useState<AudioAnalysis>(EMPTY)
   const [playing, setPlaying]     = useState(false)
   const [trackIdx, setTrackIdx]   = useState(0)
-  const [volume, setVolume]       = useState(0.8)
+  const [volume, setVolume]       = useState(0.5)
   const [ready, setReady]         = useState(false)
 
   // Init audio context on first play (browser autoplay policy)

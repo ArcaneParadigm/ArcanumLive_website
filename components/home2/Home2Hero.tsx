@@ -58,8 +58,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
   // Fade audio when other panels signal hover (fire 'arcanum:audiofade' custom event)
   useEffect(() => {
-    const on  = () => { setHoverFade(true);  audio.setVolume(0.18) }
-    const off = () => { setHoverFade(false); audio.setVolume(1.0)  }
+    const on  = () => { setHoverFade(true);  audio.setVolume(0.08) }
+    const off = () => { setHoverFade(false); audio.setVolume(0.5)  }
     window.addEventListener('arcanum:audiofade:on',  on)
     window.addEventListener('arcanum:audiofade:off', off)
     return () => {
