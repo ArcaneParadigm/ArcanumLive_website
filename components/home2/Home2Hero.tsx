@@ -111,10 +111,10 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               color: '#f0c050',
               textShadow: '0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(201,151,58,0.8), 0 0 50px rgba(180,120,20,0.5)',
             }}>
-            <span style={{ display: 'block', whiteSpace: 'nowrap' }}>
+            <span style={{ display: 'block' }}>
               A cinematic universe of immersive domeshows &amp; forbidden archives
             </span>
-            <span style={{ display: 'block', whiteSpace: 'nowrap' }}>
+            <span style={{ display: 'block' }}>
               AI Films · mythic worlds · sacred products · dimensional media systems
             </span>
           </p>
@@ -124,10 +124,11 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       {/* LAYER 4 — 4 ornate portal buttons centred over image button zone */}
       <div className="absolute inset-x-0 z-20 flex justify-center"
         style={{ top: `${BTN_Y}%`, transform: 'translateY(-50%)' }}>
-        <div className="flex gap-4 items-start">
+        <div className="flex flex-col md:flex-row gap-4 items-center w-full px-4 md:px-0 md:w-auto md:justify-center">
           {HERO_BTNS.map((btn, i) => (
             <motion.div
               key={btn.label}
+              className="w-full md:w-auto"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 + i * 0.12, ease: 'easeOut' }}

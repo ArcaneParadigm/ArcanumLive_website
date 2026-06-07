@@ -300,8 +300,8 @@ function PanelWithVideo({
 
 function DomeSection() {
   return (
-    <section className="px-8 py-2" style={{ background: '#08060e' }}>
-      <div className="max-w-6xl mx-auto flex gap-4">
+    <section className="px-4 md:px-8 py-2" style={{ background: '#08060e' }}>
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-4">
         <PanelWithVideo
           title="Immersive Dome Shows"
           desc="Cinematic journeys for domes and planetariums."
@@ -455,7 +455,7 @@ function ScreensaverBanner() {
   }
 
   return (
-    <section className="px-8 py-2" style={{ background: '#08060e' }}>
+    <section className="px-4 md:px-8 py-2" style={{ background: '#08060e' }}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="relative rounded-2xl overflow-hidden"
@@ -467,7 +467,7 @@ function ScreensaverBanner() {
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(8,6,14,0.55) 0%, rgba(8,6,14,0.2) 30%, transparent 50%)' }} />
           <Corners color={VIOLET} />
 
-          <div className="relative z-10 flex items-stretch gap-6 p-6" style={{ minHeight: 300 }}>
+          <div className="relative z-10 flex flex-col lg:flex-row items-stretch gap-6 p-6" style={{ minHeight: 300 }}>
             {/* Left text */}
             <div className="flex flex-col justify-center" style={{ minWidth: 210 }}>
               <p className="text-[8px] tracking-[0.4em] uppercase mb-2" style={{ color: `${VIOLET}80` }}>Living Visualizer</p>
@@ -480,7 +480,7 @@ function ScreensaverBanner() {
             </div>
 
             {/* Center video — YouTube embed */}
-            <div className="flex-1 flex items-center self-stretch">
+            <div className="hidden lg:flex flex-1 items-center self-stretch">
               <div
                 className="relative w-full rounded-xl overflow-hidden"
                 style={{ aspectRatio: '16/9', border: `1px solid ${VIOLET}35` }}
@@ -503,7 +503,7 @@ function ScreensaverBanner() {
             </div>
 
             {/* Right mode tiles */}
-            <div className="flex flex-col gap-1.5 justify-center" style={{ minWidth: 220 }}>
+            <div className="hidden lg:flex flex-col gap-1.5 justify-center" style={{ minWidth: 220 }}>
               {SCREENSAVER_MODES.map((m, i) => (
                 <motion.div key={i}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer"
@@ -844,8 +844,8 @@ function SonicPanel() {
 
 function ArchiveAndSonic() {
   return (
-    <section className="px-8 py-2" style={{ background: '#06040c' }}>
-      <div className="max-w-6xl mx-auto flex gap-4">
+    <section className="px-4 md:px-8 py-2" style={{ background: '#06040c' }}>
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-4">
         <FullBleedPanel
           title="Enter the Codex"
           desc="Secrets, relics and forbidden archives from across the multiverse."
@@ -891,8 +891,8 @@ function ProductsSection() {
   }
 
   return (
-    <section className="px-8 py-2" style={{ background: '#08060e' }}>
-      <div className="max-w-6xl mx-auto flex gap-4">
+    <section className="px-4 md:px-8 py-2" style={{ background: '#08060e' }}>
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-4">
 
         {/* Products */}
         <motion.div
@@ -963,7 +963,7 @@ const PORTAL_ITEMS = [
 function ChoosePortal() {
   const router = useRouter()
   return (
-    <section className="px-8 py-12" style={{ background: '#06040c' }}>
+    <section className="px-4 md:px-8 py-12" style={{ background: '#06040c' }}>
       <div className="max-w-6xl mx-auto">
         {/* Title */}
         <motion.div className="flex items-center gap-4 mb-10 justify-center"
@@ -976,7 +976,7 @@ function ChoosePortal() {
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {PORTAL_ITEMS.map((p, i) => (
             <motion.div key={p.label}
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
@@ -1087,7 +1087,7 @@ function SiteFooter() {
                 <span className="font-cinzel text-xs font-bold tracking-widest" style={{ color: `${GOLD}80` }}>THE ARCANUM</span>
               </div>
             </Link>
-            <p className="text-white/35 text-[10px] leading-relaxed mb-4">Mythic worlds. Immersive stories. Infinite portals.</p>
+            <p className="text-white/80 text-[10px] leading-relaxed mb-4">Mythic worlds. Immersive stories. Infinite portals.</p>
             <div className="flex gap-1.5">
               {SOCIALS.map(s => (
                 <motion.div key={s.label}
@@ -1109,7 +1109,7 @@ function SiteFooter() {
                 <Link key={item} href={NAV_HREFS[item] ?? '#'}>
                   <motion.p
                     className={`text-[10px] tracking-widest uppercase cursor-pointer ${ii > 0 ? 'mt-2.5' : ''}`}
-                    style={{ color: ii === 0 ? `${GOLD}90` : 'rgba(255,255,255,0.45)', fontWeight: ii === 0 ? 600 : 400 }}
+                    style={{ color: ii === 0 ? `${GOLD}90` : 'rgba(255,255,255,0.85)', fontWeight: ii === 0 ? 600 : 400 }}
                     onMouseEnter={() => playCrystalBowl(GOLD, 0.012)}
                     whileHover={{ color: '#e8dcc8' }} transition={{ duration: 0.15 }}>
                     {item}
@@ -1122,10 +1122,10 @@ function SiteFooter() {
           {/* Newsletter */}
           <div>
             <p className="font-cinzel text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: '#e8dcc8' }}>Join the Sigil Newsletter</p>
-            <p className="text-white/35 text-[9px] leading-relaxed mb-2.5">Updates, premieres and cosmic transmissions.</p>
+            <p className="text-white/80 text-[9px] leading-relaxed mb-2.5">Updates, premieres and cosmic transmissions.</p>
             <div className="flex gap-1.5">
               <input type="email" placeholder="Your email address"
-                className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md outline-none text-white/70 placeholder-white/25"
+                className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md outline-none text-white/90 placeholder-white/50"
                 style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${GOLD}30`, fontSize: 10 }} />
               <motion.button
                 className="px-3 py-1.5 rounded-md text-[9px] font-semibold tracking-widest uppercase text-white whitespace-nowrap shrink-0"
@@ -1142,11 +1142,11 @@ function SiteFooter() {
       {/* Bottom bar */}
       <div className="border-t" style={{ borderColor: `${GOLD}15` }}>
         <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
-          <p className="text-white/25 text-[10px]">© 2025 Arcanum.Live. All rights reserved.</p>
+          <p className="text-white/80 text-[10px]">© 2025 Arcanum.Live. All rights reserved.</p>
           <div className="flex gap-6">
             {['Privacy Policy', 'Terms of Use'].map(t => (
-              <motion.a key={t} href="#" className="text-white/30 text-[10px] cursor-pointer"
-                whileHover={{ color: 'rgba(255,255,255,0.6)' }}>{t}</motion.a>
+              <motion.a key={t} href="#" className="text-white/80 text-[10px] cursor-pointer"
+                whileHover={{ color: 'rgba(255,255,255,1)' }}>{t}</motion.a>
             ))}
           </div>
         </div>

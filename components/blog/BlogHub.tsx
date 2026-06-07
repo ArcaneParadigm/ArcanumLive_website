@@ -63,7 +63,7 @@ function HeroPost({ post, image }: { post: BlogPost; image: string | null }) {
                 style={{ background: `${color}25`, color, border: `1px solid ${color}50` }}>
                 {post.category}
               </span>
-              <span className="text-[9px] tracking-widest" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              <span className="text-[9px] tracking-widest" style={{ color: 'rgba(255,255,255,0.85)' }}>
                 {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
               </span>
               <span className="text-[9px] px-1.5 py-0.5 rounded tracking-widest" style={{ background: `${GOLD}15`, color: `${GOLD}90`, border: `1px solid ${GOLD}30` }}>
@@ -74,7 +74,7 @@ function HeroPost({ post, image }: { post: BlogPost; image: string | null }) {
               style={{ color: '#fff', textShadow: `0 0 20px ${color}50, 0 2px 6px rgba(0,0,0,0.9)` }}>
               {post.title}
             </h2>
-            <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,0.72)' }}>
+            <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,0.9)' }}>
               {post.excerpt}
             </p>
             <motion.span
@@ -144,20 +144,20 @@ function PostCard({ post, image }: { post: BlogPost; image: string | null }) {
 
         {/* Text */}
         <div className="p-4 flex flex-col flex-1">
-          <span className="text-[8px] tracking-widest mb-2 block" style={{ color: 'rgba(255,255,255,0.38)' }}>
+          <span className="text-[8px] tracking-widest mb-2 block" style={{ color: 'rgba(255,255,255,0.85)' }}>
             {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </span>
           <h3 className="font-cinzel text-sm font-bold leading-snug tracking-wide mb-2 flex-1"
             style={{ color: 'rgba(255,255,255,0.9)', textShadow: `0 0 12px ${color}25` }}>
             {post.title}
           </h3>
-          <p className="text-[11px] leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="text-[11px] leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.85)' }}>
             {post.excerpt.length > 100 ? post.excerpt.slice(0, 100) + '…' : post.excerpt}
           </p>
           <div className="flex items-center justify-between mt-auto">
             <span className="text-[9px] tracking-widest uppercase" style={{ color: `${color}80` }}>Read more →</span>
             {post.characters && (
-              <span className="text-[8px] tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <span className="text-[8px] tracking-widest" style={{ color: 'rgba(255,255,255,0.8)' }}>
                 {post.characters.length} characters
               </span>
             )}
@@ -208,7 +208,7 @@ export default function BlogHub({ posts, cardImages }: Props) {
               <span style={{ color: `${GOLD}60`, fontSize: 8 }}>◆</span>
               <div className="h-px w-16" style={{ background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
             </div>
-            <p className="mt-3 text-xs tracking-widest" style={{ color: 'rgba(255,255,255,0.45)' }}>
+            <p className="mt-3 text-xs tracking-widest" style={{ color: 'rgba(255,255,255,0.85)' }}>
               Lore · Characters · Myth · Dispatches from the Realms
             </p>
           </div>
@@ -267,7 +267,7 @@ export default function BlogHub({ posts, cardImages }: Props) {
 
           {filtered.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-sm tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              <p className="text-sm tracking-widest" style={{ color: 'rgba(255,255,255,0.85)' }}>
                 No dispatches in this category yet.
               </p>
             </div>

@@ -5,7 +5,7 @@ const YEAR = new Date().getFullYear()
 type FooterLinkItem = { label: string; href: string; external?: true }
 
 function FooterLink({ link, hoverClass = 'hover:text-white/90' }: { link: FooterLinkItem; hoverClass?: string }) {
-  const className = `text-white/50 ${hoverClass} text-sm transition-colors`
+  const className = `text-white/80 ${hoverClass} text-sm transition-colors`
   if (link.external) {
     return (
       <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
@@ -56,7 +56,7 @@ export default function Footer() {
                 Live
               </span>
             </div>
-            <p className="text-white/40 text-sm leading-relaxed">
+            <p className="text-white/80 text-sm leading-relaxed">
               Enter the MythMachine. A cinematic universe of immersive dome shows, 360 movies, AI films, and mythic worlds.
             </p>
           </div>
@@ -69,7 +69,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.explore.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/50 hover:text-white/90 text-sm transition-colors">
+                  <Link href={link.href} className="text-white/80 hover:text-white text-sm transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -107,14 +107,14 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/30 text-xs tracking-wider">
+          <p className="text-white/80 text-xs tracking-wider">
             © {YEAR} Arcanum Live · Arcane Realities
           </p>
           <div className="flex items-center gap-6">
-            <Link href="/contact" className="text-white/30 hover:text-white/60 text-xs tracking-wider transition-colors">
+            <Link href="/contact" className="text-white/80 hover:text-white text-xs tracking-wider transition-colors">
               Contact
             </Link>
-            <Link href="/contact" className="text-white/30 hover:text-white/60 text-xs tracking-wider transition-colors">
+            <Link href="/contact" className="text-white/80 hover:text-white text-xs tracking-wider transition-colors">
               Licensing
             </Link>
           </div>

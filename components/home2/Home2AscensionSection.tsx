@@ -45,7 +45,7 @@ function ModeChip({ mode }: ModeChipProps) {
       <p className="font-cinzel text-[11px] font-bold tracking-wide mb-0.5" style={{ color: mode.color }}>
         {mode.label}
       </p>
-      <p className="text-[9px] tracking-wide text-white/50">{mode.desc}</p>
+      <p className="text-[9px] tracking-wide text-white/80">{mode.desc}</p>
 
       {/* Bottom glow line */}
       <div className="absolute bottom-0 inset-x-4 h-px rounded-full" style={{ background: `${mode.color}50` }} />
@@ -85,7 +85,7 @@ export default function Home2AscensionSection() {
         >
           The Ascension Chamber
         </h2>
-        <p className="text-white/60 text-sm max-w-xl mx-auto leading-relaxed">
+        <p className="text-white/85 text-sm max-w-xl mx-auto leading-relaxed">
           Music-reactive visuals that transform your screen into a living portal. Choose your realm and let the sound guide you.
         </p>
 
