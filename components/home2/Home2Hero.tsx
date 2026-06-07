@@ -56,6 +56,14 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
+  // Auto-play on first user interaction (browser autoplay policy)
+  useEffect(() => {
+    if (!mounted || FRONT_PAGE_TRACKS.length === 0) return
+    const tryPlay = () => { audio.play(); window.removeEventListener('pointerdown', tryPlay) }
+    // Try immediately (works if previous gesture existed), else wait for first tap/click
+    audio.play().catch(() => window.addEventListener('pointerdown', tryPlay, { once: true }))
+  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fade audio when other panels signal hover (fire 'arcanum:audiofade' custom event)
   useEffect(() => {
     const on  = () => { setHoverFade(true);  audio.setVolume(0.08) }
