@@ -121,7 +121,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       {mounted && (
         <div
           className="absolute pointer-events-none"
-          style={{ left: '50%', top: '18%', transform: 'translateX(-50%)', width: '29%', height: '29vw', zIndex: 15 }}
+          style={{ left: '50%', top: '26%', transform: 'translateX(-50%)', width: '29%', height: '29vw', zIndex: 15 }}
         >
           <motion.div
             style={{ opacity: fade, width: '100%', height: '100%' }}
