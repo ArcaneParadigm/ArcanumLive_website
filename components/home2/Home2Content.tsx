@@ -164,10 +164,6 @@ function DoubleRule({ color = GOLD, width = 160 }: { color?: string; width?: num
 // SECTION 1 — DOME SHOWS + 360 MOVIES
 // ════════════════════════════════════════════════════════════════════════════
 
-// Send a command to an embedded YouTube iframe via postMessage
-function ytCmd(iframe: HTMLIFrameElement | null, func: string, args: unknown[] = []) {
-  iframe?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), '*')
-}
 
 function PanelWithVideo({
   title, desc, btnA, btnB, color, image, images, video, youtube, subscribeUrl,
@@ -178,30 +174,9 @@ function PanelWithVideo({
   color: string; image?: string; images?: string[]; video?: string; youtube?: string; subscribeUrl?: string;
 }) {
   const vidRef  = useRef<HTMLVideoElement>(null)
-  const ytRef   = useRef<HTMLIFrameElement>(null)
   const [playing, setPlaying] = useState(false)
   const allImages = images ?? (image ? [image] : [])
   const [imgIdx, setImgIdx] = useState(0)
-  // Facade: don't load iframe until first hover — avoids YouTube bot-check on page load
-  const [ytLoaded, setYtLoaded] = useState(false)
-
-  const handlePanelEnter = useCallback(() => {
-    window.dispatchEvent(new Event('arcanum:audiofade:on'))
-    if (!youtube) return
-    setYtLoaded(true)   // load iframe on first hover
-    // slight delay so iframe has time to init before unmuting
-    setTimeout(() => {
-      ytCmd(ytRef.current, 'playVideo')
-      ytCmd(ytRef.current, 'unMute')
-      ytCmd(ytRef.current, 'setVolume', [60])
-    }, 900)
-  }, [youtube])
-
-  const handlePanelLeave = useCallback(() => {
-    window.dispatchEvent(new Event('arcanum:audiofade:off'))
-    if (!youtube) return
-    ytCmd(ytRef.current, 'mute')
-  }, [youtube])
 
   useEffect(() => {
     if (allImages.length <= 1) return
@@ -222,8 +197,6 @@ function PanelWithVideo({
       initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
       transition={{ duration: 0.55, ease: 'easeOut' }}
       whileHover={{ borderColor: `${color}60` }}
-      onMouseEnter={handlePanelEnter}
-      onMouseLeave={handlePanelLeave}
     >
       {allImages.length > 0
         ? (
@@ -445,22 +418,6 @@ const SCREENSAVER_MODES = [
 
 function ScreensaverBanner() {
   const [active, setActive] = useState(0)
-  const ytRef = useRef<HTMLIFrameElement>(null)
-  const [ytLoaded, setYtLoaded] = useState(false)
-
-  function onVideoEnter() {
-    window.dispatchEvent(new Event('arcanum:audiofade:on'))
-    setYtLoaded(true)
-    setTimeout(() => {
-      ytCmd(ytRef.current, 'playVideo')
-      ytCmd(ytRef.current, 'unMute')
-      ytCmd(ytRef.current, 'setVolume', [60])
-    }, 900)
-  }
-  function onVideoLeave() {
-    window.dispatchEvent(new Event('arcanum:audiofade:off'))
-    ytCmd(ytRef.current, 'mute')
-  }
 
   return (
     <section className="px-4 md:px-8 py-2" style={{ background: '#08060e' }}>
@@ -492,8 +449,6 @@ function ScreensaverBanner() {
               <div
                 className="relative w-full rounded-xl overflow-hidden"
                 style={{ aspectRatio: '16/9', border: `1px solid ${VIOLET}35` }}
-                onMouseEnter={onVideoEnter}
-                onMouseLeave={onVideoLeave}
               >
                 <iframe
                   className="absolute inset-0 w-full h-full"
@@ -503,7 +458,6 @@ function ScreensaverBanner() {
                   title="Ascension Chamber Preview"
                   style={{ border: 'none' }}
                 />
-                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
                 <div className="absolute top-0 left-0 w-4 h-4 pointer-events-none" style={{ borderTop: `1px solid ${VIOLET}60`, borderLeft: `1px solid ${VIOLET}60` }} />
                 <div className="absolute bottom-0 right-0 w-4 h-4 pointer-events-none" style={{ borderBottom: `1px solid ${VIOLET}40`, borderRight: `1px solid ${VIOLET}40` }} />
               </div>

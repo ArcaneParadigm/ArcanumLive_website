@@ -44,9 +44,6 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   const [imgIdx, setImgIdx] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
 
-  // Hover fade
-  const [hoverFade, setHoverFade] = useState(false)
-
   // Astrolabe controls
   const [speedMult,       setSpeedMult]       = useState(1.0)
   const [pulseMult,       setPulseMult]       = useState(1.0)
@@ -81,18 +78,6 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
     window.addEventListener('arcanum:music-toggle', onToggle)
     return () => window.removeEventListener('arcanum:music-toggle', onToggle)
   }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Fade audio when other panels signal hover (fire 'arcanum:audiofade' custom event)
-  useEffect(() => {
-    const on  = () => { setHoverFade(true);  audio.setVolume(0.08) }
-    const off = () => { setHoverFade(false); audio.setVolume(0.5)  }
-    window.addEventListener('arcanum:audiofade:on',  on)
-    window.addEventListener('arcanum:audiofade:off', off)
-    return () => {
-      window.removeEventListener('arcanum:audiofade:on',  on)
-      window.removeEventListener('arcanum:audiofade:off', off)
-    }
-  }, [audio.setVolume]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (images.length <= 1) return

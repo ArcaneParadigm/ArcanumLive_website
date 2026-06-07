@@ -22,8 +22,6 @@ function SectionPanel({ title, subtitle, description, buttons, image, accent, va
       initial="hidden"
       whileInView="show"
       viewport={viewport}
-      onMouseEnter={() => window.dispatchEvent(new Event('arcanum:audiofade:on'))}
-      onMouseLeave={() => window.dispatchEvent(new Event('arcanum:audiofade:off'))}
       className="relative flex-1 rounded-2xl overflow-hidden border"
       style={{
         borderColor: `${accent}30`,
