@@ -5,8 +5,18 @@ import { featuredWorlds } from '@/lib/data/worlds'
 import { discoverRealmAudio, discoverRealmCardImage } from '@/lib/utils/realmImages'
 
 export const metadata: Metadata = {
-  title: 'Ascension Chamber · The Arcanum',
-  description: 'Pass through the portal. Choose a realm, select a soundtrack, and enter a fullscreen living world of cinematic art and ambient motion.',
+  title: 'Ascension Chamber — Living Visualizer & Immersive Portal',
+  description: 'Enter the Ascension Chamber — choose a mythic realm, select a soundtrack, and immerse in a fullscreen living world of cinematic art and ambient motion. Arcanum.Live\'s living visualizer.',
+  keywords: ['ascension chamber', 'living visualizer', 'immersive visual meditation', 'ambient visual art', 'fullscreen meditation', 'mythic ambient visuals', 'consciousness visualizer', 'dimensional portal meditation'],
+  openGraph: {
+    title: 'Ascension Chamber — Arcanum.Live',
+    description: 'Choose a realm, select a soundtrack, enter a fullscreen living world of cinematic art and ambient motion.',
+    url: 'https://arcanum.live/ascension',
+    type: 'website',
+    images: [{ url: '/images/arcanum-portal-v1.jpg', width: 1200, height: 630 }],
+  },
+  twitter: { card: 'summary_large_image', title: 'Ascension Chamber — Arcanum.Live', description: 'Fullscreen living visuals — choose a mythic realm and ambient soundtrack.' },
+  alternates: { canonical: 'https://arcanum.live/ascension' },
 }
 
 export default function ScreensaverPage() {

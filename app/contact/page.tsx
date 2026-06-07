@@ -1,14 +1,26 @@
 import { Metadata } from 'next'
-import PageShell from '@/components/layout/PageShell'
+import Home2Nav from '@/components/home2/Home2Nav'
+import Footer from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'License the Worlds · Work With Us',
-  description: 'Book immersive content, dome shows, custom visuals, AI cinema, and projection-mapped experiences for venues and events.',
+  title: 'Contact — License Dome Shows, AI Films & Immersive Media',
+  description: 'Book or license immersive dome shows, 360° films, AI cinema, custom visuals, and projection-mapped experiences from Arcanum.Live for venues, festivals, and events worldwide.',
+  keywords: ['book dome show', 'license fulldome content', 'hire AI film studio', 'immersive media licensing', 'dome show booking', 'projection mapping hire', '360 film licensing', 'Arcane Paradigm contact', 'Glenn Grillo booking'],
+  openGraph: {
+    title: 'Contact — License Dome Shows & AI Films | Arcanum.Live',
+    description: 'Book dome shows, license 360° films, AI cinema, and immersive media from Arcanum.Live for venues and events.',
+    url: 'https://arcanum.live/contact',
+    type: 'website',
+    images: [{ url: '/images/arcanum-portal-v1.jpg', width: 1200, height: 630 }],
+  },
+  twitter: { card: 'summary_large_image', title: 'Contact — Arcanum.Live', description: 'Book dome shows, license AI cinema and immersive media from Arcanum.Live.' },
+  alternates: { canonical: 'https://arcanum.live/contact' },
 }
 
 export default function ContactPage() {
   return (
-    <PageShell>
+    <div className="min-h-screen bg-obsidian-200 text-white">
+      <Home2Nav />
       <div className="pt-6 pb-12 min-h-screen">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-6">
@@ -61,6 +73,7 @@ export default function ContactPage() {
           </form>
         </div>
       </div>
-    </PageShell>
+      <Footer />
+    </div>
   )
 }

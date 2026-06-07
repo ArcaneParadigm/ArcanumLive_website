@@ -13,14 +13,23 @@ interface Film {
   title: string
   desc: string
   youtubeId: string
+  premiere?: boolean
 }
 
 const FILMS: Film[] = [
-  { id: 'singularity-2026', title: 'Singularity 2026 Trailer', youtubeId: 'f08oGGZbyyc', desc: 'A mythic, glitchcore fever dream rendered with AI visuals, pushing into new dimensions of speed and surreal clarity.' },
+  { id: 'singularity-2026', title: 'Singularity 2026 Trailer', youtubeId: 'f08oGGZbyyc', desc: 'A mythic, glitchcore fever dream rendered with AI visuals, pushing into new dimensions of speed and surreal clarity.', premiere: true },
+  { id: 'galactika', title: 'Galactika: War for the Living Stars', youtubeId: 'P0uVoINJNPc', desc: 'An epic multiversal conflict unfolds across living star systems — AI cinema at cosmic scale.', premiere: true },
+  { id: 'ascension-chamber-1', title: 'Ascension Chamber 1', youtubeId: '4MRrrkrBn_c', desc: 'Enter the first chamber — a portal through sacred geometry and dimensional light fields.', premiere: true },
+  { id: 'ai-film-demo', title: 'AI Film Demo: New Clips', youtubeId: 'HKzHmsS6Q3w', desc: 'A showcase of next-generation AI cinema clips pushing the boundary of immersive visual storytelling.', premiere: true },
+  { id: 'ascension-chamber-2', title: 'Ascension Chamber 2: Keys to the Multiverse', youtubeId: 'jNcOT5fKMQk', desc: 'The second chamber reveals the keys — frequencies, codes, and dimensional keys to the multiverse.', premiere: true },
+  { id: 'battle-thru-heavens', title: 'Battle Thru the Heavens: The 3 Year Agreement Part 1', youtubeId: 'VwTlGogpQ04', desc: 'A fan film epic — celestial warriors bound by a sacred three-year agreement fight through the heavens.', premiere: true },
+  { id: 'hawaiian-dreams-1', title: 'Hawaiian Dreams 1: Journey Thru the Portal', youtubeId: 'ONLCEq7HXSA', desc: 'A journey through the portal to the magical side of Hawaii — ancient myth rendered in AI.', premiere: true },
+  { id: 'ai-divine-1000-year', title: 'Ai Divine: The 1000 Year War', youtubeId: '9lQpOu5Rm1E', desc: 'Soulblade and Gaia\'s forces engage in a thousand-year multiversal conflict rendered in Ai Divine.', premiere: true },
+  { id: 'metaburn-party', title: 'Metaburn 777: The Party at the End of Time', youtubeId: 'lcn9DCqwA5U', desc: 'The ultimate metaverse party — Metaburn 777 throws down at the edge of time and reality.', premiere: true },
   { id: 'ascension-city-future', title: 'Ascension City: The Future is Now', youtubeId: 'mJlxIIaEMps', desc: 'An anthem launching viewers into a multiversal dreamworld where ancient magic meets futuristic sound.' },
-  { id: 'whispers-of-the-fae', title: 'Girls of the Multiverse: Whispers of the Fae', youtubeId: 'p9bNH9wDDrY', desc: 'The Fae Realms whisper as divine feminine chaos skips through an enchanted apocalypse.' },
-  { id: 'queen-of-the-infernals', title: 'Queen of the Infernals', youtubeId: 'xTmergUXPtc', desc: 'A seductress forged from smoke, bone, and screams emerges as a gothic horror anthem.' },
   { id: 'eshaton-rap-2025', title: 'The Eshaton Rap 2025', youtubeId: '14W5znwK4OU', desc: 'A sci-fi rap saga depicting a multiversal last stand between annihilation and infinity.' },
+  { id: 'queen-of-the-infernals', title: 'Queen of the Infernals', youtubeId: 'xTmergUXPtc', desc: 'A seductress forged from smoke, bone, and screams emerges as a gothic horror anthem.' },
+  { id: 'whispers-of-the-fae', title: 'Girls of the Multiverse: Whispers of the Fae', youtubeId: 'p9bNH9wDDrY', desc: 'The Fae Realms whisper as divine feminine chaos skips through an enchanted apocalypse.' },
   { id: 'infinite-horizons', title: 'Infinite Horizons feat. the Fly Girls', youtubeId: '6ZBV-xhfCkA', desc: 'An animated sonic voyage across space, soul, and sound for dreamers and starborn wanderers.' },
   { id: 'kumulipo', title: 'Kumulipo: The Age of Creation', youtubeId: 'AY7B9pXHShY', desc: 'A cosmic spectacle unveiling Hawaiian mythology through celestial visuals and mystical narrative.' },
   { id: 'merge-with-you', title: 'Merge With You', youtubeId: '1IqX2ZyU2jM', desc: 'A devotional love song depicting soul fusion across lifetimes through music, motion, and mystic fire.' },
@@ -28,7 +37,7 @@ const FILMS: Film[] = [
   { id: 'metaburn-horizon', title: 'Metaburn777: Chasing the Horizon', youtubeId: 'dGwX8Dfm7Qw', desc: 'A soul-scorching odyssey across galaxies where futurepunk druid witches dance in celestial ember-light.' },
   { id: 'singularity-part1', title: 'Singularity Part 1: Dawning of the Sixth Age', youtubeId: 'vpdODmduicM', desc: 'Explores the technological singularity hypothesis and superintelligence development implications.' },
   { id: 'cyber-geisha-ep3', title: 'Cyber Shamanic Ninja Geishas — Episode 3', youtubeId: 'e7QXdwy0n_Y', desc: 'Ancient arts meet futuristic fury as cyber shamanic geishas battle malevolent forces toward singularity.' },
-  { id: 'whisker-wings', title: 'Whisker Wings Episode 1', youtubeId: 'rl-0v2x6m2c', desc: 'Dragon kitten Whisker Wings journeys through a magical realm discovering dragonflies and mythical creatures.' },
+  { id: 'whisker-wings', title: 'Adventures of Whisker Wings Dragon Cat Extraordinaire: In the Great Zoomie Caper', youtubeId: 'wn55IMZeT24', desc: 'Dragon kitten Whisker Wings embarks on the Great Zoomie Caper — a magical chase through enchanted realms.' },
   { id: 'pudgy-penguins', title: 'Pudgy Penguins', youtubeId: 'TdzqvQXM1ro', desc: 'A creative work featuring whimsical penguin characters in a magical world.' },
   { id: 'gypsey-feather', title: 'Gypsey Feather', youtubeId: 'UBDCrXvuVt0', desc: 'A sacred meditation exploring the spiritual essence of feather spirits.' },
   { id: 'metaburn-crystal', title: 'Metaburn the Crystal', youtubeId: 'm8_lXeufQzI', desc: 'Crystal energy, sacred geometry, and the Metaburn universe collide.' },
@@ -125,29 +134,49 @@ export default function AiFilmsPage() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-between mt-3 px-1">
+          <div className="flex items-start justify-between mt-3 px-1">
             <div>
-              <h2 className="font-cinzel text-lg font-bold" style={{ color: '#e8dcc8' }}>{selected.title}</h2>
-              <p className="text-xs mt-0.5 max-w-2xl" style={{ color: 'rgba(255,255,255,0.55)' }}>{selected.desc}</p>
+              {selected.premiere && (
+                <span className="inline-block text-[8px] tracking-[0.35em] uppercase font-medium px-2 py-0.5 rounded mb-1.5"
+                  style={{ color: GOLD, background: `${GOLD}18`, border: `1px solid ${GOLD}50` }}>
+                  ● Premiere
+                </span>
+              )}
+              <h2 className="font-cinzel text-lg font-bold" style={{ color: '#f5ede0' }}>{selected.title}</h2>
+              <p className="text-xs mt-0.5 max-w-2xl" style={{ color: 'rgba(255,255,255,0.82)' }}>{selected.desc}</p>
             </div>
-            <a href={`https://youtu.be/${selected.youtubeId}`} target="_blank" rel="noopener noreferrer"
-              className="text-[10px] tracking-widest uppercase shrink-0 ml-4" style={{ color: `${GOLD}70` }}>
-              Open on YouTube ↗
-            </a>
           </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
-          {FILMS.map((film, i) => (
-            <FilmCard
-              key={film.id}
-              film={film}
-              isActive={selected.id === film.id}
-              onSelect={() => { setSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            />
-          ))}
-        </div>
+        {/* Grid — Premieres then More Films */}
+        {(() => {
+          const premieres = FILMS.filter(f => f.premiere)
+          const others = FILMS.filter(f => !f.premiere)
+          const onSelect = (film: Film) => { setSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+          const Divider = ({ label }: { label: string }) => (
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, ${GOLD}40)` }} />
+              <span className="text-[9px] tracking-[0.4em] uppercase font-medium" style={{ color: GOLD }}>{label}</span>
+              <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${GOLD}40)` }} />
+            </div>
+          )
+          return (
+            <>
+              <Divider label="Premieres" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 mb-6">
+                {premieres.map((film, i) => (
+                  <FilmCard key={film.id} film={film} isActive={selected.id === film.id} onSelect={() => onSelect(film)} />
+                ))}
+              </div>
+              <Divider label="More Films" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
+                {others.map((film, i) => (
+                  <FilmCard key={film.id} film={film} isActive={selected.id === film.id} onSelect={() => onSelect(film)} />
+                ))}
+              </div>
+            </>
+          )
+        })()}
 
       </div>
     </div>

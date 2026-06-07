@@ -329,20 +329,20 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
     <div className="min-h-screen" style={{ background: '#07050f' }}>
 
       {/* ── Slim header ── */}
-      <div className="flex items-center justify-between px-6 pt-3 pb-1">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between px-6 pt-3 pb-1">
         <Link href="/home2"
-          className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity flex-1"
+          className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity md:flex-1 mb-1 md:mb-0"
           style={{ color: 'rgba(255,255,255,0.82)' }}>
           ← Home
         </Link>
-        <h1 className="font-cinzel text-lg font-bold tracking-[0.25em] shrink-0"
+        <h1 className="font-cinzel text-lg font-bold tracking-[0.25em] md:shrink-0 text-center"
           style={{
             background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 30%, #f5d06e 50%, #c9973a 70%, #6b4411 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
           }}>
           The Ascension Chamber
         </h1>
-        <span className="font-cinzel text-[10px] italic tracking-widest flex-1 text-right"
+        <span className="hidden md:block font-cinzel text-[10px] italic tracking-widest flex-1 text-right"
           style={{
             background: 'linear-gradient(135deg, #8a6020, #c9973a 40%, #f0c84a 60%, #c9973a 80%, #8a6020)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',

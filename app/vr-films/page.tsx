@@ -20,6 +20,7 @@ interface RentableFilm {
   vimeoOnDemandUrl?: string
   price?: string
   rentable: boolean  // true = Vimeo rental available
+  premiere?: boolean // true = fulldome festival selection
 }
 
 // hqdefault is always available; maxresdefault only exists for HD uploads
@@ -34,6 +35,7 @@ const FILMS: RentableFilm[] = [
     desc: '360° immersive domeshow — surreal voyage through mysterious realms and otherworldly dimensions with exotic dance rituals and sacred geometries.',
     color: '#00e5ff',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'aid-eshaton-rap',
@@ -43,6 +45,7 @@ const FILMS: RentableFilm[] = [
     desc: 'Sci-fi rap film showcasing immersive cinematic experience mapped across digital screens in Unreal Engine with AI-generated visuals.',
     color: '#a855f7',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'the-nexus',
@@ -52,6 +55,7 @@ const FILMS: RentableFilm[] = [
     desc: 'Mind-bending 360° experience featuring quantum corridors and surreal environments rendered in Unreal Engine exploring dimensions and digital reality.',
     color: '#0055ff',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'infinite-grid',
@@ -61,6 +65,7 @@ const FILMS: RentableFilm[] = [
     desc: 'A 360° journey through the Multiverse — infinite grids, fractal dimensions, and cosmic architectures.',
     color: '#c9973a',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'aether-anubis',
@@ -70,6 +75,7 @@ const FILMS: RentableFilm[] = [
     desc: 'Cosmic journey through stardust streams exploring destiny, time waves, and reality bending to cosmic themes with spiritual awakening elements.',
     color: '#f5d06e',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'slipstream-3',
@@ -79,6 +85,7 @@ const FILMS: RentableFilm[] = [
     desc: 'A 360° extreme experience — pulse-pounding velocity through dimensional slipstreams.',
     color: '#ff0044',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'truth-in-shadows',
@@ -88,6 +95,7 @@ const FILMS: RentableFilm[] = [
     desc: 'Haunting 360° VR experience through abandoned chambers and echoes of lost souls in a gothic atmosphere rendered in Unreal Engine.',
     color: '#8b5cf6',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'tron-hoverracing',
@@ -97,6 +105,7 @@ const FILMS: RentableFilm[] = [
     desc: 'Immersive cyber-racing music film featuring synchronized hover-racing sequences in a digital corridor designed for VR headsets and fulldome theaters.',
     color: '#00e5ff',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'transcendence',
@@ -106,6 +115,7 @@ const FILMS: RentableFilm[] = [
     desc: 'Cyberpunk music video exploring a neon-lit city where consciousness and technology converge with AI-generated visuals.',
     color: '#ec4899',
     rentable: false,
+    premiere: true,
   },
   {
     id: 'no-gods-left',
@@ -336,25 +346,49 @@ export default function RentPage() {
               <h2 className="font-cinzel text-lg font-bold" style={{ color: '#e8dcc8' }}>{selected.title}</h2>
               <p className="text-[10px] tracking-widest uppercase mt-0.5" style={{ color: `${selected.color}cc` }}>{selected.genre}</p>
             </div>
-            <a href={`https://youtu.be/${selected.youtubeId}`} target="_blank" rel="noopener noreferrer"
-              className="text-[10px] tracking-widest uppercase" style={{ color: `${GOLD}70` }}>
-              Open on YouTube ↗
-            </a>
           </div>
         </div>
 
-        {/* Film grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
-          {FILMS.map((film, i) => (
-            <FilmCard
-              key={film.id}
-              film={film}
-              index={i}
-              isActive={selected.id === film.id}
-              onSelect={() => { setSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            />
-          ))}
-        </div>
+        {/* Film grid — premieres first, then rest */}
+        {(() => {
+          const premieres = FILMS.filter(f => f.premiere)
+          const others = FILMS.filter(f => !f.premiere)
+          let globalIdx = 0
+          return (
+            <>
+              {premieres.length > 0 && (
+                <>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, ${GOLD}40)` }} />
+                    <span className="text-[9px] tracking-[0.4em] uppercase font-medium" style={{ color: GOLD }}>Premieres</span>
+                    <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${GOLD}40)` }} />
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 mb-6">
+                    {premieres.map((film, i) => (
+                      <FilmCard key={film.id} film={film} index={i} isActive={selected.id === film.id}
+                        onSelect={() => { setSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />
+                    ))}
+                  </div>
+                </>
+              )}
+              {others.length > 0 && (
+                <>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, rgba(255,255,255,0.15))` }} />
+                    <span className="text-[9px] tracking-[0.4em] uppercase" style={{ color: 'rgba(255,255,255,0.45)' }}>More Films</span>
+                    <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, rgba(255,255,255,0.15))` }} />
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
+                    {others.map((film, i) => (
+                      <FilmCard key={film.id} film={film} index={premieres.length + i} isActive={selected.id === film.id}
+                        onSelect={() => { setSelected(film); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          )
+        })()}
 
       </div>
     </div>

@@ -210,8 +210,8 @@ export default function BlogHub({ posts, cardImages }: Props) {
             </p>
           </div>
 
-          {/* Category filter tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-1 mb-8 pb-3 border-b" style={{ borderColor: `${GOLD}18` }}>
+          {/* Category filter tabs — hidden on mobile (shown at bottom) */}
+          <div className="hidden md:flex flex-wrap items-center justify-center gap-1 mb-8 pb-3 border-b" style={{ borderColor: `${GOLD}18` }}>
             {categories.map(cat => {
               const isActive = activeCategory === cat
               return (
@@ -261,6 +261,30 @@ export default function BlogHub({ posts, cardImages }: Props) {
               </div>
             </motion.div>
           </AnimatePresence>
+
+          {/* Category filter tabs — mobile only, at bottom */}
+          <div className="md:hidden flex flex-wrap items-center justify-center gap-1 mt-8 pt-5 border-t" style={{ borderColor: `${GOLD}18` }}>
+            {categories.map(cat => {
+              const isActive = activeCategory === cat
+              return (
+                <motion.button
+                  key={cat}
+                  onClick={() => { setActiveCategory(cat); playCrystalBowl(GOLD, 0.018) }}
+                  className="px-3 py-1.5 text-[10px] tracking-widest uppercase rounded transition-colors"
+                  style={{
+                    color: isActive ? GOLD : 'rgba(255,255,255,0.6)',
+                    background: isActive ? `${GOLD}15` : 'transparent',
+                    border: `1px solid ${isActive ? GOLD + '50' : 'rgba(255,255,255,0.08)'}`,
+                  }}
+                  whileHover={{ color: isActive ? GOLD : '#e8dcc8' }}
+                  transition={{ duration: 0.12 }}
+                  onMouseEnter={() => !isActive && playCrystalBowl(GOLD, 0.012)}
+                >
+                  {cat}
+                </motion.button>
+              )
+            })}
+          </div>
 
           {filtered.length === 0 && (
             <div className="text-center py-16">

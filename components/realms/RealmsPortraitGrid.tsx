@@ -54,9 +54,9 @@ function RealmCard({
 
   return (
     <motion.div
-      className="relative rounded-xl overflow-hidden shrink-0 flex flex-col"
+      className="relative rounded-xl overflow-hidden shrink-0 flex flex-col w-[calc(50vw-2rem)] sm:w-[163px]"
       style={{
-        width: 163,
+        maxWidth: 163,
         aspectRatio: '3/4',
         background: `radial-gradient(ellipse at 50% 30%, ${color}28, #06040c 80%)`,
         border: `1px solid ${hovered ? color + 'cc' : color + '45'}`,

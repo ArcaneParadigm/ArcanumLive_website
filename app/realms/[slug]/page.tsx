@@ -219,9 +219,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const world = featuredWorlds.find((w) => w.slug === slug)
   if (!world) return { title: 'Realm Not Found · The Arcanum' }
+  const heroImage = discoverRealmHeroImage(slug)
+  const desc = world.short_description ?? `Enter the ${world.title} realm — an immersive mythic universe from Arcanum.Live.`
   return {
-    title: `${world.title ?? slug} · The Arcanum`,
-    description: world.short_description ?? undefined,
+    title: `${world.title ?? slug} — Mythic Realm | Arcanum.Live`,
+    description: desc,
+    openGraph: {
+      title: world.title ?? slug,
+      description: desc,
+      url: `https://arcanum.live/realms/${slug}`,
+      type: 'website',
+      images: heroImage
+        ? [{ url: heroImage, width: 1200, height: 630, alt: world.title ?? slug }]
+        : [{ url: '/images/arcanum-portal-v1.jpg', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: world.title ?? slug,
+      description: desc,
+      images: [heroImage ?? '/images/arcanum-portal-v1.jpg'],
+    },
+    alternates: { canonical: `https://arcanum.live/realms/${slug}` },
   }
 }
 

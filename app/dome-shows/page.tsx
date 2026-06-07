@@ -201,10 +201,10 @@ function ShowStrip({ show, index }: { show: DomeShow; index: number }) {
       }}
     >
       {/* Top row: title left + video right */}
-      <div className="flex gap-6 p-6 pb-4">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 p-4 lg:p-6 pb-4">
 
         {/* Left: title + desc + button */}
-        <div className="flex flex-col justify-between" style={{ minWidth: 260, maxWidth: 300 }}>
+        <div className="flex flex-col justify-between lg:min-w-[260px] lg:max-w-[300px]">
           <div>
             {/* Index number */}
             <span className="font-cinzel text-4xl font-black" style={{ color: `${color}40`, lineHeight: 1 }}>
@@ -224,7 +224,7 @@ function ShowStrip({ show, index }: { show: DomeShow; index: number }) {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-2 mt-4" style={{ width: 180 }}>
+          <div className="flex flex-col gap-2 mt-4 lg:w-[180px]">
             {show.wip ? (
               <>
                 <div className="flex items-center justify-center px-4 py-2 rounded-md text-[10px] tracking-wide text-center"

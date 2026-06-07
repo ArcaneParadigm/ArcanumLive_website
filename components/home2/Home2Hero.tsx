@@ -22,7 +22,7 @@ const HERO_BTNS = [
 
 // Tune these two values to align with your art's button positions
 const BTN_W   = 220   // button width (px)
-const BTN_Y   = 52    // % from top of hero — over the black ball
+const BTN_Y   = 59    // % from top of hero — over the black ball
 
 export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   const images = heroImages.length > 0 ? heroImages : ['/images/arcanum-portal-v1.jpg']
@@ -124,7 +124,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       {/* LAYER 4 — 4 ornate portal buttons centred over image button zone */}
       <div className="absolute inset-x-0 z-20 flex justify-center"
         style={{ top: `${BTN_Y}%`, transform: 'translateY(-50%)' }}>
-        <div className="flex flex-col md:flex-row gap-4 items-center w-full px-4 md:px-0 md:w-auto md:justify-center">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center w-full px-4 md:px-0 md:w-auto md:justify-center">
           {HERO_BTNS.map((btn, i) => (
             <motion.div
               key={btn.label}
@@ -132,7 +132,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 + i * 0.12, ease: 'easeOut' }}
             >
-              <BtnOrnate label={btn.label} href={btn.href} width={BTN_W} height={88} />
+              <BtnOrnate label={btn.label} href={btn.href} width={BTN_W} height={72} />
             </motion.div>
           ))}
         </div>

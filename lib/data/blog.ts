@@ -13,6 +13,26 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: 'architecture-of-control',
+    realmSlug: 'architecture-of-control',
+    title: 'The Architecture of Control and the Hijacking of Gnosis',
+    category: 'Shadow Studies',
+    date: '2026-06-06',
+    excerpt: 'Long before there were banks or bloodlines or Bilderberg, the old stories warned us: there are forces that feed on fear. This is not about conspiracy. It is about sovereignty.',
+    color: '#7c3aed',
+    body: [
+      'Long before there were banks or bloodlines or Bilderberg, the old stories warned us: there are forces that feed on fear. The Gnostics called them Archons — rulers of this dark age who cannot create, only consume. The Hebrews named them Watchers — beings who traded their divine station for dominion over flesh and bone. The Hindus knew them as Asuras, the Buddhists as Mara\'s legions. The names shift, but the pattern holds: something has hijacked this world and installed a management team of the spiritually dead.',
+      'Sociopaths. Psychopaths. Narcissists. Humans who do not feel what you feel, who do not love as you love, who rise through hierarchies not despite their emptiness but because of it. They marry their own kind, raise children in the cold, and pass down wealth like a curse. And beneath them, the rest of us — awake or half-asleep — generate the only thing they truly need: loosh. Fear. Rage. Grief. Addiction. Outrage. The harvest never ends because the fear never stops.',
+      'But what if the old scriptures were instructions, not warnings? What if the Kingdom of Heaven is not a place you go after you die, but a frequency you reclaim while you live? This is not about conspiracy. It is about sovereignty. And it begins with a single question: what happens when you stop feeding the machine?',
+      'The pattern of spiritual hijacking is consistent across cultures and centuries. Every major religion began as a living transmission — direct gnosis, no priest required, internal verifiable results, questioning encouraged. Then came institutionalization: a hierarchy forms, spiritual authority is tied to office rather than realization, the institution\'s primary goal shifts from liberation to self-preservation. Direct experience is replaced by faith. Techniques are replaced by rituals. Liberation is postponed to the afterlife. Fear is introduced as the beginning of wisdom.',
+      'The Gnostic texts, buried at Nag Hammadi, describe this architecture precisely. The Apocryphon of John names the Archons as forces that feed on human fear. The Hypostasis of the Archons identifies them as entities that trap human consciousness. But the deeper claim — the one that matters — is that the trap cannot hold what refuses to be afraid. The Archons cannot harvest what is not afraid. The dynasties cannot own what does not grasp. The narcissists cannot manipulate what does not need their approval.',
+      'The CIA spent nearly $20 million over two decades researching remote viewing (Project STARGATE, 1972–1995). The Nazi Ahnenerbe sent expeditions across the globe to locate ancient power sites and distort their significance for state control. Both regimes understood that sacred knowledge exists — and that it can be used for liberation or for control. The controllers are always trying to suppress or weaponize it. This is not coincidence. It is the oldest strategy in the architecture of control.',
+      'The way out is not political. It is ontological. Starve the parasites: generate no fear, no rage, no endless outrage. Practice radical non-reactivity. Die before you die — dissolve the ego that fears before physical death arrives, so you are not tricked at the moment of transition. Withhold consent from systems you recognize as inverted. The good news — the truth the old scriptures buried and the hierarchies tried to burn — is that you can simply stop. Stop feeding. Stop believing. Stop consenting. Not by withdrawing from the world, but by stepping out of the dream within it.',
+      'You were never the cattle. You were never the loosh. You were the sleeper — and now you are waking up. The harvest ends when you stop being food.',
+    ],
+    tags: ['gnosis', 'archons', 'control systems', 'sovereignty', 'spiritual hijacking', 'watchers'],
+  },
+  {
     slug: 'girls-of-the-multiverse-fracture',
     realmSlug: 'girls-of-the-multiverse',
     title: 'When the Fracture Opened: Origins of the Girls of the Multiverse',

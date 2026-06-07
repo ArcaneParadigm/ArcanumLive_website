@@ -6,8 +6,18 @@ import { featuredWorlds } from '@/lib/data/worlds'
 import { discoverRealmAudio, discoverRealmCardImage, discoverRealmImages } from '@/lib/utils/realmImages'
 
 export const metadata: Metadata = {
-  title: 'Realms · The Arcanum',
-  description: 'Enter the mythic IP universes of The Arcanum — each a cinematic realm of characters, music, films, visuals, and immersive experiences.',
+  title: 'Realms — Mythic IP Universes & Cinematic Worlds',
+  description: 'Enter the mythic IP universes of Arcanum.Live — each a cinematic realm of characters, music, films, lore, and immersive media experiences. Explore Girls of the Multiverse, Metahub, and more.',
+  keywords: ['mythic worlds', 'Arcanum realms', 'cinematic universe', 'Girls of the Multiverse', 'Metahub', 'immersive storytelling', 'mythic IP', 'Arcane Paradigm worlds', 'consciousness realms', 'AI world building'],
+  openGraph: {
+    title: 'Realms — Arcanum.Live Mythic Universes',
+    description: 'Explore mythic IP universes — each a cinematic realm of characters, music, films, and immersive media.',
+    url: 'https://arcanum.live/realms',
+    type: 'website',
+    images: [{ url: '/images/arcanum-portal-v1.jpg', width: 1200, height: 630 }],
+  },
+  twitter: { card: 'summary_large_image', title: 'Realms — Arcanum.Live', description: 'Mythic IP universes — cinematic realms of characters, music, films, and immersive media.' },
+  alternates: { canonical: 'https://arcanum.live/realms' },
 }
 
 export default function WorldsPage() {
