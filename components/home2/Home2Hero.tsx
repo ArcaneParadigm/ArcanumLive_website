@@ -53,19 +53,6 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
-  // Play music on first user interaction anywhere (browser autoplay policy)
-  useEffect(() => {
-    if (!mounted || FRONT_PAGE_TRACKS.length === 0) return
-    const el = audio.audioRef.current
-    if (!el) return
-    const onFirstInteraction = () => {
-      el.play().catch(() => {})
-      document.removeEventListener('pointerdown', onFirstInteraction)
-    }
-    document.addEventListener('pointerdown', onFirstInteraction)
-    return () => document.removeEventListener('pointerdown', onFirstInteraction)
-  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
-
   // Sound On/Off nav button toggles music
   useEffect(() => {
     if (!mounted || FRONT_PAGE_TRACKS.length === 0) return
