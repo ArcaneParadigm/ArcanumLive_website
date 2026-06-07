@@ -22,75 +22,72 @@ function HeroPost({ post, image }: { post: BlogPost; image: string | null }) {
   return (
     <Link href={`/blog/${post.slug}`}>
       <motion.div
-        className="relative rounded-2xl overflow-hidden cursor-pointer"
+        className="relative rounded-2xl overflow-hidden cursor-pointer flex flex-col"
         style={{
-          minHeight: 420,
-          background: `radial-gradient(ellipse at 40% 50%, ${color}20, #06040c 75%)`,
+          background: `radial-gradient(ellipse at 50% 20%, ${color}14, #06040c 70%)`,
           border: `1px solid ${color}30`,
           boxShadow: `0 0 40px ${color}12`,
         }}
-        whileHover={{ borderColor: `${color}60`, boxShadow: `0 0 60px ${color}20` }}
+        whileHover={{ borderColor: `${color}60`, y: -4, boxShadow: `0 8px 40px ${color}20` }}
         transition={{ duration: 0.25 }}
         onMouseEnter={() => playCrystalBowl(color, 0.022)}
       >
-        {image && (
-          <motion.img
-            src={image}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
-            style={{ opacity: 0.28 }}
-            whileHover={{ opacity: 0.38 }}
-            transition={{ duration: 0.4 }}
-          />
-        )}
-        {/* Gradient overlay — text-side heavy */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(to right, rgba(6,4,12,0.88) 0%, rgba(6,4,12,0.65) 45%, rgba(6,4,12,0.18) 75%, transparent 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, rgba(6,4,12,0.85) 0%, transparent 50%)' }} />
-
-        {/* Corner marks */}
-        <div className="absolute top-4 left-4 w-7 h-7" style={{ borderTop: `1px solid ${color}60`, borderLeft: `1px solid ${color}60` }} />
-        <div className="absolute top-4 right-4 w-7 h-7" style={{ borderTop: `1px solid ${color}30`, borderRight: `1px solid ${color}30` }} />
-        <div className="absolute bottom-4 left-4 w-7 h-7" style={{ borderBottom: `1px solid ${color}35`, borderLeft: `1px solid ${color}35` }} />
-        <div className="absolute bottom-4 right-4 w-7 h-7" style={{ borderBottom: `1px solid ${color}20`, borderRight: `1px solid ${color}20` }} />
-
-        {/* Content */}
-        <div className="relative z-10 p-8 flex flex-col justify-end h-full" style={{ minHeight: 420 }}>
-          <div className="max-w-lg">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-[9px] font-medium tracking-[0.35em] uppercase px-2.5 py-0.5 rounded"
-                style={{ background: `${color}25`, color, border: `1px solid ${color}50` }}>
-                {post.category}
-              </span>
-              <span className="text-[9px] tracking-widest" style={{ color: 'rgba(255,255,255,0.85)' }}>
-                {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-              </span>
-              <span className="text-[9px] px-1.5 py-0.5 rounded tracking-widest" style={{ background: `${GOLD}15`, color: `${GOLD}90`, border: `1px solid ${GOLD}30` }}>
-                Featured
-              </span>
-            </div>
-            <h2 className="font-cinzel text-2xl md:text-3xl font-bold leading-tight tracking-wide mb-3"
-              style={{ color: '#fff', textShadow: `0 0 20px ${color}50, 0 2px 6px rgba(0,0,0,0.9)` }}>
-              {post.title}
-            </h2>
-            <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,0.9)' }}>
-              {post.excerpt}
-            </p>
-            <motion.span
-              className="inline-flex items-center gap-2 px-5 py-1.5 rounded-lg text-[10px] tracking-widest uppercase font-semibold"
-              style={{
-                background: 'linear-gradient(135deg, #2e1e06, #5a3a10, #7a5018)',
-                border: `1px solid ${GOLD}55`,
-                color: '#f0d08a',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
-              }}
-              whileHover={{ boxShadow: `0 4px 22px ${GOLD}35` }}
-              transition={{ duration: 0.15 }}
-            >
-              Read Dispatch →
-            </motion.span>
+        {/* Image top */}
+        <div className="relative overflow-hidden" style={{ aspectRatio: '16/9' }}>
+          {image ? (
+            <motion.img
+              src={image}
+              alt=""
+              className="w-full h-full object-cover object-center"
+              style={{ opacity: 0.6 }}
+              whileHover={{ opacity: 0.78 }}
+              transition={{ duration: 0.35 }}
+            />
+          ) : (
+            <div className="w-full h-full"
+              style={{ background: `radial-gradient(ellipse at 50% 40%, ${color}25, #06040c 80%)` }} />
+          )}
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(to top, rgba(6,4,12,0.92) 0%, rgba(6,4,12,0.15) 50%, transparent 100%)' }} />
+          {/* Corner marks */}
+          <div className="absolute top-3 left-3 w-6 h-6" style={{ borderTop: `1px solid ${color}60`, borderLeft: `1px solid ${color}60` }} />
+          <div className="absolute top-3 right-3 w-6 h-6" style={{ borderTop: `1px solid ${color}30`, borderRight: `1px solid ${color}30` }} />
+          {/* Featured + category badges */}
+          <div className="absolute bottom-3 left-3 flex items-center gap-2">
+            <span className="text-[9px] font-medium tracking-[0.3em] uppercase px-2.5 py-0.5 rounded"
+              style={{ background: `${color}25`, color, border: `1px solid ${color}50` }}>
+              {post.category}
+            </span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded tracking-widest" style={{ background: `${GOLD}20`, color: `${GOLD}cc`, border: `1px solid ${GOLD}40` }}>
+              Featured
+            </span>
           </div>
+        </div>
+
+        {/* Text below */}
+        <div className="p-5 flex flex-col">
+          <span className="text-[9px] tracking-widest mb-2 block" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </span>
+          <h2 className="font-cinzel text-xl md:text-2xl font-bold leading-tight tracking-wide mb-3"
+            style={{ color: '#fff', textShadow: `0 0 20px ${color}40` }}>
+            {post.title}
+          </h2>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.9)' }}>
+            {post.excerpt}
+          </p>
+          <motion.span
+            className="self-start inline-flex items-center gap-2 px-5 py-1.5 rounded-lg text-[10px] tracking-widest uppercase font-semibold"
+            style={{
+              background: 'linear-gradient(135deg, #2e1e06, #5a3a10, #7a5018)',
+              border: `1px solid ${GOLD}55`,
+              color: '#f0d08a',
+            }}
+            whileHover={{ boxShadow: `0 4px 22px ${GOLD}35` }}
+            transition={{ duration: 0.15 }}
+          >
+            Read Dispatch →
+          </motion.span>
         </div>
       </motion.div>
     </Link>
