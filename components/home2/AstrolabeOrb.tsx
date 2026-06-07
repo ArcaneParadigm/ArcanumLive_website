@@ -167,7 +167,7 @@ export default function AstrolabeOrb({
     const haloMesh = new THREE.Mesh(haloGeo, haloMat)
     tiltGroup.add(haloMesh)
 
-    // ── Particles ─────────────────────────────────────────────────────────────
+    // ── Orbital sparkle ring ──────────────────────────────────────────────────
     const COUNT = 320
     const positions = new Float32Array(COUNT * 3)
     for (let i = 0; i < COUNT; i++) {
@@ -183,6 +183,44 @@ export default function AstrolabeOrb({
     const ptMat = new THREE.PointsMaterial({ size: 0.022, color: 0xf5d06e, transparent: true, opacity: 0.7, depthWrite: false, sizeAttenuation: true })
     const particles = new THREE.Points(ptGeo, ptMat)
     tiltGroup.add(particles)
+
+    // ── Fire emitter ──────────────────────────────────────────────────────────
+    const FIRE_COUNT = 180
+    type FireParticle = { x: number; y: number; z: number; vx: number; vy: number; vz: number; life: number; maxLife: number; seed: number }
+    const firePool: FireParticle[] = []
+    function spawnFire(): FireParticle {
+      const phi   = Math.random() * Math.PI * 2
+      const theta = Math.random() * Math.PI
+      const r     = 0.52
+      const nx    = Math.sin(theta) * Math.cos(phi)
+      const ny    = Math.sin(theta) * Math.sin(phi)
+      const nz    = Math.cos(theta)
+      const spd   = 0.35 + Math.random() * 0.55
+      return {
+        x: nx * r, y: ny * r, z: nz * r,
+        vx: nx * spd, vy: ny * spd + 0.2, vz: nz * spd,
+        life: 0, maxLife: 0.6 + Math.random() * 0.8,
+        seed: Math.random() * 100,
+      }
+    }
+    for (let i = 0; i < FIRE_COUNT; i++) {
+      const p = spawnFire()
+      p.life = Math.random() * p.maxLife   // stagger initial ages
+      firePool.push(p)
+    }
+    const firePosArr  = new Float32Array(FIRE_COUNT * 3)
+    const fireColArr  = new Float32Array(FIRE_COUNT * 3)
+    const fireSizeArr = new Float32Array(FIRE_COUNT)
+    const fireGeo = new THREE.BufferGeometry()
+    fireGeo.setAttribute('position', new THREE.BufferAttribute(firePosArr,  3))
+    fireGeo.setAttribute('color',    new THREE.BufferAttribute(fireColArr,  3))
+    fireGeo.setAttribute('size',     new THREE.BufferAttribute(fireSizeArr, 1))
+    const fireMat = new THREE.PointsMaterial({
+      size: 0.07, vertexColors: true, transparent: true,
+      opacity: 1, depthWrite: false, sizeAttenuation: true,
+    })
+    const fireMesh = new THREE.Points(fireGeo, fireMat)
+    tiltGroup.add(fireMesh)
 
     // ── Animation ─────────────────────────────────────────────────────────────
     let rafId = 0
@@ -221,10 +259,37 @@ export default function AstrolabeOrb({
       orbMesh.rotation.x += dt * 0.04
       haloMesh.scale.setScalar(orbPulse * (1.35 + a.energy * 0.4 * pm))
 
-      // Particles
+      // Orbital sparkle
       particles.rotation.y += dt * 0.12
       const ps = 1 + a.energy * 0.4 * pm
       particles.scale.setScalar(ps)
+
+      // Fire emitter update
+      const beatFire = a.beat ? 1.8 : 1
+      for (let i = 0; i < FIRE_COUNT; i++) {
+        const p = firePool[i]
+        p.life += dt
+        if (p.life >= p.maxLife) { Object.assign(p, spawnFire()); continue }
+        const t = p.life / p.maxLife   // 0→1
+        // turbulence: cheap curl via sin offsets
+        const turb = 0.45 * (1 - t)
+        p.x += (p.vx + Math.sin(p.life * 3.1 + p.seed) * turb) * dt * beatFire
+        p.y += (p.vy + Math.cos(p.life * 2.7 + p.seed) * turb * 0.5) * dt * beatFire
+        p.z += (p.vz + Math.sin(p.life * 2.3 + p.seed + 1) * turb) * dt * beatFire
+        // drag
+        p.vx *= 0.985; p.vy *= 0.985; p.vz *= 0.985
+        // color: white→yellow→orange→red, fade out after 60%
+        const fade = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4
+        const r2 = Math.min(1, t * 2.5)
+        const g2 = Math.max(0, 0.75 - t * 1.2)
+        const b2 = Math.max(0, 0.3 - t * 0.6)
+        firePosArr[i*3]   = p.x; firePosArr[i*3+1] = p.y; firePosArr[i*3+2] = p.z
+        fireColArr[i*3]   = r2 * fade
+        fireColArr[i*3+1] = g2 * fade
+        fireColArr[i*3+2] = b2 * fade
+      }
+      fireGeo.attributes.position.needsUpdate = true
+      fireGeo.attributes.color.needsUpdate = true
 
       // Point lights beat
       pointA.intensity = 3 * (1 + a.bass * gs * 0.5)
@@ -257,6 +322,7 @@ export default function AstrolabeOrb({
       orbGeo.dispose(); orbMat.dispose()
       haloGeo.dispose(); haloMat.dispose()
       ptGeo.dispose(); ptMat.dispose()
+      fireGeo.dispose(); fireMat.dispose()
     }
   }, []) // init once
 
