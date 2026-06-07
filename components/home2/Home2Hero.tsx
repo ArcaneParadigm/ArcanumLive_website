@@ -136,7 +136,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
           className="absolute pointer-events-none"
           style={{
             opacity: fade,
-            left: 'calc(35% + 9px)', top: '23%',
+            left: '50%', top: '23%',
+            transform: 'translateX(-50%)',
             width: '29%', height: '29vw',
             zIndex: 15,
           }}
