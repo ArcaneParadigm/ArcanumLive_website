@@ -471,12 +471,13 @@ function ScreensaverBanner() {
                   style={{
                     background: active === i ? `${m.color}CC` : `${m.color}30`,
                     border: `1px solid ${m.color}`,
-                    boxShadow: active === i ? `0 0 12px ${m.color}80, inset 0 0 8px ${m.color}30` : `0 0 6px ${m.color}40`,
+                    boxShadow: active === i ? `0 0 14px ${m.color}90` : `0 0 6px ${m.color}40`,
+                    transition: 'background 0.08s, box-shadow 0.08s',
                   }}
                   onClick={() => setActive(i)}
                   onHoverStart={() => S.solfeggio(m.hz)}
-                  whileHover={{ background: `${m.color}99`, boxShadow: `0 0 16px ${m.color}90, inset 0 0 10px ${m.color}40` }}
-                  transition={{ duration: 0.15 }}>
+                  whileHover={{ background: `${m.color}88`, boxShadow: `0 0 18px ${m.color}99` }}
+                  transition={{ duration: 0 }}>
                   <span style={{ color: active === i ? '#fff' : m.color, fontSize: 16, lineHeight: 1, filter: `drop-shadow(0 0 4px ${m.color})` }}>{m.symbol}</span>
                   <div className="flex flex-col min-w-0">
                     <span className="text-[9px] tracking-wider uppercase whitespace-pre-line leading-tight font-semibold"
