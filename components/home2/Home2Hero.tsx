@@ -1,9 +1,21 @@
 'use client'
 
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { BtnOrnate } from '@/components/ui/BtnOrnate'
+import { useAstrolabeAudio } from '@/lib/hooks/useAstrolabeAudio'
+import type { AstrolabeTrack } from '@/lib/hooks/useAstrolabeAudio'
+
+// No SSR — Three.js + Web Audio are client-only
+const AstrolabeOrb      = dynamic(() => import('./AstrolabeOrb'),      { ssr: false })
+const AstrolabeControls = dynamic(() => import('./AstrolabeControls'), { ssr: false })
+
+// ── Front-page playlist — swap in real tracks when ready ──────────────────────
+const FRONT_PAGE_TRACKS: AstrolabeTrack[] = [
+  // { title: 'Track Name', src: '/audio/track.mp3' }
+]
 
 interface Home2HeroProps {
   heroImages: string[]
@@ -12,28 +24,34 @@ interface Home2HeroProps {
 
 const CYCLE_MS = 9000
 
-// 4 portal buttons — centred as a row over the image's button zone
 const HERO_BTNS = [
-  { label: 'Watch VR Films',     href: '/vr-films'    },
-  { label: 'Ascension\nChamber',  href: '/ascension'  },
-  { label: 'Explore\nthe Realms', href: '/realms'      },
-  { label: 'Watch AI Films',     href: '/ai-films'    },
+  { label: 'Watch VR Films',     href: '/vr-films'   },
+  { label: 'Ascension\nChamber', href: '/ascension'  },
+  { label: 'Explore\nthe Realms',href: '/realms'     },
+  { label: 'Watch AI Films',     href: '/ai-films'   },
 ]
 
-// Tune these two values to align with your art's button positions
-const BTN_W   = 220   // button width (px)
-const BTN_Y   = 84    // % from top of hero — near bottom, half button height up from 88
+const BTN_W = 220
+const BTN_Y = 84
 
 export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   const images = heroImages.length > 0 ? heroImages : ['/images/arcanum-portal-v1.jpg']
   const prefersReducedMotionRaw = useReducedMotion()
-  // Guard against SSR/client mismatch: treat as false until mounted on client
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
   const prefersReducedMotion = mounted ? prefersReducedMotionRaw : false
   const containerRef = useRef<HTMLDivElement>(null)
   const [imgIdx, setImgIdx] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
+
+  // Astrolabe controls
+  const [speedMult,       setSpeedMult]       = useState(1.0)
+  const [pulseMult,       setPulseMult]       = useState(1.0)
+  const [glowStrength,    setGlowStrength]    = useState(1.6)
+  const [beatSensitivity, setBeatSensitivity] = useState(1.4)
+
+  // Audio
+  const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -50,7 +68,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
 
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] })
   const fade = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-  const px = (d: number) => ({
+
+  const parallax = (d: number) => ({
     x: prefersReducedMotion ? 0 : (mousePos.x - 0.5) * d,
     y: prefersReducedMotion ? 0 : (mousePos.y - 0.5) * d,
   })
@@ -58,8 +77,8 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   return (
     <div ref={containerRef} className="relative w-full min-h-screen overflow-hidden bg-obsidian-200">
 
-      {/* LAYER 1 — cycling backgrounds (fades on scroll, buttons do not) */}
-      <motion.div className="absolute inset-0" style={{ opacity: fade, ...px(8) }} transition={{ type: 'spring', stiffness: 50, damping: 20 }}>
+      {/* LAYER 1 — cycling backgrounds */}
+      <motion.div className="absolute inset-0" style={{ opacity: fade, ...parallax(8) }} transition={{ type: 'spring', stiffness: 50, damping: 20 }}>
         <AnimatePresence mode="sync">
           <motion.div key={imgIdx} className="absolute inset-0"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -75,7 +94,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
         </AnimatePresence>
       </motion.div>
 
-      {/* LAYER 2 — UI chrome overlay (also fades on scroll) */}
+      {/* LAYER 2 — UI chrome overlay */}
       {uiOverlay && (
         <motion.div className="absolute inset-0 pointer-events-none z-10"
           style={{ opacity: fade }}
@@ -85,7 +104,33 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
         </motion.div>
       )}
 
-      {/* LAYER 3 — Title + subtitle just below the nav header */}
+      {/* LAYER 2b — 3D Astrolabe Orb */}
+      {mounted && (
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            opacity: fade,
+            left: '28%', top: '8%',
+            width: '44%', aspectRatio: '1/1',
+            zIndex: 15,
+          }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2, delay: 0.8 }}
+        >
+          <AstrolabeOrb
+            audio={audio.analysis}
+            speedMult={speedMult}
+            pulseMult={pulseMult}
+            glowStrength={glowStrength}
+            mousePos={mousePos}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </motion.div>
+      )}
+
+      {/* Hidden audio element */}
+      <audio ref={audio.audioRef} crossOrigin="anonymous" preload="auto" loop={false} style={{ display: 'none' }} />
+
+      {/* LAYER 3 — Title + subtitle */}
       <div className="absolute inset-x-0 z-20 flex flex-col items-center text-center pointer-events-none"
         style={{ top: 8 }}>
         <motion.div
@@ -121,7 +166,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
         </motion.div>
       </div>
 
-      {/* LAYER 4 — 4 ornate portal buttons centred over image button zone */}
+      {/* LAYER 4 — 4 ornate portal buttons */}
       <div className="absolute inset-x-0 z-20 flex justify-center"
         style={{ top: `${BTN_Y}%`, transform: 'translateY(-50%)' }}>
         <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center w-full px-4 md:px-0 md:w-auto md:justify-center">
@@ -138,7 +183,23 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
         </div>
       </div>
 
-      {/* Bottom page fade */}
+      {/* LAYER 5 — Astrolabe hot controls */}
+      {mounted && (
+        <AstrolabeControls
+          speedMult={speedMult} pulseMult={pulseMult}
+          glowStrength={glowStrength} beatSensitivity={beatSensitivity}
+          onSpeed={setSpeedMult} onPulse={setPulseMult}
+          onGlow={setGlowStrength} onBeatSensitivity={setBeatSensitivity}
+          playing={audio.playing} volume={audio.volume}
+          currentTrack={audio.currentTrack}
+          trackIdx={audio.trackIdx} tracks={FRONT_PAGE_TRACKS}
+          onPlay={audio.play} onPause={audio.pause}
+          onNext={audio.next} onPrev={audio.prev}
+          onVolume={audio.setVolume}
+        />
+      )}
+
+      {/* Bottom fade */}
       <div className="absolute bottom-0 inset-x-0 h-32 pointer-events-none z-10"
         style={{ background: 'linear-gradient(to top, #08060e, transparent)' }} />
 
