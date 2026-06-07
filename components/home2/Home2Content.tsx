@@ -182,17 +182,22 @@ function PanelWithVideo({
   const [playing, setPlaying] = useState(false)
   const allImages = images ?? (image ? [image] : [])
   const [imgIdx, setImgIdx] = useState(0)
+  // Facade: don't load iframe until first hover — avoids YouTube bot-check on page load
+  const [ytLoaded, setYtLoaded] = useState(false)
 
   const handlePanelEnter = useCallback(() => {
+    window.dispatchEvent(new Event('arcanum:audiofade:on'))
     if (!youtube) return
-    // Stop any other audio/music playing on the page
-    document.dispatchEvent(new CustomEvent('arcanum:stop-all-audio'))
-    // Unmute the YouTube iframe and raise volume
-    ytCmd(ytRef.current, 'unMute')
-    ytCmd(ytRef.current, 'setVolume', [60])
+    setYtLoaded(true)   // load iframe on first hover
+    // slight delay so iframe has time to init before unmuting
+    setTimeout(() => {
+      ytCmd(ytRef.current, 'unMute')
+      ytCmd(ytRef.current, 'setVolume', [60])
+    }, 800)
   }, [youtube])
 
   const handlePanelLeave = useCallback(() => {
+    window.dispatchEvent(new Event('arcanum:audiofade:off'))
     if (!youtube) return
     ytCmd(ytRef.current, 'mute')
   }, [youtube])
@@ -265,15 +270,25 @@ function PanelWithVideo({
             onClick={!youtube ? toggle : undefined}>
             {youtube ? (
               <>
-                <iframe
-                  ref={ytRef}
-                  className="absolute inset-0 w-full h-full"
-                  src={`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  title={title}
-                  style={{ border: 'none' }}
-                />
+                {/* Thumbnail shown until first hover — prevents YouTube bot-check on load */}
+                {!ytLoaded && (
+                  <img
+                    src={`https://img.youtube.com/vi/${youtube}/hqdefault.jpg`}
+                    alt={title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                {ytLoaded && (
+                  <iframe
+                    ref={ytRef}
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    title={title}
+                    style={{ border: 'none' }}
+                  />
+                )}
                 <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
               </>
             ) : (
@@ -444,13 +459,18 @@ const SCREENSAVER_MODES = [
 function ScreensaverBanner() {
   const [active, setActive] = useState(0)
   const ytRef = useRef<HTMLIFrameElement>(null)
+  const [ytLoaded, setYtLoaded] = useState(false)
 
   function onVideoEnter() {
-    document.dispatchEvent(new CustomEvent('arcanum:stop-all-audio'))
-    ytCmd(ytRef.current, 'unMute')
-    ytCmd(ytRef.current, 'setVolume', [60])
+    window.dispatchEvent(new Event('arcanum:audiofade:on'))
+    setYtLoaded(true)
+    setTimeout(() => {
+      ytCmd(ytRef.current, 'unMute')
+      ytCmd(ytRef.current, 'setVolume', [60])
+    }, 800)
   }
   function onVideoLeave() {
+    window.dispatchEvent(new Event('arcanum:audiofade:off'))
     ytCmd(ytRef.current, 'mute')
   }
 
@@ -487,7 +507,14 @@ function ScreensaverBanner() {
                 onMouseEnter={onVideoEnter}
                 onMouseLeave={onVideoLeave}
               >
-                <iframe
+                {!ytLoaded && (
+                  <img
+                    src="https://img.youtube.com/vi/4MRrrkrBn_c/hqdefault.jpg"
+                    alt="Ascension Chamber"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                {ytLoaded && <iframe
                   ref={ytRef}
                   className="absolute inset-0 w-full h-full"
                   src="https://www.youtube-nocookie.com/embed/4MRrrkrBn_c?autoplay=1&mute=1&loop=1&playlist=4MRrrkrBn_c&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
@@ -495,7 +522,7 @@ function ScreensaverBanner() {
                   allowFullScreen
                   title="Ascension Chamber Preview"
                   style={{ border: 'none' }}
-                />
+                />}
                 <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
                 <div className="absolute top-0 left-0 w-4 h-4 pointer-events-none" style={{ borderTop: `1px solid ${VIOLET}60`, borderLeft: `1px solid ${VIOLET}60` }} />
                 <div className="absolute bottom-0 right-0 w-4 h-4 pointer-events-none" style={{ borderBottom: `1px solid ${VIOLET}40`, borderRight: `1px solid ${VIOLET}40` }} />
