@@ -56,10 +56,17 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   // Audio
   const audio = useAstrolabeAudio(FRONT_PAGE_TRACKS, beatSensitivity)
 
-  // Fade audio volume on button hover
+  // Fade audio when other panels signal hover (fire 'arcanum:audiofade' custom event)
   useEffect(() => {
-    audio.setVolume(hoverFade ? 0.18 : 1.0)
-  }, [hoverFade]) // eslint-disable-line react-hooks/exhaustive-deps
+    const on  = () => { setHoverFade(true);  audio.setVolume(0.18) }
+    const off = () => { setHoverFade(false); audio.setVolume(1.0)  }
+    window.addEventListener('arcanum:audiofade:on',  on)
+    window.addEventListener('arcanum:audiofade:off', off)
+    return () => {
+      window.removeEventListener('arcanum:audiofade:on',  on)
+      window.removeEventListener('arcanum:audiofade:off', off)
+    }
+  }, [audio.setVolume]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -184,8 +191,6 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 + i * 0.12, ease: 'easeOut' }}
-              onMouseEnter={() => setHoverFade(true)}
-              onMouseLeave={() => setHoverFade(false)}
             >
               <BtnOrnate label={btn.label} href={btn.href} width={BTN_W} height={72} />
             </motion.div>
