@@ -92,7 +92,7 @@ export default function AstrolabeOrb({
     renderer.setSize(w, h)
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
-    camera.position.set(0, 0, 4.5)
+    camera.position.set(0, 0, 9.0)
 
     const scene = new THREE.Scene()
 
@@ -111,6 +111,9 @@ export default function AstrolabeOrb({
 
     // ── Mouse tilt group ──────────────────────────────────────────────────────
     const tiltGroup = new THREE.Group()
+    tiltGroup.scale.setScalar(1.44)
+    // 5 o'clock = 150° clockwise from top: x=sin(150°)=0.5, y=−cos(150°)=−0.866
+    // one sphere diameter ≈ 1.04 units
     scene.add(tiltGroup)
 
     // ── Rings ─────────────────────────────────────────────────────────────────
@@ -121,10 +124,10 @@ export default function AstrolabeOrb({
     const PURPLE = new THREE.Color('#a855f7')
 
     const ringDefs = [
-      { r: 1.72, tube: 0.028, tilt: [0, 0, 0],                          speed: 0.38,  color: GOLD,   emit: BRIGHT  },
-      { r: 1.55, tube: 0.032, tilt: [Math.PI*0.3, 0, Math.PI*0.15],     speed: -0.55, color: PALE,   emit: BRIGHT  },
-      { r: 1.32, tube: 0.036, tilt: [Math.PI*0.44, Math.PI*0.1, 0],     speed: 0.72,  color: GOLD,   emit: ORANGE  },
-      { r: 1.85, tube: 0.014, tilt: [Math.PI*0.08, 0, 0],               speed: -0.18, color: PURPLE, emit: new THREE.Color('#d08fff') },
+      { r: 1.72, tube: 0.084, tilt: [0, 0, 0],                          speed: 0.38,  color: GOLD,   emit: BRIGHT  },
+      { r: 1.55, tube: 0.096, tilt: [Math.PI*0.3, 0, Math.PI*0.15],     speed: -0.55, color: PALE,   emit: BRIGHT  },
+      { r: 1.32, tube: 0.108, tilt: [Math.PI*0.44, Math.PI*0.1, 0],     speed: 0.72,  color: GOLD,   emit: ORANGE  },
+      { r: 1.85, tube: 0.042, tilt: [Math.PI*0.08, 0, 0],               speed: -0.18, color: PURPLE, emit: new THREE.Color('#d08fff') },
     ]
 
     const ringMeshes: { mesh: THREE.Mesh; mat: THREE.MeshStandardMaterial; speed: number }[] = []
@@ -147,7 +150,11 @@ export default function AstrolabeOrb({
 
     // ── Inner orb ─────────────────────────────────────────────────────────────
     const orbGeo = new THREE.SphereGeometry(0.52, 64, 64)
-    const orbMat = new THREE.MeshStandardMaterial({ color: 0x050308, roughness: 0.0, metalness: 1.0 })
+    const orbMat = new THREE.MeshStandardMaterial({
+      color: 0x050308,
+      metalness: 1.0,
+      roughness: 0.0,
+    })
     const orbMesh = new THREE.Mesh(orbGeo, orbMat)
     tiltGroup.add(orbMesh)
 
