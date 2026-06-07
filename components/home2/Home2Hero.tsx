@@ -110,7 +110,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
           className="absolute pointer-events-none"
           style={{
             opacity: fade,
-            left: 'calc(35% + 12px)', top: '23%',
+            left: 'calc(35% + 9px)', top: '23%',
             width: '29%', aspectRatio: '1/1',
             zIndex: 15,
           }}

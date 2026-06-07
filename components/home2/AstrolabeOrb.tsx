@@ -111,15 +111,15 @@ export default function AstrolabeOrb({
 
     // ── Mouse tilt group ──────────────────────────────────────────────────────
     const tiltGroup = new THREE.Group()
-    tiltGroup.scale.setScalar(1.44)
+    tiltGroup.scale.setScalar(1.58)
     // 5 o'clock = 150° clockwise from top: x=sin(150°)=0.5, y=−cos(150°)=−0.866
     // one sphere diameter ≈ 1.04 units
     scene.add(tiltGroup)
 
     // ── Rings ─────────────────────────────────────────────────────────────────
-    const GOLD = new THREE.Color('#c9973a')
-    const BRIGHT = new THREE.Color('#f5d06e')
-    const PALE = new THREE.Color('#ffe9a0')
+    const GOLD = new THREE.Color('#c8901a')
+    const BRIGHT = new THREE.Color('#f0c040')
+    const PALE = new THREE.Color('#e8c878')
     const ORANGE = new THREE.Color('#ff9933')
     const PURPLE = new THREE.Color('#a855f7')
 
@@ -137,10 +137,10 @@ export default function AstrolabeOrb({
       const mat = new THREE.MeshStandardMaterial({
         color: def.color,
         emissive: def.emit,
-        emissiveIntensity: 0.8,
+        emissiveIntensity: 1.4,
         emissiveMap: tex,
-        metalness: 0.95,
-        roughness: 0.08,
+        metalness: 0.55,
+        roughness: 0.18,
       })
       const mesh = new THREE.Mesh(geo, mat)
       mesh.rotation.set(def.tilt[0], def.tilt[1], def.tilt[2])
