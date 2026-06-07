@@ -207,7 +207,7 @@ export default function AstrolabeOrb({
       return {
         x: Math.cos(a) * RING_R, y: Math.sin(a) * RING_R, z: (Math.random() - 0.5) * 0.06,
         vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, vz: (Math.random() - 0.5) * 0.18,
-        life: 0, maxLife: 1.2 + Math.random() * 1.1,
+        life: 0, maxLife: (1.2 + Math.random() * 1.1) * (Math.random() < 1/3 ? 2 : 1),
         seed: Math.random() * 100,
         sz: 0.06 + Math.random() * 0.07,
       }
@@ -221,7 +221,7 @@ export default function AstrolabeOrb({
       return {
         x: px + (Math.random()-0.5)*0.06, y: py + (Math.random()-0.5)*0.06, z: pz + (Math.random()-0.5)*0.06,
         vx: Math.cos(el)*Math.cos(a)*spd, vy: Math.sin(el)*spd + 0.06, vz: Math.cos(el)*Math.sin(a)*spd,
-        life: 0, maxLife: 0.25 + Math.random() * 0.45,
+        life: 0, maxLife: (0.25 + Math.random() * 0.45) * (Math.random() < 1/3 ? 2 : 1),
         seed: Math.random() * 100,
         sz: 0.022 + Math.random() * 0.03,
       }
