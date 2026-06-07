@@ -139,7 +139,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
           style={{
             opacity: fade,
             left: 'calc(35% + 9px)', top: '23%',
-            width: '29%', aspectRatio: '1/1',
+            width: '29%', height: '29vw',
             zIndex: 15,
           }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2, delay: 0.8 }}
