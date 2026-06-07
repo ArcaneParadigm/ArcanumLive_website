@@ -124,7 +124,7 @@ function ChannelCard({ ch, index }: { ch: YTChannel; index: number }) {
       }}
     >
       {/* Banner image */}
-      <div className="relative w-full overflow-hidden" style={{ height: 200 }}>
+      <div className="relative w-full overflow-hidden" style={{ height: 'clamp(150px, 25vh, 240px)' }}>
         <img
           src={ch.image}
           alt={ch.name}

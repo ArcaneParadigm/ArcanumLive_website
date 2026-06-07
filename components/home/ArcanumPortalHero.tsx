@@ -186,8 +186,8 @@ export default function ArcanumPortalHero({ buttons, hotspots, heroImages, uiOve
             return (
               <motion.p
                 key={spot.id}
-                className="text-[9px] font-cinzel tracking-[0.35em] uppercase"
-                style={{ color, textShadow: `0 0 10px ${color}` }}
+                className="font-cinzel tracking-[0.35em] uppercase"
+                style={{ fontSize: 'clamp(7px, 1.5vw, 9px)', color, textShadow: `0 0 10px ${color}` }}
                 initial={{ opacity: 0, y: 3 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 3 }}
@@ -202,8 +202,8 @@ export default function ArcanumPortalHero({ buttons, hotspots, heroImages, uiOve
 
       {/* Bottom fade into page */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to top, var(--color-obsidian-200, #08060e), transparent)', opacity: heroOpacity }}
+        className="absolute bottom-0 left-0 right-0 pointer-events-none z-10"
+        style={{ height: 'clamp(80px, 15vh, 160px)', background: 'linear-gradient(to top, var(--color-obsidian-200, #08060e), transparent)', opacity: heroOpacity }}
       />
 
       {/* Scroll cue */}

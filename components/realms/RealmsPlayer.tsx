@@ -389,10 +389,10 @@ export default function RealmsPlayer({ audioMap, compact, activeSlug }: RealmsPl
             <span className="text-[9px] tracking-[0.4em] uppercase font-semibold" style={{ color: `${accent}80` }}>
               Sequence
             </span>
-            <span className="text-[9px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+            <span className="text-[9px]" style={{ color: 'rgba(255,255,255,0.75)' }}>
               {sequence.length} realm{sequence.length !== 1 ? 's' : ''}
             </span>
-            <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.2)' }}>· drag to reorder</span>
+            <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.75)' }}>· drag to reorder</span>
           </div>
           <button
             onClick={shuffleSequence}

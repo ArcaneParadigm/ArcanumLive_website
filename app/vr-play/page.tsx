@@ -79,7 +79,7 @@ function ClipCard({ clip, isActive, onSelect, color }: {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-10 h-10 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(0,0,0,0.75)', border: `1px solid ${color}` }}>
-              <span style={{ color, fontSize: 14, marginLeft: 2 }}>▶</span>
+              <span style={{ color, fontSize: 'clamp(10px, 2vw, 14px)', marginLeft: 2 }}>▶</span>
             </div>
           </div>
         )}

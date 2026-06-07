@@ -156,14 +156,14 @@ function PlatformCard({ p, i }: { p: typeof PLATFORMS[0]; i: number }) {
       transition={{ duration: 0.5, delay: i * 0.08 }}
       className="relative block rounded-2xl overflow-hidden p-6 cursor-pointer group"
       style={{
-        border: `1px solid ${p.color}35`,
+        border: `1px solid ${p.color}cc`,
         background: `linear-gradient(135deg, ${p.color}10 0%, #0c0a14 60%)`,
-        boxShadow: `0 0 40px ${p.color}08`,
+        boxShadow: `0 0 40px ${p.color}20`,
         opacity: p.comingSoon ? 0.7 : 1,
       }}
       whileHover={p.comingSoon ? {} : {
-        borderColor: `${p.color}80`,
-        boxShadow: `0 0 40px ${p.color}20, 0 0 80px ${p.color}08`,
+        borderColor: `${p.color}ff`,
+        boxShadow: `0 0 40px ${p.color}40, 0 0 80px ${p.color}20`,
         transition: { duration: 0.2 },
       }}
     >
@@ -193,9 +193,9 @@ function ScreensaverStrip({ ss, i }: { ss: typeof SCREENSAVERS[0]; i: number }) 
       className="relative rounded-xl overflow-hidden cursor-pointer group"
       style={{
         background: ss.bg,
-        border: `1px solid ${ss.color}40`,
+        border: `1px solid ${ss.color}cc`,
       }}
-      whileHover={{ borderColor: ss.color, boxShadow: `0 0 30px ${ss.color}25` }}
+      whileHover={{ borderColor: `${ss.color}ff`, boxShadow: `0 0 30px ${ss.color}40` }}
     >
       {/* Animated glow orb */}
       <motion.div

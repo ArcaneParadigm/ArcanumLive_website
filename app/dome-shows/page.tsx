@@ -128,7 +128,7 @@ function FestivalBadge({ fest, color }: { fest: Festival; color: string }) {
       }}>
       <div className="w-5 h-5 rounded-full mb-1 flex items-center justify-center"
         style={{ border: `1px solid ${color}`, background: `${color}30` }}>
-        <span style={{ fontSize: 9, color }}>✦</span>
+        <span style={{ fontSize: 'clamp(7px, 1.5vw, 9px)', color }}>✦</span>
       </div>
       {fest.award && (
         <p className="text-[7px] tracking-wider uppercase leading-tight" style={{ color: 'white' }}>
@@ -161,16 +161,16 @@ function GalleryStrip({ images, color, title }: { images: string[]; color: strin
       <div ref={ref} className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
         {slots.map((src, i) => (
           <div key={i} className="shrink-0 rounded-lg overflow-hidden relative"
-            style={{ width: 160, height: 90, border: `1px solid ${color}`, background: `radial-gradient(ellipse at 50% 40%, ${color}18, #08060e 70%)`, flexShrink: 0, boxShadow: `0 0 12px ${color}40, 0 0 24px ${color}18` }}>
+            style={{ width: 'clamp(120px, 20vw, 160px)', height: 'clamp(67px, 11vw, 90px)', border: `1px solid ${color}`, background: `radial-gradient(ellipse at 50% 40%, ${color}18, #08060e 70%)`, flexShrink: 0, boxShadow: `0 0 12px ${color}40, 0 0 24px ${color}18`, aspectRatio: '16/9' }}>
             {src.startsWith('__placeholder') ? (
               <div className="absolute inset-0 flex items-center justify-center">
-                <span style={{ fontSize: 18, color: `${color}60` }}>◎</span>
+                <span style={{ fontSize: 'clamp(14px, 2vw, 18px)', color: `${color}60` }}>◎</span>
               </div>
             ) : (
               <img src={src} alt={`${title} gallery ${i + 1}`} className="w-full h-full object-cover" />
             )}
-            <div className="absolute top-1 left-1 w-2 h-2" style={{ borderTop: `1px solid ${color}`, borderLeft: `1px solid ${color}` }} />
-            <div className="absolute bottom-1 right-1 w-2 h-2" style={{ borderBottom: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
+            <div className="absolute top-1 left-1" style={{ width: 'clamp(2px, 0.5vw, 4px)', height: 'clamp(2px, 0.5vw, 4px)', borderTop: `1px solid ${color}`, borderLeft: `1px solid ${color}` }} />
+            <div className="absolute bottom-1 right-1" style={{ width: 'clamp(2px, 0.5vw, 4px)', height: 'clamp(2px, 0.5vw, 4px)', borderBottom: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
           </div>
         ))}
       </div>
@@ -282,7 +282,7 @@ function ShowStrip({ show, index }: { show: DomeShow; index: number }) {
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center"
                   style={{ background: `${color}25`, border: `1px solid ${color}` }}>
-                  <span style={{ fontSize: 22, color: color }}>▶</span>
+                  <span style={{ fontSize: 'clamp(16px, 3vw, 22px)', color: color }}>▶</span>
                 </div>
                 <p className="text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>
                   Trailer Coming Soon
