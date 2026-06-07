@@ -154,7 +154,7 @@ export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
       )}
 
       {/* Hidden audio element */}
-      <audio ref={audio.audioRef} crossOrigin="anonymous" preload="auto" loop={false} style={{ display: 'none' }} />
+      <audio ref={audio.audioRef} crossOrigin="anonymous" preload="auto" loop style={{ display: 'none' }} />
 
       {/* LAYER 3 — Title + subtitle */}
       <div className="absolute inset-x-0 z-20 flex flex-col items-center text-center pointer-events-none"

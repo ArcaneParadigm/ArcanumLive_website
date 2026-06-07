@@ -21,7 +21,7 @@ const NAV_LINKS = [
 ]
 
 export default function Home2Nav() {
-  const [soundOn, setSoundOn] = useState(true)
+  const [soundOn, setSoundOn] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
@@ -99,7 +99,8 @@ export default function Home2Nav() {
           transition={{ duration: 0.15 }}
           onClick={() => {
             const next = !soundOn; setSoundOn(next); unlockAudio()
-            window.dispatchEvent(new CustomEvent('arcanum:music-toggle', { detail: { on: next } }))
+            const el = document.querySelector('audio') as HTMLAudioElement | null
+            if (el) { next ? el.play().catch(() => {}) : el.pause() }
           }}
           onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
         >
@@ -114,7 +115,8 @@ export default function Home2Nav() {
             style={{ color: soundOn ? `${GOLD}cc` : 'rgba(255,255,255,0.6)', fontSize: 10 }}
             onClick={() => {
               const next = !soundOn; setSoundOn(next); unlockAudio()
-              window.dispatchEvent(new CustomEvent('arcanum:music-toggle', { detail: { on: next } }))
+              const el = document.querySelector('audio') as HTMLAudioElement | null
+              if (el) { next ? el.play().catch(() => {}) : el.pause() }
             }}
           >
             <span style={{ fontSize: 14 }}>{soundOn ? '🔊' : '🔇'}</span>

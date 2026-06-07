@@ -270,28 +270,14 @@ function PanelWithVideo({
             style={{ aspectRatio: '16/9', border: `1px solid ${color}30`, background: '#0a0710' }}
             onClick={!youtube ? toggle : undefined}>
             {youtube ? (
-              <>
-                {/* Thumbnail shown until first hover — prevents YouTube bot-check on load */}
-                {!ytLoaded && (
-                  <img
-                    src={`https://img.youtube.com/vi/${youtube}/hqdefault.jpg`}
-                    alt={title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                )}
-                {ytLoaded && (
-                  <iframe
-                    ref={ytRef}
-                    className="absolute inset-0 w-full h-full"
-                    src={`https://www.youtube-nocookie.com/embed/${youtube}?mute=1&loop=1&playlist=${youtube}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    title={title}
-                    style={{ border: 'none' }}
-                  />
-                )}
-                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
-              </>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube-nocookie.com/embed/${youtube}?rel=0&modestbranding=1&iv_load_policy=3&fs=1`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowFullScreen
+                title={title}
+                style={{ border: 'none' }}
+              />
             ) : (
               <>
                 {video && <video ref={vidRef} src={video} className="absolute inset-0 w-full h-full object-cover" loop muted playsInline />}
@@ -509,22 +495,14 @@ function ScreensaverBanner() {
                 onMouseEnter={onVideoEnter}
                 onMouseLeave={onVideoLeave}
               >
-                {!ytLoaded && (
-                  <img
-                    src="https://img.youtube.com/vi/4MRrrkrBn_c/hqdefault.jpg"
-                    alt="Ascension Chamber"
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                )}
-                {ytLoaded && <iframe
-                  ref={ytRef}
+                <iframe
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube-nocookie.com/embed/4MRrrkrBn_c?mute=1&loop=1&playlist=4MRrrkrBn_c&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  src="https://www.youtube-nocookie.com/embed/4MRrrkrBn_c?rel=0&modestbranding=1&iv_load_policy=3&fs=1"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                   allowFullScreen
                   title="Ascension Chamber Preview"
                   style={{ border: 'none' }}
-                />}
+                />
                 <div className="absolute inset-0 z-10" style={{ pointerEvents: 'all', background: 'transparent' }} />
                 <div className="absolute top-0 left-0 w-4 h-4 pointer-events-none" style={{ borderTop: `1px solid ${VIOLET}60`, borderLeft: `1px solid ${VIOLET}60` }} />
                 <div className="absolute bottom-0 right-0 w-4 h-4 pointer-events-none" style={{ borderBottom: `1px solid ${VIOLET}40`, borderRight: `1px solid ${VIOLET}40` }} />
