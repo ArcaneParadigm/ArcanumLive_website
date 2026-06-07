@@ -502,11 +502,11 @@ function ScreensaverBanner() {
               </div>
             </div>
 
-            {/* Right mode tiles — horizontal scroll on mobile, vertical on lg */}
-            <div className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible lg:justify-center pb-1 lg:pb-0" style={{ minWidth: 0 }}>
+            {/* Right mode tiles — vertical always */}
+            <div className="flex flex-col gap-1 justify-center" style={{ minWidth: 0 }}>
               {SCREENSAVER_MODES.map((m, i) => (
                 <motion.div key={i}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer"
+                  className="flex items-center gap-2 px-2.5 py-1 rounded-md cursor-pointer"
                   style={{
                     background: active === i ? `${m.color}CC` : `${m.color}30`,
                     border: `1px solid ${m.color}`,
