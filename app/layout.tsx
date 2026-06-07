@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Cinzel, Raleway } from 'next/font/google'
 import './globals.css'
 import DevControls from '@/components/admin/DevControls'
@@ -16,6 +16,12 @@ const raleway = Raleway({
   variable: '--font-raleway',
   display: 'swap',
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://arcanum.live'),
