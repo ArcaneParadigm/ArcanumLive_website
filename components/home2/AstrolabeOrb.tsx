@@ -125,10 +125,10 @@ export default function AstrolabeOrb({
 
     // axis: which local axis each ring spins on — gives divergent motion
     const ringDefs = [
-      { r: 1.72, tube: 0.084, tilt: [0, 0, 0],                          speed:  0.13, axis: 'z' as const, color: GOLD,   emit: BRIGHT  },
-      { r: 1.55, tube: 0.096, tilt: [Math.PI*0.3, 0, Math.PI*0.15],    speed: -0.19, axis: 'x' as const, color: PALE,   emit: BRIGHT  },
-      { r: 1.32, tube: 0.108, tilt: [Math.PI*0.44, Math.PI*0.1, 0],    speed:  0.24, axis: 'y' as const, color: GOLD,   emit: ORANGE  },
-      { r: 1.85, tube: 0.042, tilt: [Math.PI*0.08, 0, 0],              speed: -0.08, axis: 'z' as const, color: PURPLE, emit: new THREE.Color('#d08fff') },
+      { r: 1.72, tube: 0.071, tilt: [0, 0, 0],                          speed:  0.13, axis: 'y' as const, color: GOLD,   emit: BRIGHT  },
+      { r: 1.55, tube: 0.082, tilt: [Math.PI*0.3, 0, Math.PI*0.15],    speed: -0.19, axis: 'x' as const, color: PALE,   emit: BRIGHT  },
+      { r: 1.32, tube: 0.092, tilt: [Math.PI*0.44, Math.PI*0.1, 0],    speed:  0.24, axis: 'y' as const, color: GOLD,   emit: ORANGE  },
+      { r: 1.85, tube: 0.036, tilt: [Math.PI*0.08, 0, 0],              speed: -0.08, axis: 'x' as const, color: PURPLE, emit: new THREE.Color('#d08fff') },
     ]
 
     const ringMeshes: { mesh: THREE.Mesh; mat: THREE.MeshStandardMaterial; speed: number; axis: 'x'|'y'|'z' }[] = []
