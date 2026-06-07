@@ -153,13 +153,13 @@ export default function AstrolabeOrb({
     const orbGeo = new THREE.SphereGeometry(0.52, 64, 64)
     const orbMat = new THREE.MeshPhysicalMaterial({
       color: 0x1a0a28,
-      transmission: 0.82,
+      transmission: 0.92,
       thickness: 1.4,
       roughness: 0.04,
       metalness: 0.0,
       ior: 1.65,
       transparent: true,
-      opacity: 0.92,
+      opacity: 0.65,
       envMapIntensity: 0.5,
     })
     const orbMesh = new THREE.Mesh(orbGeo, orbMat)
@@ -195,8 +195,8 @@ export default function AstrolabeOrb({
     // Secondaries (sparks) spawn near active primaries → 6x density cascade.
     const RING_R  = 0.56
     const isMobile = window.innerWidth < 768 || ('ontouchstart' in window && window.innerWidth < 1024)
-    const PRI_N   = isMobile ? 80  : 300
-    const SPK_N   = isMobile ? 960 : 3900
+    const PRI_N   = isMobile ? 40  : 100
+    const SPK_N   = isMobile ? 400 : 900
     const TOTAL_F = PRI_N + SPK_N
 
     type FP = { x:number; y:number; z:number; vx:number; vy:number; vz:number; life:number; maxLife:number; seed:number; sz:number }
