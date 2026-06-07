@@ -22,7 +22,7 @@ const HERO_BTNS = [
 
 // Tune these two values to align with your art's button positions
 const BTN_W   = 220   // button width (px)
-const BTN_Y   = 83    // % from top of hero — halfway to bottom
+const BTN_Y   = 52    // % from top of hero — over the black ball
 
 export default function Home2Hero({ heroImages, uiOverlay }: Home2HeroProps) {
   const images = heroImages.length > 0 ? heroImages : ['/images/arcanum-portal-v1.jpg']
