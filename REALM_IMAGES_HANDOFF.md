@@ -48,7 +48,12 @@ Ken Burns cycles through every image in gallery/ in filename sort order. The spe
 3. Copy selected files to `public/realms/[slug]/characters/` with prefix naming (e.g. `01-original-name.jpg`)
 4. **Target: 20 images** (wider strip needs more to fill — use 20)
 
-### Step 4 — Verify
+### Step 4 — Reorder realm card
+- Open `lib/data/worlds.ts`
+- Move this realm's entry to the next slot after the last already-filled realm (see **Realm Card Order Rule** section below)
+- Commit the reorder
+
+### Step 5 — Verify
 - All 3 pages auto-discover `gallery/` — no code changes needed
 - Lore and characters auto-discovered — no code changes needed
 - Realm must exist in `lib/data/worlds.ts` `featuredWorlds` array with matching `slug`
@@ -163,6 +168,21 @@ Card world uses `WorldAudioPlayer` directly with same `discoverRealmAudio(slug)`
 - Auto-cycles every 2.4s — crossfade 0.6s
 - Active thumbnail: gold border + glow, scales `1.08`
 - Click thumbnail → jump to image; click main image → fullscreen lightbox
+
+---
+
+## Realm Card Order Rule
+
+Realms with content (gallery images) should appear first in the grid. When you finish adding a sequence to a realm:
+
+1. Open `lib/data/worlds.ts`
+2. Find the realm's entry in `featuredWorlds`
+3. Move it to the **next position after the last realm that already has content** — i.e. the last slot before the first empty realm
+4. Commit the reorder
+
+**How to tell if a realm has content:** check `public/realms/[slug]/gallery/` — if it has images, it's filled. If the folder is missing or empty, it's empty.
+
+Example: if slots 1–2 are filled (ai-divine, girls-of-the-multiverse) and you just add content to kitsune, move kitsune to slot 3 in the array.
 
 ---
 
