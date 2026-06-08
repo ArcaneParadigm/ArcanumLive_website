@@ -120,7 +120,6 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   const [progress, setProgress]       = useState(0)
   const [mounted, setMounted]         = useState(false)
   const [bgColorIdx, setBgColorIdx]   = useState(0)
-  const [secPerImage, setSecPerImage] = useState(10)
 
   const audioRef    = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -340,7 +339,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           const galleryImgs = imageMap[slug] ?? []
           if (galleryImgs.length > 0) return (
             <div className="absolute inset-0">
-              <KenBurnsSlideshow key={`${slug}-${activationCount}`} images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
+              <KenBurnsSlideshow key={`${slug}-${activationCount}`} images={galleryImgs} showControls accentColor={accent} className="absolute inset-0" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
             </div>
           )
@@ -366,18 +365,6 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           style={{ background: 'linear-gradient(to top, #08060e, transparent)' }}
         />
 
-        {/* Speed slider — bottom right */}
-        <div className="absolute bottom-3 right-4 z-20 flex items-center gap-2 select-none"
-          style={{ opacity: 0.7 }}>
-          <span className="text-[8px] tracking-widest uppercase" style={{ color: accent }}>Speed</span>
-          <input
-            type="range" min={5} max={30} step={1} value={secPerImage}
-            onChange={e => setSecPerImage(Number(e.target.value))}
-            className="w-20 h-1 cursor-pointer appearance-none rounded-full"
-            style={{ accentColor: accent }}
-          />
-          <span className="text-[8px] font-mono" style={{ color: accent, minWidth: 24 }}>{secPerImage}s</span>
-        </div>
       </div>
 
       {/* ── SEQUENCER ── */}
