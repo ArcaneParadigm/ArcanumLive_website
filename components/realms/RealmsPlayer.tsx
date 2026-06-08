@@ -369,9 +369,6 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
             <motion.div key={worldIdx}
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.4 }} className="flex flex-col items-center gap-1">
-              <p className="text-[9px] tracking-[0.45em] uppercase" style={{ color: `${accent}95` }}>
-                {currentPlaylist.world.theme_style}
-              </p>
               <h2 className="font-cinzel text-2xl md:text-3xl font-bold tracking-widest" style={{ color: accent }}>
                 {currentPlaylist.world.title}
               </h2>
