@@ -363,39 +363,6 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
         <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2" style={{ borderColor: `${accent}50` }} />
         <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2" style={{ borderColor: `${accent}50` }} />
 
-        {/* Realm name + current track */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <AnimatePresence mode="wait">
-            <motion.div key={worldIdx}
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4 }} className="flex flex-col items-center gap-1">
-              <h2 className="font-cinzel text-2xl md:text-3xl font-bold tracking-widest" style={{ color: accent }}>
-                {currentPlaylist.world.title}
-              </h2>
-            </motion.div>
-          </AnimatePresence>
-          <AnimatePresence mode="wait">
-            <motion.p key={`${worldIdx}-${trackIdx}`}
-              className="text-xs tracking-wide mt-3" style={{ color: 'rgba(255,255,255,0.82)' }}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-              {currentTrack.title}
-              {currentTrack.duration && <span className="ml-2" style={{ color: 'rgba(255,255,255,0.5)' }}>{currentTrack.duration}</span>}
-            </motion.p>
-          </AnimatePresence>
-
-          {/* Visual mode badge for current entry */}
-          {currentEntry && (
-            <div className="mt-2 flex items-center gap-1 px-2 py-0.5 rounded-full"
-              style={{ background: `${accent}15`, border: `1px solid ${accent}30` }}>
-              <span className="text-[9px]" style={{ color: accent }}>
-                {MODE_ICON[currentEntry.visualMode]}
-              </span>
-              <span className="text-[8px] tracking-widest uppercase" style={{ color: `${accent}90` }}>
-                {MODE_SHORT[currentEntry.visualMode]}
-              </span>
-            </div>
-          )}
-        </div>
 
         {/* Bottom fade */}
         <div className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"

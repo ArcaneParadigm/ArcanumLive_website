@@ -49,7 +49,7 @@ function presetColor(index: number): string {
 function AscensionRealmCard({
   world, isActive, onActivate, cardImage,
 }: {
-  world: { slug?: string; title?: string; color_primary?: string }
+  world: { slug?: string; title?: string; short_description?: string; color_primary?: string }
   isActive: boolean
   onActivate: () => void
   cardImage?: string | null
@@ -107,33 +107,37 @@ function AscensionRealmCard({
         <div className="absolute top-1 left-1 w-2 h-2" style={{ borderTop: `1px solid ${color}70`, borderLeft: `1px solid ${color}70` }} />
       </div>
 
-      {/* Title — 1 line, bright */}
+      {/* Hover bar — title + description + Enter */}
       <div
-        className="shrink-0 px-1 py-1"
+        className="shrink-0 px-2 py-1.5"
         style={{ background: isActive ? `${color}28` : 'rgba(7,5,15,0.92)', borderTop: `1px solid ${color}35` }}
       >
         <p
-          className="font-cinzel truncate text-center leading-none"
+          className="font-cinzel truncate text-center leading-none mb-0.5"
           style={{ fontSize: 11, color: isActive ? color : 'rgba(255,255,255,0.85)', letterSpacing: '0.05em' }}
         >
           {world.title}
         </p>
+        {hov && world.short_description && (
+          <p className="text-[7px] text-white/40 leading-tight text-center truncate mb-1">
+            {world.short_description}
+          </p>
+        )}
+        <button
+          onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
+          className="w-full text-center transition-colors"
+          style={{
+            fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase',
+            fontFamily: 'Cinzel, serif', fontWeight: 600,
+            borderTop: `1px solid ${color}20`,
+            paddingTop: 4,
+            color: hov ? color : 'rgba(255,255,255,0.3)',
+            background: 'transparent',
+          }}
+        >
+          Enter →
+        </button>
       </div>
-
-      {/* Enter World button */}
-      <button
-        onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
-        className="shrink-0 w-full text-center py-0.5 transition-colors"
-        style={{
-          fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase',
-          fontFamily: 'Cinzel, serif', fontWeight: 600,
-          borderTop: `1px solid ${color}25`,
-          color: hov ? color : 'rgba(255,255,255,0.4)',
-          background: 'transparent',
-        }}
-      >
-        World →
-      </button>
     </motion.div>
   )
 }
@@ -413,7 +417,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
             {featuredWorlds.map(w => (
               <AscensionRealmCard
                 key={w.slug}
-                world={{ slug: w.slug, title: w.title ?? undefined, color_primary: w.color_primary ?? undefined }}
+                world={{ slug: w.slug, title: w.title ?? undefined, short_description: w.short_description ?? undefined, color_primary: w.color_primary ?? undefined }}
                 isActive={activeRealm === w.slug}
                 onActivate={() => setActiveRealm(w.slug ?? null)}
                 cardImage={w.slug ? (cardImages[w.slug] ?? null) : null}
