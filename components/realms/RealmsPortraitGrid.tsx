@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import type { IpWorld } from '@/types'
-import { playCrystalBowl } from '@/lib/utils/crystalSound'
 import RealmGalleryModal from '@/components/realms/RealmGalleryModal'
+import SharedRealmCard from '@/components/realms/RealmCard'
 
 const GOLD = '#c9973a'
 const COLS = 7
@@ -37,110 +37,6 @@ function OrnateRule() {
   )
 }
 
-// ── Portrait card — image activates player, Enter button enters world ─────────
-
-function RealmCard({
-  world, cardImage, galleryImages, hovered, onEnter, onOpenGallery, onActivate,
-}: {
-  world: Partial<IpWorld>
-  cardImage?: string | null
-  galleryImages?: string[]
-  hovered: boolean
-  onEnter: () => void
-  onOpenGallery: () => void
-  onActivate?: () => void
-}) {
-  const color = world.color_primary ?? GOLD
-  const router = useRouter()
-
-  return (
-    <motion.div
-      className="relative rounded-xl overflow-hidden shrink-0 flex flex-col w-[calc(50vw-2rem)] sm:w-[163px]"
-      style={{
-        maxWidth: 163,
-        aspectRatio: '3/4',
-        background: `radial-gradient(ellipse at 50% 30%, ${color}28, #06040c 80%)`,
-        border: `1px solid ${hovered ? color + 'cc' : color + '45'}`,
-        boxShadow: hovered
-          ? `0 0 28px ${color}60, 0 0 8px ${color}40, 0 12px 40px rgba(0,0,0,0.75)`
-          : `0 0 8px ${color}20, 0 4px 16px rgba(0,0,0,0.5)`,
-      }}
-      animate={{ y: hovered ? -8 : 0, scale: hovered ? 1.04 : 1 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      onMouseEnter={() => { onEnter(); playCrystalBowl(color, 0.025) }}
-    >
-      {/* Neon top edge on hover */}
-      {hovered && (
-        <div className="absolute inset-x-0 top-0 z-10 h-px pointer-events-none"
-          style={{ background: `linear-gradient(to right, transparent, ${color}ee 30%, ${color}ee 70%, transparent)` }} />
-      )}
-
-      {/* Ground glow */}
-      <motion.div
-        className="absolute inset-x-2 pointer-events-none"
-        style={{ bottom: -14, height: 22, background: `radial-gradient(ellipse at 50% 0%, ${color}cc, transparent 70%)`, filter: 'blur(7px)' }}
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.25 }}
-      />
-
-      {/* TOP ZONE — click to activate player */}
-      <div
-        className="relative flex-1 cursor-pointer"
-        style={{ minHeight: 0 }}
-        onClick={onActivate}
-      >
-        {cardImage && (
-          <img src={cardImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center" />
-        )}
-        <div className="absolute inset-0" style={{
-          background: hovered
-            ? 'linear-gradient(to bottom, rgba(6,4,12,0.0) 30%, rgba(6,4,12,0.82) 100%)'
-            : 'linear-gradient(to bottom, rgba(6,4,12,0.0) 40%, rgba(6,4,12,0.78) 100%)',
-        }} />
-        {/* Corner marks */}
-        <div className="absolute top-2 left-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}80`, borderLeft: `1px solid ${color}80` }} />
-        <div className="absolute top-2 right-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}60`, borderRight: `1px solid ${color}60` }} />
-        {/* Activate hint on hover */}
-        {hovered && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 pointer-events-none">
-            <span className="text-white/80 text-base">▶</span>
-            <span className="text-[7px] tracking-widest uppercase" style={{ color: `${color}cc` }}>Activate</span>
-          </div>
-        )}
-        {/* Title */}
-        <div className="absolute bottom-0 inset-x-0 px-2.5 pb-1.5">
-          <p
-            className="font-cinzel text-[10px] font-bold leading-snug"
-            style={{ color, textShadow: `0 0 12px ${color}80, 0 1px 6px rgba(0,0,0,0.95)` }}
-          >
-            {world.title}
-          </p>
-        </div>
-      </div>
-
-      {/* BOTTOM ZONE — gold Enter button */}
-      <button
-        onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
-        className="shrink-0 w-full flex items-center justify-center py-1 transition-all rounded-none"
-        style={{
-          background: hovered
-            ? 'linear-gradient(135deg, #6b4411 0%, #c9973a 35%, #f5d06e 55%, #c9973a 75%, #6b4411 100%)'
-            : `${color}18`,
-          borderTop: `1px solid ${hovered ? '#c9973a' : color + '30'}`,
-          color: hovered ? '#07050f' : `${color}80`,
-          fontSize: 9,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          fontFamily: 'Cinzel, serif',
-          fontWeight: 700,
-          boxShadow: hovered ? '0 0 8px #c9973a50' : 'none',
-        }}
-      >
-        Enter
-      </button>
-    </motion.div>
-  )
-}
 
 // ── Info strip ────────────────────────────────────────────────────────────────
 
@@ -247,15 +143,13 @@ export default function RealmsPortraitGrid({ worlds, cardImages, galleryImages =
             <div key={rowIdx}>
               <div className="flex flex-wrap gap-3 justify-center mb-1">
                 {row.map(w => (
-                  <RealmCard
+                  <SharedRealmCard
                     key={w.id}
-                    world={w}
+                    world={{ slug: w.slug, title: w.title ?? undefined, short_description: w.short_description ?? undefined, color_primary: w.color_primary ?? undefined }}
                     cardImage={w.slug ? cardImages[w.slug] : null}
-                    galleryImages={w.slug ? galleryImages[w.slug] : undefined}
-                    hovered={hoveredSlug === w.slug}
-                    onEnter={() => setHoveredSlug(w.slug ?? null)}
-                    onOpenGallery={() => setGallerySlug(w.slug ?? null)}
+                    isActive={false}
                     onActivate={() => w.slug && onActivate?.(w.slug)}
+                    onHover={(slug) => setHoveredSlug(slug)}
                   />
                 ))}
               </div>

@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import RealmsPlayer from '@/components/realms/RealmsPlayer'
+import RealmCard from '@/components/realms/RealmCard'
 import { screensaverModes, featuredScreensaverPresets } from '@/lib/data/screensaver'
 import { featuredWorlds } from '@/lib/data/worlds'
 import { musicCategories, featuredAlbums } from '@/lib/data/music'
@@ -44,106 +44,6 @@ function presetColor(index: number): string {
   return `hsl(${hue}, ${sat}%, ${Math.max(lit, 44)}%)`
 }
 
-// ── Realm card for Ascension Chamber ─────────────────────────────────────────
-
-function AscensionRealmCard({
-  world, isActive, onActivate, cardImage, onHover,
-}: {
-  world: { slug?: string; title?: string; short_description?: string; color_primary?: string }
-  isActive: boolean
-  onActivate: () => void
-  cardImage?: string | null
-  onHover?: (slug: string | null) => void
-}) {
-  const color = world.color_primary ?? GOLD
-  const router = useRouter()
-  const [hov, setHov] = useState(false)
-
-  return (
-    <motion.div
-      className="shrink-0 rounded-lg overflow-hidden flex flex-col"
-      style={{
-        width: 168,
-        aspectRatio: '2/3',
-        border: `1px solid ${isActive ? color + 'cc' : color + '40'}`,
-        boxShadow: isActive
-          ? `0 0 20px ${color}70, 0 0 6px ${color}50`
-          : hov
-            ? `0 0 14px ${color}55`
-            : 'none',
-        background: `radial-gradient(ellipse at 50% 20%, ${color}22, #07050f 75%)`,
-      }}
-      animate={{ scale: hov || isActive ? 1.05 : 1, y: hov ? -4 : 0 }}
-      transition={{ duration: 0.15 }}
-      onMouseEnter={() => { setHov(true); playCrystalBowl(color, 0.018); onHover?.(world.slug ?? null) }}
-      onMouseLeave={() => { setHov(false); onHover?.(null) }}
-    >
-      {/* Image fills almost the whole card — clicking activates player */}
-      <div className="flex-1 relative cursor-pointer" style={{ minHeight: 0 }} onClick={onActivate}>
-        {cardImage ? (
-          <img src={cardImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center" />
-        ) : (
-          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 30%, ${color}35, #07050f)` }} />
-        )}
-        <div className="absolute inset-0" style={{
-          background: isActive
-            ? `linear-gradient(to bottom, transparent 35%, ${color}50 100%)`
-            : 'linear-gradient(to bottom, transparent 50%, rgba(7,5,15,0.75) 100%)',
-        }} />
-        {isActive && (
-          <div className="absolute inset-0 flex items-end justify-center pb-1">
-            <span className="text-[7px] tracking-widest uppercase" style={{ color }}>▶ Active</span>
-          </div>
-        )}
-        {hov && !isActive && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-            <span className="text-white/80 text-base">▶</span>
-            <span className="text-[7px] tracking-widest uppercase" style={{ color: `${color}cc` }}>Activate</span>
-          </div>
-        )}
-        {/* Neon top edge when active */}
-        {isActive && (
-          <div className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${color}cc 40%, ${color}cc 60%, transparent)` }} />
-        )}
-        <div className="absolute top-1 left-1 w-2 h-2" style={{ borderTop: `1px solid ${color}70`, borderLeft: `1px solid ${color}70` }} />
-      </div>
-
-      {/* Bottom bar — title + description on hover + gold Enter button */}
-      <div
-        className="shrink-0 px-2 pt-1 pb-1.5"
-        style={{ background: isActive ? `${color}28` : 'rgba(7,5,15,0.92)', borderTop: `1px solid ${color}35` }}
-      >
-        <p
-          className="font-cinzel truncate text-center leading-none mb-1"
-          style={{ fontSize: 11, color: isActive ? color : 'rgba(255,255,255,0.85)', letterSpacing: '0.05em' }}
-        >
-          {world.title}
-        </p>
-        {hov && world.short_description && (
-          <p className="text-[7px] text-white/40 leading-tight text-center truncate mb-1.5" style={{ lineHeight: 1.3 }}>
-            {world.short_description}
-          </p>
-        )}
-        <button
-          onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
-          className="w-full text-center py-0.5 rounded transition-all"
-          style={{
-            fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
-            fontFamily: 'Cinzel, serif', fontWeight: 700,
-            background: hov
-              ? 'linear-gradient(135deg, #6b4411 0%, #c9973a 35%, #f5d06e 55%, #c9973a 75%, #6b4411 100%)'
-              : `${color}18`,
-            color: hov ? '#07050f' : `${color}80`,
-            border: `1px solid ${hov ? '#c9973a' : color + '30'}`,
-            boxShadow: hov ? `0 0 8px #c9973a50` : 'none',
-          }}
-        >
-          Enter
-        </button>
-      </div>
-    </motion.div>
-  )
-}
 
 // ── Foldable section wrapper ──────────────────────────────────────────────────
 
@@ -420,7 +320,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
           </div>
           <div className="flex flex-wrap gap-3 max-h-[560px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
             {featuredWorlds.map(w => (
-              <AscensionRealmCard
+              <RealmCard
                 key={w.slug}
                 world={{ slug: w.slug, title: w.title ?? undefined, short_description: w.short_description ?? undefined, color_primary: w.color_primary ?? undefined }}
                 isActive={activeRealm === w.slug}
