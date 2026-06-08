@@ -348,10 +348,11 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
           style={{ color: 'rgba(255,255,255,0.82)' }}>
           ← Home
         </Link>
-        <h1 className="font-cinzel text-lg font-bold tracking-[0.25em] md:shrink-0 text-center"
+        <h1 className="font-cinzel text-2xl md:text-3xl font-bold tracking-[0.2em] md:shrink-0 text-center"
           style={{
             background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 30%, #f5d06e 50%, #c9973a 70%, #6b4411 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            filter: 'drop-shadow(0 0 18px rgba(201,151,58,0.45))',
           }}>
           The Ascension Chamber
         </h1>

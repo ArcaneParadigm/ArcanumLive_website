@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { featuredWorlds } from '@/lib/data/worlds'
 import type { VisualMode } from '@/types'
-import SequencePlayer from '@/components/screensaver/SequencePlayer'
 import KenBurnsSlideshow from '@/components/screensaver/KenBurnsSlideshow'
 
 export interface DiscoveredTrack {
@@ -334,24 +333,13 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
       {/* ── Imagery band ── */}
       <div className="relative z-10 w-full" style={{ aspectRatio: '21/7', minHeight: 240 }}>
 
-        {/* Imagery: sequence → Ken Burns gallery → gradient fallback */}
+        {/* Imagery: Ken Burns gallery → gradient fallback */}
         {(() => {
           const slug = currentPlaylist.world.slug ?? ''
-          const seqFrames = sequenceMap[slug] ?? []
           const galleryImgs = imageMap[slug] ?? []
-          if (seqFrames.length > 0) return (
-            <div className="absolute inset-0">
-              <SequencePlayer frames={seqFrames} fps={12} fadeDur={0.4} className="w-full h-full" />
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
-              {/* Debug: seq frame count — remove once confirmed working */}
-              <div className="absolute top-2 left-3 text-[8px] font-mono pointer-events-none" style={{ color: `${accent}60` }}>
-                seq {seqFrames.length}f
-              </div>
-            </div>
-          )
           if (galleryImgs.length > 0) return (
             <div className="absolute inset-0">
-              <KenBurnsSlideshow images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
+              <KenBurnsSlideshow key={slug} images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
             </div>
           )
