@@ -295,9 +295,9 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
       />
 
       {/* ── Header ── */}
-      <div className={`relative z-10 ${compact ? 'pt-3 pb-3' : 'pt-4 pb-5'} text-center px-6`}>
+      <div className={`relative z-10 ${compact ? 'pt-2 pb-2' : 'pt-[10px] pb-2'} text-center px-6`}>
         {!compact && (
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
               style={{ color: 'rgba(255,255,255,0.82)' }}>
               ← Home
@@ -315,7 +315,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
         {!compact && (
           <>
             <h1
-              className="font-cinzel font-bold tracking-widest leading-none text-3xl md:text-4xl mb-2"
+              className="font-cinzel font-bold tracking-widest leading-none text-3xl md:text-4xl mb-1"
               style={{
                 background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 22%, #f5d06e 50%, #c9973a 78%, #6b4411 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
@@ -331,7 +331,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
       </div>
 
       {/* ── Imagery band ── */}
-      <div className="relative z-10 w-full" style={{ aspectRatio: '21/7', minHeight: 240 }}>
+      <div className="relative z-10 w-full" style={{ aspectRatio: '16/9', minHeight: 240 }}>
 
         {/* Imagery: Ken Burns gallery → gradient fallback */}
         {(() => {
