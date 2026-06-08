@@ -41,18 +41,23 @@ export default function RealmGallerySection({ images, accentColor, label }: Prop
         <GlassButton href="/dome-shows" variant="silver">Dome Shows</GlassButton>
         <button
           onClick={() => setOpenAt(0)}
-          className="group relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl overflow-hidden text-sm tracking-[0.18em] uppercase font-medium transition-colors duration-300"
-          style={{ color: '#c0c8d0' }}
+          className="group relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl overflow-hidden text-sm tracking-[0.18em] uppercase font-medium transition-all duration-300"
+          style={{ color: '#d8b4fe' }}
         >
           <div
-            className="absolute inset-0 rounded-xl"
+            className="absolute inset-0 rounded-xl transition-all duration-300"
             style={{
-              background: 'rgba(6,4,10,0.7)',
+              background: 'linear-gradient(135deg, rgba(88,28,135,0.55) 0%, rgba(139,92,246,0.35) 50%, rgba(88,28,135,0.55) 100%)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(192,200,208,0.2)',
+              border: '1px solid rgba(139,92,246,0.45)',
+              boxShadow: '0 0 18px rgba(139,92,246,0.15)',
             }}
           />
-          <span className="relative z-10">View Gallery</span>
+          <div
+            className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            style={{ boxShadow: 'inset 0 0 0 1px rgba(192,132,252,0.6), 0 0 28px rgba(139,92,246,0.3)' }}
+          />
+          <span className="relative z-10 group-hover:text-white transition-colors duration-300">View Gallery</span>
         </button>
       </div>
     </>
