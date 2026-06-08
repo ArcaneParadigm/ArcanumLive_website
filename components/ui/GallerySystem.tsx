@@ -226,7 +226,7 @@ export default function GallerySystem({
                   })}
                 </div>
                 <p className="text-center text-[8px] tracking-[0.25em] uppercase mt-1.5 pointer-events-none"
-                  style={{ color: `${accentColor}60` }}>
+                  style={{ color: '#c9973ae6' }}>
                   click image to open gallery
                 </p>
               </motion.div>
