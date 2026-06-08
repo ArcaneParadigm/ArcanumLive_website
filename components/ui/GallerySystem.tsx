@@ -16,12 +16,13 @@ export interface GalleryImage {
 interface GallerySystemProps {
   images: GalleryImage[]
   accentColor?: string
-  aspectRatio?: string  // for the main slot, e.g. "16/9" or "21/9"
-  label?: string        // e.g. "Lore Gallery"
-  fullWidth?: boolean   // removes rounded corners + max-width for edge-to-edge use
-  kenBurns?: boolean    // use Ken Burns animated slideshow for main display
-  isStatic?: boolean    // no auto-morph, no thumbnail strip (lore/character panels)
-  secPerImage?: number  // Ken Burns speed in seconds (default 10)
+  aspectRatio?: string       // for the main slot, e.g. "16/9" or "21/9"
+  label?: string             // e.g. "Lore Gallery"
+  fullWidth?: boolean        // removes rounded corners + max-width for edge-to-edge use
+  kenBurns?: boolean         // use Ken Burns animated slideshow for main display
+  isStatic?: boolean         // no auto-morph, no thumbnail strip (lore/character panels)
+  secPerImage?: number       // Ken Burns speed in seconds (default 10)
+  openLightboxAt?: number    // programmatically opens lightbox at this index
 }
 
 const MORPH_INTERVAL = 3800
@@ -35,6 +36,7 @@ export default function GallerySystem({
   kenBurns = false,
   isStatic = false,
   secPerImage = 10,
+  openLightboxAt,
 }: GallerySystemProps) {
   const [activeIdx, setActiveIdx] = useState(0)
   const [hovered, setHovered] = useState(false)
@@ -46,6 +48,11 @@ export default function GallerySystem({
   const thumbStripRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { setMounted(true) }, [])
+
+  // Programmatic lightbox open (e.g. from "View Gallery" button)
+  useEffect(() => {
+    if (openLightboxAt !== undefined) setLightbox(openLightboxAt)
+  }, [openLightboxAt])
 
   // Auto-morph when not hovered (disabled for kenBurns and isStatic modes)
   useEffect(() => {

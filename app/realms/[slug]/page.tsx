@@ -4,6 +4,7 @@ import Link from 'next/link'
 import PageShell from '@/components/layout/PageShell'
 import GlassButton from '@/components/ui/GlassButton'
 import GallerySystem from '@/components/ui/GallerySystem'
+import RealmGallerySection from '@/components/realms/RealmGallerySection'
 import WorldAudioPlayer from '@/components/worlds/WorldAudioPlayer'
 import { featuredWorlds } from '@/lib/data/worlds'
 import { discoverRealmImages, discoverRealmAudio, discoverRealmHeroImage, splitAcrossChapters, toGalleryImages } from '@/lib/utils/realmImages'
@@ -339,30 +340,12 @@ export default async function WorldDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── FULL-WIDTH GALLERY ── */}
-      <section id="realm-gallery" className="relative overflow-hidden" style={{ background: '#08060e' }}>
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: `linear-gradient(160deg, ${accent}12 0%, transparent 50%, ${accentAlt}08 100%)` }}
-        />
-        <GallerySystem
-          images={toGalleryImages(imgs.gallery, slug, worldTitle, 6)}
-          accentColor={accent}
-          aspectRatio="21/9"
-          label={worldTitle}
-          fullWidth
-          kenBurns
-        />
-        <div className="absolute inset-x-0 bottom-0 h-12 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #08060e, transparent)' }}
-        />
-      </section>
-
-      {/* Action buttons */}
-      <div className="flex flex-wrap justify-center gap-3 py-5" style={{ background: '#08060e' }}>
-        <GlassButton href="/ascension" variant="gold">Ascension Chamber</GlassButton>
-        <GlassButton href="/dome-shows" variant="silver">Dome Shows</GlassButton>
-        <GlassButton href="#realm-gallery" variant="silver">View Gallery</GlassButton>
-      </div>
+      {/* ── FULL-WIDTH GALLERY + VIEW GALLERY BUTTON ── */}
+      <RealmGallerySection
+        images={toGalleryImages(imgs.gallery, slug, worldTitle, 6)}
+        accentColor={accent}
+        label={worldTitle}
+      />
 
       {/* ══════════════════════════════════════════
           AUDIO PLAYLIST
