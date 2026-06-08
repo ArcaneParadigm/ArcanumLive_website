@@ -62,7 +62,7 @@ export default function KenBurnsSlideshow({
   const fadeDur = speed / 3   // locked: crossfade = 1/3 of display time
 
   return (
-    <div className={`relative overflow-hidden ${className ?? ''}`} style={style}>
+    <div className={className ?? ''} style={{ overflow: 'hidden', position: 'relative', ...style }}>
       <AnimatePresence mode="sync">
         <motion.img
           key={`${idx}-${images[idx]}-${restartKey}`}
