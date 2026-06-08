@@ -64,7 +64,7 @@ export default function SequencePlayer({
     }
 
     function drawFrame(img: HTMLImageElement, alpha: number) {
-      if (!canvas) return
+      if (!canvas || !ctx) return
       const { width: cw, height: ch } = canvas
       const { naturalWidth: iw, naturalHeight: ih } = img
       const scale = Math.max(cw / iw, ch / ih)
@@ -102,6 +102,7 @@ export default function SequencePlayer({
         }
       }
 
+      if (!ctx) return
       ctx.clearRect(0, 0, canvas!.width, canvas!.height)
 
       if (fading && nextIdx !== null) {
