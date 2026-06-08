@@ -38,6 +38,8 @@ export default function GallerySystem({
   const [hovered, setHovered] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null) // index or null
   const [mounted, setMounted] = useState(false)
+  const [fadeDur, setFadeDur] = useState(2.4)
+  const [kbSpeed, setKbSpeed] = useState(secPerImage)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => { setMounted(true) }, [])
@@ -89,11 +91,41 @@ export default function GallerySystem({
         >
           {/* Ken Burns mode */}
           {kenBurns && realImageUrls.length > 0 && (
-            <KenBurnsSlideshow
-              images={realImageUrls}
-              secPerImage={secPerImage}
-              className="absolute inset-0 w-full h-full"
-            />
+            <>
+              <KenBurnsSlideshow
+                images={realImageUrls}
+                secPerImage={kbSpeed}
+                fadeDur={fadeDur}
+                className="absolute inset-0 w-full h-full"
+              />
+              {/* Sliders — bottom right */}
+              <div
+                className="absolute bottom-3 right-4 z-20 flex items-center gap-4 select-none"
+                style={{ opacity: 0.65 }}
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[8px] tracking-widest uppercase" style={{ color: accentColor }}>Fade</span>
+                  <input
+                    type="range" min={0.3} max={8} step={0.1} value={fadeDur}
+                    onChange={e => setFadeDur(Number(e.target.value))}
+                    className="w-16 h-1 cursor-pointer appearance-none rounded-full"
+                    style={{ accentColor }}
+                  />
+                  <span className="text-[8px] font-mono" style={{ color: accentColor, minWidth: 28 }}>{fadeDur.toFixed(1)}s</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[8px] tracking-widest uppercase" style={{ color: accentColor }}>Speed</span>
+                  <input
+                    type="range" min={5} max={30} step={1} value={kbSpeed}
+                    onChange={e => setKbSpeed(Number(e.target.value))}
+                    className="w-16 h-1 cursor-pointer appearance-none rounded-full"
+                    style={{ accentColor }}
+                  />
+                  <span className="text-[8px] font-mono" style={{ color: accentColor, minWidth: 24 }}>{kbSpeed}s</span>
+                </div>
+              </div>
+            </>
           )}
 
           {/* Standard morph / static mode */}
