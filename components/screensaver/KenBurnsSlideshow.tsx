@@ -15,12 +15,14 @@ interface KenBurnsSlideshowProps {
 }
 
 const KB_VARIANTS = [
-  { initial: { scale: 1.18, x: '-3%',  y: '-3%'  }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
-  { initial: { scale: 1.18, x: '3%',   y: '-3%'  }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
-  { initial: { scale: 1.18, x: '-3%',  y: '3%'   }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
-  { initial: { scale: 1.18, x: '3%',   y: '3%'   }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
-  { initial: { scale: 1.0,  x: '0%',   y: '0%'   }, animate: { scale: 1.16, x: '-2%',  y: '-2%'  } },
-  { initial: { scale: 1.0,  x: '0%',   y: '0%'   }, animate: { scale: 1.16, x: '2%',   y: '2%'   } },
+  { initial: { scale: 1.45, x: '-8%',  y: '-6%'  }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
+  { initial: { scale: 1.45, x: '8%',   y: '-6%'  }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
+  { initial: { scale: 1.45, x: '-8%',  y: '6%'   }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
+  { initial: { scale: 1.45, x: '8%',   y: '6%'   }, animate: { scale: 1.0,  x: '0%',   y: '0%'   } },
+  { initial: { scale: 1.0,  x: '0%',   y: '0%'   }, animate: { scale: 1.4,  x: '-7%',  y: '-5%'  } },
+  { initial: { scale: 1.0,  x: '0%',   y: '0%'   }, animate: { scale: 1.4,  x: '7%',   y: '5%'   } },
+  { initial: { scale: 1.3,  x: '-10%', y: '0%'   }, animate: { scale: 1.0,  x: '10%',  y: '0%'   } },
+  { initial: { scale: 1.3,  x: '10%',  y: '0%'   }, animate: { scale: 1.0,  x: '-10%', y: '0%'   } },
 ]
 
 export default function KenBurnsSlideshow({
@@ -56,8 +58,10 @@ export default function KenBurnsSlideshow({
   if (images.length === 0) return null
 
   const kbv = KB_VARIANTS[variant]
-  const fd  = fadeDur          // read state (only used on next image mount)
-  const scaleDur = speed + 2   // scale slightly outlasts interval for overlap
+  const fd  = fadeDur
+  // scale duration = fadeDur * 4 so the zoom motion is clearly visible
+  // capped to slightly exceed speed so the animation fills the full display time
+  const scaleDur = Math.min(fadeDur * 4, speed + 1)
 
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`} style={style}>
@@ -88,7 +92,7 @@ export default function KenBurnsSlideshow({
           <div className="flex items-center gap-1.5">
             <span className="text-[8px] tracking-widest uppercase" style={{ color: accentColor }}>Fade</span>
             <input
-              type="range" min={0.3} max={8} step={0.1} value={fadeDur}
+              type="range" min={0.3} max={20} step={0.1} value={fadeDur}
               onChange={e => setFadeDur(Number(e.target.value))}
               className="w-16 h-1 cursor-pointer appearance-none rounded-full"
               style={{ accentColor }}
