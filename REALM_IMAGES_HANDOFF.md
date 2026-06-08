@@ -35,8 +35,9 @@ Ken Burns cycles through every image in gallery/ in filename sort order. The spe
    - Ch2 frames → name `12–22`
    - Ch3 frames → name `23–33`
 4. Aim for variety: mix of close-up, wide, atmospheric within each chapter
-5. Copy selected files to `public/realms/[slug]/lore/` with prefix naming (e.g. `01-original-name.jpg`)
-6. **Target: 33 lore images** — exactly 11 per chapter
+5. **No duplicate first slots** — `01-`, `12-`, and `23-` (the first image of each chapter panel) must be different frames. Also ensure `lore/01-` and `characters/01-` are different frames.
+6. Copy selected files to `public/realms/[slug]/lore/` with prefix naming (e.g. `01-original-name.jpg`)
+7. **Target: 33 lore images** — exactly 11 per chapter
 
 ### Step 3 — Curate character images (card world page only)
 1. Scan all seq frames for strong character shots
@@ -45,6 +46,7 @@ Ken Burns cycles through every image in gallery/ in filename sort order. The spe
    - Clear character identity — face visible or strong silhouette
    - Diverse poses/characters if multiple exist in the realm
    - **Reject:** wide establishing shots, busy crowd scenes, frames with text overlays, non-human-character frames (creatures/entities only)
+   - **No duplicate first slots** — `characters/01-` must be a different frame than `lore/01-`
 3. Copy selected files to `public/realms/[slug]/characters/` with prefix naming (e.g. `01-original-name.jpg`)
 4. **Target: 20 images** (wider strip needs more to fill — use 20)
 
