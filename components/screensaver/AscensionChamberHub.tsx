@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import RealmsPlayer from '@/components/realms/RealmsPlayer'
+import SequencePlayer from '@/components/screensaver/SequencePlayer'
 import { screensaverModes, featuredScreensaverPresets } from '@/lib/data/screensaver'
 import { featuredWorlds } from '@/lib/data/worlds'
 import { musicCategories, featuredAlbums } from '@/lib/data/music'
@@ -14,6 +15,7 @@ import type { DiscoveredTrack } from '@/components/realms/RealmsPlayer'
 interface AscensionChamberHubProps {
   audioMap?: Record<string, DiscoveredTrack[]>
   cardImages?: Record<string, string | null>
+  sequenceMap?: Record<string, string[]>
 }
 
 const GOLD   = '#c9973a'
@@ -295,7 +297,7 @@ function MusicRow({ album, index, isActive, onClick }: {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function AscensionChamberHub({ audioMap, cardImages = {} }: AscensionChamberHubProps) {
+export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenceMap = {} }: AscensionChamberHubProps) {
   const [activeMode,   setActiveMode]   = useState<string | null>(null)
   const [activeAlbum,  setActiveAlbum]  = useState<string | null>(null)
   const [activePreset, setActivePreset] = useState<string>('')
@@ -325,8 +327,30 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
 
   const hoveredMode = activeMode ? screensaverModes.find(m => m.href.includes(activeMode)) : null
 
+  const activeSequence = activeRealm ? (sequenceMap[activeRealm] ?? []) : []
+
   return (
-    <div className="min-h-screen" style={{ background: '#07050f' }}>
+    <div className="min-h-screen relative" style={{ background: '#07050f' }}>
+
+      {/* ── Sequence background — plays when active realm has frames ── */}
+      {activeSequence.length > 0 && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <SequencePlayer
+            frames={activeSequence}
+            fps={12}
+            fadeDur={0.22}
+            opacity={0.38}
+            className="w-full h-full"
+          />
+          {/* Dark vignette so UI stays readable */}
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(7,5,15,0.72) 100%)',
+          }} />
+        </div>
+      )}
+
+      {/* ── Content (above sequence layer) ── */}
+      <div className="relative z-10">
 
       {/* ── Slim header ── */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between px-6 pt-3 pb-1">
@@ -460,6 +484,8 @@ export default function AscensionChamberHub({ audioMap, cardImages = {} }: Ascen
         </div>
 
       </div>
+
+      </div>{/* end z-10 content wrapper */}
     </div>
   )
 }

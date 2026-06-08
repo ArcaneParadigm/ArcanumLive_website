@@ -113,6 +113,15 @@ export function discoverRealmImages(slug: string): DiscoveredImages {
 }
 
 /**
+ * Discovers a frame sequence from public/realms/[slug]/seq/
+ * Returns sorted array of URLs — drop frames in, they appear automatically.
+ */
+export function discoverRealmSequence(slug: string): string[] {
+  const dir = path.join(process.cwd(), 'public', 'realms', slug, 'seq')
+  return listImages(dir, `/realms/${slug}/seq`)
+}
+
+/**
  * Discovers audio tracks from public/audio/realms/[slug]/
  * Drop mp3/wav/ogg/flac/m4a files in → they appear as a playlist automatically.
  */

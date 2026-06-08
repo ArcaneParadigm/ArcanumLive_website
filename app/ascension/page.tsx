@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import PageShell from '@/components/layout/PageShell'
 import AscensionChamberHub from '@/components/screensaver/AscensionChamberHub'
 import { featuredWorlds } from '@/lib/data/worlds'
-import { discoverRealmAudio, discoverRealmCardImage } from '@/lib/utils/realmImages'
+import { discoverRealmAudio, discoverRealmCardImage, discoverRealmSequence } from '@/lib/utils/realmImages'
 
 export const metadata: Metadata = {
   title: 'Ascension Chamber — Living Visualizer & Immersive Portal',
@@ -32,9 +32,15 @@ export default function ScreensaverPage() {
       .map((w) => [w.slug, discoverRealmCardImage(w.slug!)])
   ) as Record<string, string | null>
 
+  const sequenceMap = Object.fromEntries(
+    featuredWorlds
+      .filter((w) => w.slug)
+      .map((w) => [w.slug, discoverRealmSequence(w.slug!)])
+  ) as Record<string, string[]>
+
   return (
     <PageShell noHeader>
-      <AscensionChamberHub audioMap={audioMap} cardImages={cardImages} />
+      <AscensionChamberHub audioMap={audioMap} cardImages={cardImages} sequenceMap={sequenceMap} />
     </PageShell>
   )
 }
