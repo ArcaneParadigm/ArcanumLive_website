@@ -8,15 +8,21 @@ When given a set of images for a realm (e.g. "here are 30 images for ai-divine")
 
 ```
 public/realms/[slug]/
-  gallery/        ← hero gallery images (all 3 pages use these for Ken Burns)
+  gallery/        ← ALL frames that play in Ken Burns on all 3 pages (Realms, Asc, card world)
   lore/           ← lore chapter images (card world only)
   characters/     ← character images (card world only)
   audio/          ← WAV/MP3 tracks (all 3 pages)
-  seq/            ← (reserved for raw frame sequences — NOT currently used)
-  card.jpg        ← single card thumbnail image (optional, falls back to gallery[0])
+  seq/            ← master copy of raw sequence frames (source — copy all to gallery/ too)
+  card.jpg        ← single card thumbnail image
 ```
 
-Drop images into `public/realms/[slug]/gallery/` — everything is auto-discovered at build time. No code changes needed.
+## Seq Workflow (when given a new frame sequence)
+
+1. Copy ALL frames → `public/realms/[slug]/seq/` (master archive)
+2. Copy ALL frames → `public/realms/[slug]/gallery/` (this is what Ken Burns plays)
+3. Done — all 3 pages auto-discover gallery/ and play the full sequence
+
+Ken Burns cycles through every image in gallery/ in filename sort order. The speed slider (3–30s per frame) controls playback rate. All 300+ frames will play through continuously.
 
 ---
 
