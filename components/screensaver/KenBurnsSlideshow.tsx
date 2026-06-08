@@ -7,6 +7,8 @@ interface KenBurnsSlideshowProps {
   images: string[]
   /** Seconds per image — default 10, range 5–30 */
   secPerImage?: number
+  /** Fade/scale transition duration in seconds — default 2.4 */
+  fadeDur?: number
   className?: string
   style?: React.CSSProperties
 }
@@ -25,6 +27,7 @@ const KB_VARIANTS = [
 export default function KenBurnsSlideshow({
   images,
   secPerImage = 10,
+  fadeDur = 2.4,
   className,
   style,
 }: KenBurnsSlideshowProps) {
@@ -61,10 +64,10 @@ export default function KenBurnsSlideshow({
           animate={{ opacity: 1,  scale: kbv.animate.scale, x: kbv.animate.x, y: kbv.animate.y }}
           exit={{ opacity: 0 }}
           transition={{
-            opacity: { duration: 2.4, ease: 'easeInOut' },
-            scale:   { duration: secPerImage + 2, ease: 'linear' },
-            x:       { duration: secPerImage + 2, ease: 'linear' },
-            y:       { duration: secPerImage + 2, ease: 'linear' },
+            opacity: { duration: fadeDur, ease: 'easeInOut' },
+            scale:   { duration: secPerImage * (fadeDur / 2.4), ease: 'linear' },
+            x:       { duration: secPerImage * (fadeDur / 2.4), ease: 'linear' },
+            y:       { duration: secPerImage * (fadeDur / 2.4), ease: 'linear' },
           }}
         />
       </AnimatePresence>
