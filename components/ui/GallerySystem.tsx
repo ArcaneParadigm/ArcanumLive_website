@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import KenBurnsSlideshow from '@/components/screensaver/KenBurnsSlideshow'
+import { playDeepGong } from '@/lib/utils/crystalSound'
 
 export interface GalleryImage {
   id: string
@@ -36,9 +37,12 @@ export default function GallerySystem({
 }: GallerySystemProps) {
   const [activeIdx, setActiveIdx] = useState(0)
   const [hovered, setHovered] = useState(false)
+  const [isPanelHovered, setIsPanelHovered] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null) // index or null
   const [mounted, setMounted] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const panelTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const thumbStripRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -50,6 +54,27 @@ export default function GallerySystem({
     }, MORPH_INTERVAL)
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [kenBurns, isStatic, hovered, images.length])
+
+  // isStatic panel: auto-cycle while hovered
+  useEffect(() => {
+    if (!isStatic) return
+    if (isPanelHovered && images.length > 1) {
+      panelTimerRef.current = setInterval(() => {
+        setActiveIdx(i => (i + 1) % images.length)
+      }, 2400)
+    } else {
+      if (panelTimerRef.current) { clearInterval(panelTimerRef.current); panelTimerRef.current = null }
+    }
+    return () => { if (panelTimerRef.current) clearInterval(panelTimerRef.current) }
+  }, [isStatic, isPanelHovered, images.length])
+
+  // Scroll active thumbnail into view in strip
+  useEffect(() => {
+    if (!isPanelHovered || !thumbStripRef.current) return
+    const strip = thumbStripRef.current
+    const btn = strip.children[activeIdx] as HTMLElement | undefined
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [activeIdx, isPanelHovered])
 
   // Keyboard nav for lightbox
   const handleKey = useCallback((e: KeyboardEvent) => {
@@ -77,14 +102,31 @@ export default function GallerySystem({
   return (
     <>
       <div
-        className={`relative overflow-hidden group ${fullWidth ? '' : 'rounded-xl'}`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        className={`${fullWidth ? '' : 'rounded-xl'} ${isStatic ? '' : 'relative overflow-hidden'} group`}
+        onMouseEnter={() => {
+          setHovered(true)
+          if (isStatic) {
+            setIsPanelHovered(true)
+            playDeepGong()
+          }
+        }}
+        onMouseLeave={() => {
+          setHovered(false)
+          if (isStatic) setIsPanelHovered(false)
+        }}
       >
         {/* ── Main display ── */}
         <div
           className="relative overflow-hidden cursor-pointer"
-          style={{ aspectRatio }}
+          style={{
+            aspectRatio,
+            borderRadius: fullWidth ? undefined : 12,
+            transform: isStatic && isPanelHovered ? 'scale(1.03)' : 'scale(1)',
+            transition: 'transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease',
+            boxShadow: isStatic && isPanelHovered
+              ? `0 0 0 1px ${accentColor}60, 0 0 28px ${accentColor}45, 0 0 60px ${accentColor}20`
+              : `inset 0 0 0 1px ${accentColor}20`,
+          }}
           onClick={() => setLightbox(activeIdx)}
         >
           {/* Ken Burns mode */}
@@ -110,7 +152,7 @@ export default function GallerySystem({
                   initial={{ opacity: 0, scale: 1.05 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: isStatic ? 0 : 1.2 }}
+                  transition={{ duration: isStatic ? 0.6 : 1.2 }}
                 />
               ) : (
                 <motion.div
@@ -141,14 +183,53 @@ export default function GallerySystem({
             </div>
           )}
 
-          {/* Inner border rim */}
-          <div
-            className="absolute inset-0 rounded-xl pointer-events-none"
-            style={{ boxShadow: `inset 0 0 0 1px ${accentColor}20` }}
-          />
         </div>
 
-        {/* ── Hover thumbnail strip (not shown in isStatic or kenBurns mode) ── */}
+        {/* ── isStatic panel: thumbnail strip below image, visible on hover ── */}
+        {isStatic && images.length > 1 && (
+          <AnimatePresence>
+            {isPanelHovered && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -3 }}
+                transition={{ duration: 0.28 }}
+                style={{ background: 'rgba(8,6,14,0.88)', backdropFilter: 'blur(10px)', borderTop: `1px solid ${accentColor}20` }}
+                className="rounded-b-xl overflow-hidden px-2 py-2"
+              >
+                <div
+                  ref={thumbStripRef}
+                  className="flex gap-1.5 overflow-x-auto scrollbar-none"
+                >
+                  {images.filter(img => img.src).map((img, i) => {
+                    const realIdx = images.indexOf(img)
+                    const isActive = realIdx === activeIdx
+                    return (
+                      <button
+                        key={img.id}
+                        onClick={(e) => { e.stopPropagation(); setActiveIdx(realIdx) }}
+                        className="shrink-0 rounded overflow-hidden transition-all duration-300"
+                        style={{
+                          width: 54,
+                          height: 36,
+                          border: isActive ? `1.5px solid ${accentColor}` : `1px solid rgba(255,255,255,0.08)`,
+                          boxShadow: isActive ? `0 0 10px ${accentColor}70, 0 0 4px ${accentColor}40` : 'none',
+                          opacity: isActive ? 1 : 0.48,
+                          transform: isActive ? 'scale(1.08)' : 'scale(1)',
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        <img src={img.src} alt="" className="w-full h-full object-cover" />
+                      </button>
+                    )
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+
+        {/* ── Hover thumbnail strip (non-isStatic, non-kenBurns mode) ── */}
         {!isStatic && !kenBurns && (
           <AnimatePresence>
             {hovered && images.length > 1 && (

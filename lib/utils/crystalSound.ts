@@ -101,6 +101,59 @@ export function playCrystalBowl(color: string, volume = 0.04) {
   }
 }
 
+/**
+ * Deep gong strike — used for lore/character panel hover.
+ * Low G2 (~98 Hz) with longer decay and heavy echo, feels like a temple bowl.
+ */
+export function playDeepGong(volume = 0.055) {
+  if (typeof window === 'undefined') return
+  const key = '__deep_gong__'
+  const now = Date.now()
+  if (lastPlayTime[key] && now - lastPlayTime[key] < 400) return
+  lastPlayTime[key] = now
+  try {
+    const ctx = getCtx()
+    const t = ctx.currentTime
+    const freq = 97.999 // G2
+
+    const master = ctx.createGain()
+    const finalVol = volume * _volumeMultiplier
+    master.gain.setValueAtTime(0, t)
+    master.gain.linearRampToValueAtTime(finalVol, t + 0.06)
+    master.gain.exponentialRampToValueAtTime(0.001, t + 5.5)
+    master.connect(ctx.destination)
+
+    const partials = [
+      { ratio: 1,     amp: 0.65 },
+      { ratio: 2.756, amp: 0.20 },
+      { ratio: 5.404, amp: 0.08 },
+      { ratio: 1.002, amp: 0.07 }, // subtle beating
+    ]
+    partials.forEach(({ ratio, amp }) => {
+      const osc = ctx.createOscillator()
+      const g   = ctx.createGain()
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(freq * ratio, t)
+      osc.frequency.linearRampToValueAtTime(freq * ratio * 1.0005, t + 0.5)
+      g.gain.setValueAtTime(amp, t)
+      osc.connect(g)
+      g.connect(master)
+      osc.start(t)
+      osc.stop(t + 6)
+    })
+
+    // Long reverb tail
+    const delay = ctx.createDelay(0.6)
+    delay.delayTime.setValueAtTime(0.28, t)
+    const echoGain = ctx.createGain()
+    echoGain.gain.setValueAtTime(0.22, t)
+    echoGain.gain.exponentialRampToValueAtTime(0.001, t + 4.5)
+    master.connect(delay)
+    delay.connect(echoGain)
+    echoGain.connect(ctx.destination)
+  } catch { /* AudioContext blocked */ }
+}
+
 /** Call once on first user interaction to unlock AudioContext early */
 export function unlockAudio() {
   if (typeof window === 'undefined') return
