@@ -121,7 +121,6 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   const [mounted, setMounted]         = useState(false)
   const [bgColorIdx, setBgColorIdx]   = useState(0)
   const [secPerImage, setSecPerImage] = useState(10)
-  const [fadeDur, setFadeDur] = useState(2.4)
 
   const audioRef    = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -341,7 +340,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           const galleryImgs = imageMap[slug] ?? []
           if (galleryImgs.length > 0) return (
             <div className="absolute inset-0">
-              <KenBurnsSlideshow key={`${slug}-${activationCount}`} images={galleryImgs} secPerImage={secPerImage} fadeDur={fadeDur} className="absolute inset-0" />
+              <KenBurnsSlideshow key={`${slug}-${activationCount}`} images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
             </div>
           )
@@ -367,29 +366,17 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           style={{ background: 'linear-gradient(to top, #08060e, transparent)' }}
         />
 
-        {/* Sliders — bottom right */}
-        <div className="absolute bottom-3 right-4 z-20 flex items-center gap-4 select-none"
+        {/* Speed slider — bottom right */}
+        <div className="absolute bottom-3 right-4 z-20 flex items-center gap-2 select-none"
           style={{ opacity: 0.7 }}>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[8px] tracking-widest uppercase" style={{ color: accent }}>Fade</span>
-            <input
-              type="range" min={0.3} max={8} step={0.1} value={fadeDur}
-              onChange={e => setFadeDur(Number(e.target.value))}
-              className="w-16 h-1 cursor-pointer appearance-none rounded-full"
-              style={{ accentColor: accent }}
-            />
-            <span className="text-[8px] font-mono" style={{ color: accent, minWidth: 28 }}>{fadeDur.toFixed(1)}s</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[8px] tracking-widest uppercase" style={{ color: accent }}>Speed</span>
-            <input
-              type="range" min={5} max={30} step={1} value={secPerImage}
-              onChange={e => setSecPerImage(Number(e.target.value))}
-              className="w-16 h-1 cursor-pointer appearance-none rounded-full"
-              style={{ accentColor: accent }}
-            />
-            <span className="text-[8px] font-mono" style={{ color: accent, minWidth: 24 }}>{secPerImage}s</span>
-          </div>
+          <span className="text-[8px] tracking-widest uppercase" style={{ color: accent }}>Speed</span>
+          <input
+            type="range" min={5} max={30} step={1} value={secPerImage}
+            onChange={e => setSecPerImage(Number(e.target.value))}
+            className="w-20 h-1 cursor-pointer appearance-none rounded-full"
+            style={{ accentColor: accent }}
+          />
+          <span className="text-[8px] font-mono" style={{ color: accent, minWidth: 24 }}>{secPerImage}s</span>
         </div>
       </div>
 
