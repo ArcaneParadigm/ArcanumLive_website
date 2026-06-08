@@ -126,9 +126,12 @@ export function discoverRealmSequence(slug: string): string[] {
  * Drop mp3/wav/ogg/flac/m4a files in → they appear as a playlist automatically.
  */
 export function discoverRealmAudio(slug: string): DiscoveredAudioTrack[] {
-  const dir = path.join(process.cwd(), 'public', 'audio', 'realms', slug)
-  const urlBase = `/audio/realms/${slug}`
-  return listAudio(dir, urlBase)
+  // Check both locations: public/audio/realms/[slug]/ and public/realms/[slug]/audio/
+  const dir1 = path.join(process.cwd(), 'public', 'audio', 'realms', slug)
+  const dir2 = path.join(process.cwd(), 'public', 'realms', slug, 'audio')
+  if (fs.existsSync(dir1)) return listAudio(dir1, `/audio/realms/${slug}`)
+  if (fs.existsSync(dir2)) return listAudio(dir2, `/realms/${slug}/audio`)
+  return []
 }
 
 /**

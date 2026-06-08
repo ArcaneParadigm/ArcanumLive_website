@@ -60,7 +60,7 @@ function AscensionRealmCard({
 
   return (
     <motion.div
-      className="shrink-0 rounded-lg overflow-hidden flex flex-col cursor-pointer"
+      className="shrink-0 rounded-lg overflow-hidden flex flex-col"
       style={{
         width: 168,
         aspectRatio: '2/3',
@@ -76,10 +76,9 @@ function AscensionRealmCard({
       transition={{ duration: 0.15 }}
       onMouseEnter={() => { setHov(true); playCrystalBowl(color, 0.018) }}
       onMouseLeave={() => setHov(false)}
-      onClick={onActivate}
     >
-      {/* Image fills almost the whole card */}
-      <div className="flex-1 relative" style={{ minHeight: 0 }}>
+      {/* Image fills almost the whole card — clicking activates player */}
+      <div className="flex-1 relative cursor-pointer" style={{ minHeight: 0 }} onClick={onActivate}>
         {cardImage ? (
           <img src={cardImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center" />
         ) : (
@@ -107,35 +106,37 @@ function AscensionRealmCard({
         <div className="absolute top-1 left-1 w-2 h-2" style={{ borderTop: `1px solid ${color}70`, borderLeft: `1px solid ${color}70` }} />
       </div>
 
-      {/* Hover bar — title + description + Enter */}
+      {/* Bottom bar — title + description on hover + gold Enter button */}
       <div
-        className="shrink-0 px-2 py-1.5"
+        className="shrink-0 px-2 pt-1 pb-1.5"
         style={{ background: isActive ? `${color}28` : 'rgba(7,5,15,0.92)', borderTop: `1px solid ${color}35` }}
       >
         <p
-          className="font-cinzel truncate text-center leading-none mb-0.5"
+          className="font-cinzel truncate text-center leading-none mb-1"
           style={{ fontSize: 11, color: isActive ? color : 'rgba(255,255,255,0.85)', letterSpacing: '0.05em' }}
         >
           {world.title}
         </p>
         {hov && world.short_description && (
-          <p className="text-[7px] text-white/40 leading-tight text-center truncate mb-1">
+          <p className="text-[7px] text-white/40 leading-tight text-center truncate mb-1.5" style={{ lineHeight: 1.3 }}>
             {world.short_description}
           </p>
         )}
         <button
           onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
-          className="w-full text-center transition-colors"
+          className="w-full text-center py-0.5 rounded transition-all"
           style={{
-            fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase',
-            fontFamily: 'Cinzel, serif', fontWeight: 600,
-            borderTop: `1px solid ${color}20`,
-            paddingTop: 4,
-            color: hov ? color : 'rgba(255,255,255,0.3)',
-            background: 'transparent',
+            fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
+            fontFamily: 'Cinzel, serif', fontWeight: 700,
+            background: hov
+              ? 'linear-gradient(135deg, #6b4411 0%, #c9973a 35%, #f5d06e 55%, #c9973a 75%, #6b4411 100%)'
+              : `${color}18`,
+            color: hov ? '#07050f' : `${color}80`,
+            border: `1px solid ${hov ? '#c9973a' : color + '30'}`,
+            boxShadow: hov ? `0 0 8px #c9973a50` : 'none',
           }}
         >
-          Enter →
+          Enter
         </button>
       </div>
     </motion.div>
