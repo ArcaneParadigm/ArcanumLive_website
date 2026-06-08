@@ -32,10 +32,17 @@ export default function KenBurnsSlideshow({
   className,
   style,
 }: KenBurnsSlideshowProps) {
-  const [idx, setIdx]       = useState(0)
+  const [idx, setIdx]         = useState(0)
   const [variant, setVariant] = useState(0)
-  const [speed, setSpeed]   = useState(secPerImage)
+  const [speed, setSpeed]     = useState(secPerImage)
+  const [restartKey, setRestartKey] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  function applySpeed(s: number) {
+    setSpeed(s)
+    setVariant(Math.floor(Math.random() * KB_VARIANTS.length))
+    setRestartKey(k => k + 1)  // force current image to remount with new duration
+  }
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -58,7 +65,7 @@ export default function KenBurnsSlideshow({
     <div className={`relative overflow-hidden ${className ?? ''}`} style={style}>
       <AnimatePresence mode="sync">
         <motion.img
-          key={`${idx}-${images[idx]}`}
+          key={`${idx}-${images[idx]}-${restartKey}`}
           src={images[idx]}
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-center"
@@ -88,7 +95,7 @@ export default function KenBurnsSlideshow({
           <span className="text-[8px] tracking-widest uppercase" style={{ color: accentColor }}>Speed</span>
           <input
             type="range" min={3} max={30} step={1} value={speed}
-            onChange={e => setSpeed(Number(e.target.value))}
+            onChange={e => applySpeed(Number(e.target.value))}
             className="w-20 h-1 cursor-pointer appearance-none rounded-full"
             style={{ accentColor }}
           />
