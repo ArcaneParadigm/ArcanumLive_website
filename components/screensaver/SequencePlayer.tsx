@@ -77,10 +77,10 @@ export default function SequencePlayer({
     function tick(now: number) {
       rafId = requestAnimationFrame(tick)
 
-      // Sync canvas size to display size
+      // Sync canvas size to display size (round to avoid float oscillation clearing canvas)
       const dpr = window.devicePixelRatio || 1
-      const dispW = canvas!.clientWidth * dpr
-      const dispH = canvas!.clientHeight * dpr
+      const dispW = Math.round(canvas!.clientWidth * dpr)
+      const dispH = Math.round(canvas!.clientHeight * dpr)
       if (canvas!.width !== dispW || canvas!.height !== dispH) {
         canvas!.width = dispW
         canvas!.height = dispH

@@ -3,7 +3,7 @@ import PageShell from '@/components/layout/PageShell'
 import RealmsPlayer from '@/components/realms/RealmsPlayer'
 import RealmsPortraitGrid from '@/components/realms/RealmsPortraitGrid'
 import { featuredWorlds } from '@/lib/data/worlds'
-import { discoverRealmAudio, discoverRealmCardImage, discoverRealmImages } from '@/lib/utils/realmImages'
+import { discoverRealmAudio, discoverRealmCardImage, discoverRealmImages, discoverRealmSequence } from '@/lib/utils/realmImages'
 
 export const metadata: Metadata = {
   title: 'Realms — Mythic IP Universes & Cinematic Worlds',
@@ -39,9 +39,15 @@ export default function WorldsPage() {
       .map((w) => [w.slug, discoverRealmImages(w.slug!).gallery])
   ) as Record<string, string[]>
 
+  const sequenceMap = Object.fromEntries(
+    featuredWorlds
+      .filter((w) => w.slug)
+      .map((w) => [w.slug, discoverRealmSequence(w.slug!)])
+  ) as Record<string, string[]>
+
   return (
     <PageShell noHeader>
-      <RealmsPlayer audioMap={audioMap} />
+      <RealmsPlayer audioMap={audioMap} sequenceMap={sequenceMap} imageMap={galleryImages} />
       <RealmsPortraitGrid worlds={featuredWorlds} cardImages={cardImages} galleryImages={galleryImages} />
     </PageShell>
   )
