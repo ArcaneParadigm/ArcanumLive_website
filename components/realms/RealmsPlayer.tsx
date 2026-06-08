@@ -339,6 +339,10 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
             <div className="absolute inset-0">
               <SequencePlayer frames={seqFrames} fps={12} fadeDur={0.4} className="w-full h-full" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
+              {/* Debug: seq frame count — remove once confirmed working */}
+              <div className="absolute top-2 left-3 text-[8px] font-mono pointer-events-none" style={{ color: `${accent}60` }}>
+                seq {seqFrames.length}f
+              </div>
             </div>
           )
           if (galleryImgs.length > 0) return (
