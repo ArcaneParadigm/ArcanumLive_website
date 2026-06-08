@@ -94,6 +94,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
     PLAYLISTS.map((_, i) => ({ id: mkId(), worldIdx: i, visualMode: 'gallery_drift' as VisualMode }))
   )
   const [seqIdx, setSeqIdx] = useState(0)
+  const [activationCount, setActivationCount] = useState(0)
 
   // Drag-and-drop state
   const [dragFrom, setDragFrom]   = useState<number | null>(null)
@@ -103,11 +104,11 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   const [showAddMenu, setShowAddMenu] = useState(false)
   const addMenuRef = useRef<HTMLDivElement>(null)
 
-  // External realm activation (from Ascension Chamber card click)
+  // External realm activation (from card click on any page)
   useEffect(() => {
     if (!activeSlug) return
     const idx = sequence.findIndex(e => PLAYLISTS[e.worldIdx].world.slug === activeSlug)
-    if (idx >= 0 && idx !== seqIdx) { setSeqIdx(idx); setTrackIdx(0); setProgress(0) }
+    if (idx >= 0) { setSeqIdx(idx); setTrackIdx(0); setProgress(0); setActivationCount(c => c + 1) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlug])
 
@@ -263,7 +264,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ background: '#08060e' }}>
+    <div id="realms-player" className="relative w-full overflow-hidden" style={{ background: '#08060e' }}>
 
       {/* Audio element */}
       {currentTrack.url && <audio ref={audioRef} src={currentTrack.url} onEnded={nextTrack} />}
@@ -339,7 +340,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           const galleryImgs = imageMap[slug] ?? []
           if (galleryImgs.length > 0) return (
             <div className="absolute inset-0">
-              <KenBurnsSlideshow key={slug} images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
+              <KenBurnsSlideshow key={`${slug}-${activationCount}`} images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
             </div>
           )

@@ -35,7 +35,10 @@ export default function RealmsPageHub({ worlds, cardImages, galleryImages, audio
         worlds={worlds}
         cardImages={cardImages}
         galleryImages={galleryImages}
-        onActivate={(slug) => setActiveSlug(slug)}
+        onActivate={(slug) => {
+          setActiveSlug(slug)
+          document.getElementById('realms-player')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }}
       />
     </>
   )
