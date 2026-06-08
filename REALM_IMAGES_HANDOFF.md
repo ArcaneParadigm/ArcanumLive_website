@@ -18,11 +18,40 @@ public/realms/[slug]/
 
 ## Seq Workflow (when given a new frame sequence)
 
+**Source folder for all new sequences:** `C:\Users\arcan\Downloads\Claude Code\website_added\Seq`
+
+### Step 1 — Copy frames (all 3 pages)
 1. Copy ALL frames → `public/realms/[slug]/seq/` (master archive)
-2. Copy ALL frames → `public/realms/[slug]/gallery/` (this is what Ken Burns plays)
-3. Done — all 3 pages auto-discover gallery/ and play the full sequence
+2. Copy ALL frames → `public/realms/[slug]/gallery/` (this is what Ken Burns plays on all 3 pages)
+3. If a card thumbnail image was provided, copy it → `public/realms/[slug]/card.jpg`
 
 Ken Burns cycles through every image in gallery/ in filename sort order. The speed slider (3–30s per frame) controls playback rate. All 300+ frames will play through continuously.
+
+### Step 2 — Curate lore images (card world page only)
+1. Read the 3 lore chapter captions in `WORLD_LORE` in `app/realms/[slug]/page.tsx` to understand each chapter's theme
+2. Scan seq frames visually — read any written text/context in the images, identify visual themes
+3. Match frames to chapters — assign based on story/visual fit:
+   - Ch1 frames → name `01–11`
+   - Ch2 frames → name `12–22`
+   - Ch3 frames → name `23–33`
+4. Aim for variety: mix of close-up, wide, atmospheric within each chapter
+5. Copy selected files to `public/realms/[slug]/lore/` with prefix naming (e.g. `01-original-name.jpg`)
+6. **Target: 33 lore images** — exactly 11 per chapter
+
+### Step 3 — Curate character images (card world page only)
+1. Scan all seq frames for strong character shots
+2. Selection rules:
+   - Subject fills ≥40% of frame height — centered/prominent
+   - Clear character identity — face visible or strong silhouette
+   - Diverse poses/characters if multiple exist in the realm
+   - **Reject:** wide establishing shots, busy crowd scenes, frames with text overlays, non-human-character frames (creatures/entities only)
+3. Copy selected files to `public/realms/[slug]/characters/` with prefix naming (e.g. `01-original-name.jpg`)
+4. **Target: 20 images** (wider strip needs more to fill — use 20)
+
+### Step 4 — Verify
+- All 3 pages auto-discover `gallery/` — no code changes needed
+- Lore and characters auto-discovered — no code changes needed
+- Realm must exist in `lib/data/worlds.ts` `featuredWorlds` array with matching `slug`
 
 ---
 
