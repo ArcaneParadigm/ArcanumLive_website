@@ -15,6 +15,7 @@ interface AscensionChamberHubProps {
   audioMap?: Record<string, DiscoveredTrack[]>
   cardImages?: Record<string, string | null>
   sequenceMap?: Record<string, string[]>
+  imageMap?: Record<string, string[]>
 }
 
 const GOLD   = '#c9973a'
@@ -296,7 +297,7 @@ function MusicRow({ album, index, isActive, onClick }: {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenceMap = {} }: AscensionChamberHubProps) {
+export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenceMap = {}, imageMap = {} }: AscensionChamberHubProps) {
   const [activeMode,   setActiveMode]   = useState<string | null>(null)
   const [activeAlbum,  setActiveAlbum]  = useState<string | null>(null)
   const [activePreset, setActivePreset] = useState<string>('')
@@ -356,7 +357,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
       </div>
 
       {/* ── Player ── */}
-      <RealmsPlayer audioMap={audioMap} sequenceMap={sequenceMap} compact activeSlug={activeRealm ?? undefined} />
+      <RealmsPlayer audioMap={audioMap} sequenceMap={sequenceMap} imageMap={imageMap} compact activeSlug={activeRealm ?? undefined} />
 
       {/* ── Visual modes ── */}
       <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(168,85,247,0.12)', background: '#07050f' }}>

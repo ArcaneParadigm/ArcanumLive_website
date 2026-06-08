@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { featuredWorlds } from '@/lib/data/worlds'
 import type { VisualMode } from '@/types'
 import SequencePlayer from '@/components/screensaver/SequencePlayer'
+import KenBurnsSlideshow from '@/components/screensaver/KenBurnsSlideshow'
 
 export interface DiscoveredTrack {
   id: string
@@ -16,6 +17,7 @@ export interface DiscoveredTrack {
 interface RealmsPlayerProps {
   audioMap?: Record<string, DiscoveredTrack[]>
   sequenceMap?: Record<string, string[]>
+  imageMap?: Record<string, string[]>
   compact?: boolean
   activeSlug?: string
 }
@@ -84,7 +86,7 @@ const BG_CYCLE_MS = 4200
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function RealmsPlayer({ audioMap, sequenceMap = {}, compact, activeSlug }: RealmsPlayerProps) {
+export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}, compact, activeSlug }: RealmsPlayerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PLAYLISTS = useMemo(() => buildPlaylists(audioMap), [])
 
@@ -118,6 +120,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, compact, acti
   const [progress, setProgress]       = useState(0)
   const [mounted, setMounted]         = useState(false)
   const [bgColorIdx, setBgColorIdx]   = useState(0)
+  const [secPerImage, setSecPerImage] = useState(10)
 
   const audioRef    = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -327,16 +330,24 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, compact, acti
       {/* ── Imagery band ── */}
       <div className="relative z-10 w-full" style={{ aspectRatio: '21/7', minHeight: 240 }}>
 
-        {/* Sequence player — fills band when active realm has frames */}
+        {/* Imagery: sequence → Ken Burns gallery → gradient fallback */}
         {(() => {
           const slug = currentPlaylist.world.slug ?? ''
-          const frames = sequenceMap[slug] ?? []
-          return frames.length > 0 ? (
+          const seqFrames = sequenceMap[slug] ?? []
+          const galleryImgs = imageMap[slug] ?? []
+          if (seqFrames.length > 0) return (
             <div className="absolute inset-0">
-              <SequencePlayer frames={frames} fps={12} fadeDur={0.4} className="w-full h-full" />
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 60%, #08060e 100%)' }} />
+              <SequencePlayer frames={seqFrames} fps={12} fadeDur={0.4} className="w-full h-full" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
             </div>
-          ) : (
+          )
+          if (galleryImgs.length > 0) return (
+            <div className="absolute inset-0">
+              <KenBurnsSlideshow images={galleryImgs} secPerImage={secPerImage} className="absolute inset-0" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 55%, #08060e 100%)' }} />
+            </div>
+          )
+          return (
             <AnimatePresence mode="sync">
               <motion.div key={`img-${worldIdx}`} className="absolute inset-0"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}
@@ -393,6 +404,19 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, compact, acti
         <div className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
           style={{ background: 'linear-gradient(to top, #08060e, transparent)' }}
         />
+
+        {/* Slide duration slider — bottom right */}
+        <div className="absolute bottom-3 right-4 z-20 flex items-center gap-2 select-none"
+          style={{ opacity: 0.7 }}>
+          <span className="text-[8px] tracking-widest uppercase" style={{ color: accent }}>Speed</span>
+          <input
+            type="range" min={5} max={30} step={1} value={secPerImage}
+            onChange={e => setSecPerImage(Number(e.target.value))}
+            className="w-20 h-1 cursor-pointer appearance-none rounded-full"
+            style={{ accentColor: accent }}
+          />
+          <span className="text-[8px] font-mono" style={{ color: accent, minWidth: 24 }}>{secPerImage}s</span>
+        </div>
       </div>
 
       {/* ── SEQUENCER ── */}
