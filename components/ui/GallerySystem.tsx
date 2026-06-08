@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import KenBurnsSlideshow from '@/components/screensaver/KenBurnsSlideshow'
 
 export interface GalleryImage {
   id: string
@@ -16,6 +17,9 @@ interface GallerySystemProps {
   aspectRatio?: string  // for the main slot, e.g. "16/9" or "21/9"
   label?: string        // e.g. "Lore Gallery"
   fullWidth?: boolean   // removes rounded corners + max-width for edge-to-edge use
+  kenBurns?: boolean    // use Ken Burns animated slideshow for main display
+  isStatic?: boolean    // no auto-morph, no thumbnail strip (lore/character panels)
+  secPerImage?: number  // Ken Burns speed in seconds (default 10)
 }
 
 const MORPH_INTERVAL = 3800
@@ -26,6 +30,9 @@ export default function GallerySystem({
   aspectRatio = '16/9',
   label,
   fullWidth = false,
+  kenBurns = false,
+  isStatic = false,
+  secPerImage = 10,
 }: GallerySystemProps) {
   const [activeIdx, setActiveIdx] = useState(0)
   const [hovered, setHovered] = useState(false)
@@ -35,14 +42,14 @@ export default function GallerySystem({
 
   useEffect(() => { setMounted(true) }, [])
 
-  // Auto-morph when not hovered
+  // Auto-morph when not hovered (disabled for kenBurns and isStatic modes)
   useEffect(() => {
-    if (hovered || images.length <= 1) return
+    if (kenBurns || isStatic || hovered || images.length <= 1) return
     timerRef.current = setInterval(() => {
       setActiveIdx((i) => (i + 1) % images.length)
     }, MORPH_INTERVAL)
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
-  }, [hovered, images.length])
+  }, [kenBurns, isStatic, hovered, images.length])
 
   // Keyboard nav for lightbox
   const handleKey = useCallback((e: KeyboardEvent) => {
@@ -64,6 +71,9 @@ export default function GallerySystem({
   const active = images[activeIdx]
   const lbImage = lightbox !== null ? images[lightbox] : null
 
+  // Collect real image URLs for Ken Burns
+  const realImageUrls = images.map(img => img.src).filter(Boolean) as string[]
+
   return (
     <>
       <div
@@ -71,13 +81,23 @@ export default function GallerySystem({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* ── Main morphing display ── */}
+        {/* ── Main display ── */}
         <div
           className="relative overflow-hidden cursor-pointer"
           style={{ aspectRatio }}
           onClick={() => setLightbox(activeIdx)}
         >
-          {mounted && (
+          {/* Ken Burns mode */}
+          {kenBurns && realImageUrls.length > 0 && (
+            <KenBurnsSlideshow
+              images={realImageUrls}
+              secPerImage={secPerImage}
+              className="absolute inset-0 w-full h-full"
+            />
+          )}
+
+          {/* Standard morph / static mode */}
+          {!kenBurns && mounted && (
             <AnimatePresence mode="sync">
               {active.src ? (
                 <motion.img
@@ -88,7 +108,7 @@ export default function GallerySystem({
                   initial={{ opacity: 0, scale: 1.05 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 1.2 }}
+                  transition={{ duration: isStatic ? 0 : 1.2 }}
                 />
               ) : (
                 <motion.div
@@ -112,24 +132,8 @@ export default function GallerySystem({
             </AnimatePresence>
           )}
 
-          {/* Hover overlay — expand icon + count */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30 backdrop-blur-[1px]">
-            <div
-              className="flex items-center gap-2 px-4 py-2 rounded-full border text-xs tracking-widest uppercase"
-              style={{
-                borderColor: `${accentColor}60`,
-                background: 'rgba(8,6,14,0.7)',
-                color: accentColor,
-              }}
-            >
-              <span>⊞</span>
-              <span>View Gallery</span>
-              <span style={{ color: `${accentColor}60` }}>({images.length})</span>
-            </div>
-          </div>
-
           {/* Caption bottom-left */}
-          {active.caption && (
+          {active && active.caption && (
             <div className="absolute bottom-3 left-4 text-white/40 text-xs tracking-widest uppercase pointer-events-none">
               {active.caption}
             </div>
@@ -142,63 +146,65 @@ export default function GallerySystem({
           />
         </div>
 
-        {/* ── Hover thumbnail strip ── */}
-        <AnimatePresence>
-          {hovered && images.length > 1 && (
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 z-20"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.25 }}
-            >
-              <div
-                className="flex gap-1.5 px-3 py-2 overflow-x-auto scrollbar-none"
-                style={{ background: 'rgba(8,6,14,0.85)', backdropFilter: 'blur(8px)' }}
+        {/* ── Hover thumbnail strip (not shown in isStatic or kenBurns mode) ── */}
+        {!isStatic && !kenBurns && (
+          <AnimatePresence>
+            {hovered && images.length > 1 && (
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 z-20"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.25 }}
               >
-                {images.map((img, i) => (
+                <div
+                  className="flex gap-1.5 px-3 py-2 overflow-x-auto scrollbar-none"
+                  style={{ background: 'rgba(8,6,14,0.85)', backdropFilter: 'blur(8px)' }}
+                >
+                  {images.map((img, i) => (
+                    <button
+                      key={img.id}
+                      onClick={(e) => { e.stopPropagation(); setActiveIdx(i); setLightbox(i) }}
+                      className="shrink-0 rounded overflow-hidden transition-all duration-200"
+                      style={{
+                        width: 56,
+                        height: 38,
+                        border: i === activeIdx ? `1px solid ${accentColor}` : '1px solid rgba(255,255,255,0.1)',
+                        opacity: i === activeIdx ? 1 : 0.55,
+                        background: img.src
+                          ? undefined
+                          : `${accentColor}15`,
+                      }}
+                    >
+                      {img.src ? (
+                        <img src={img.src} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-[8px]" style={{ color: `${accentColor}60` }}>{i + 1}</span>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+
+                  {/* Open all button */}
                   <button
-                    key={img.id}
-                    onClick={(e) => { e.stopPropagation(); setActiveIdx(i); setLightbox(i) }}
-                    className="shrink-0 rounded overflow-hidden transition-all duration-200"
+                    onClick={(e) => { e.stopPropagation(); setLightbox(0) }}
+                    className="shrink-0 rounded flex items-center justify-center text-[9px] tracking-widest uppercase transition-all duration-200 hover:opacity-100 opacity-70"
                     style={{
                       width: 56,
                       height: 38,
-                      border: i === activeIdx ? `1px solid ${accentColor}` : '1px solid rgba(255,255,255,0.1)',
-                      opacity: i === activeIdx ? 1 : 0.55,
-                      background: img.src
-                        ? undefined
-                        : `${accentColor}15`,
+                      border: `1px solid ${accentColor}30`,
+                      color: accentColor,
+                      background: `${accentColor}10`,
                     }}
                   >
-                    {img.src ? (
-                      <img src={img.src} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-[8px]" style={{ color: `${accentColor}60` }}>{i + 1}</span>
-                      </div>
-                    )}
+                    All
                   </button>
-                ))}
-
-                {/* Open all button */}
-                <button
-                  onClick={(e) => { e.stopPropagation(); setLightbox(0) }}
-                  className="shrink-0 rounded flex items-center justify-center text-[9px] tracking-widest uppercase transition-all duration-200 hover:opacity-100 opacity-70"
-                  style={{
-                    width: 56,
-                    height: 38,
-                    border: `1px solid ${accentColor}30`,
-                    color: accentColor,
-                    background: `${accentColor}10`,
-                  }}
-                >
-                  All
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
 
         {/* Label */}
         {label && (

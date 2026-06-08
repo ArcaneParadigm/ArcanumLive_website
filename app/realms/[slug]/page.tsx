@@ -340,7 +340,7 @@ export default async function WorldDetailPage({ params }: Props) {
       </section>
 
       {/* ── FULL-WIDTH GALLERY ── */}
-      <section className="relative overflow-hidden" style={{ background: '#08060e' }}>
+      <section id="realm-gallery" className="relative overflow-hidden" style={{ background: '#08060e' }}>
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: `linear-gradient(160deg, ${accent}12 0%, transparent 50%, ${accentAlt}08 100%)` }}
         />
@@ -350,6 +350,7 @@ export default async function WorldDetailPage({ params }: Props) {
           aspectRatio="21/9"
           label={worldTitle}
           fullWidth
+          kenBurns
         />
         <div className="absolute inset-x-0 bottom-0 h-12 pointer-events-none"
           style={{ background: 'linear-gradient(to top, #08060e, transparent)' }}
@@ -358,8 +359,9 @@ export default async function WorldDetailPage({ params }: Props) {
 
       {/* Action buttons */}
       <div className="flex flex-wrap justify-center gap-3 py-5" style={{ background: '#08060e' }}>
-        <GlassButton href="/ascension" variant="gold">Launch in Ascension Chamber</GlassButton>
+        <GlassButton href="/ascension" variant="gold">Ascension Chamber</GlassButton>
         <GlassButton href="/dome-shows" variant="silver">Dome Shows</GlassButton>
+        <GlassButton href="#realm-gallery" variant="silver">View Gallery</GlassButton>
       </div>
 
       {/* ══════════════════════════════════════════
@@ -408,6 +410,7 @@ export default async function WorldDetailPage({ params }: Props) {
                   accentColor={accent}
                   aspectRatio="16/10"
                   label={chapter.caption}
+                  isStatic
                 />
               </div>
               {/* Lore text */}
@@ -439,6 +442,7 @@ export default async function WorldDetailPage({ params }: Props) {
             accentColor={accent}
             aspectRatio="21/8"
             label="Character Gallery"
+            isStatic
           />
         </div>
       </section>
@@ -455,7 +459,7 @@ export default async function WorldDetailPage({ params }: Props) {
           Launch the Full Experience
         </h2>
         <div className="flex flex-wrap gap-3 justify-center">
-          <GlassButton href="/ascension" variant="gold">Open Ascension Chamber</GlassButton>
+          <GlassButton href="/ascension" variant="gold">Ascension Chamber</GlassButton>
           <GlassButton href="/realms" variant="silver">← All Realms</GlassButton>
         </div>
       </section>
