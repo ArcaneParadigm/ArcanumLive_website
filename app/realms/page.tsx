@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import PageShell from '@/components/layout/PageShell'
-import RealmsPlayer from '@/components/realms/RealmsPlayer'
-import RealmsPortraitGrid from '@/components/realms/RealmsPortraitGrid'
+import RealmsPageHub from '@/components/realms/RealmsPageHub'
 import { featuredWorlds } from '@/lib/data/worlds'
 import { discoverRealmAudio, discoverRealmCardImage, discoverRealmImages, discoverRealmSequence } from '@/lib/utils/realmImages'
 
@@ -47,8 +46,13 @@ export default function WorldsPage() {
 
   return (
     <PageShell noHeader>
-      <RealmsPlayer audioMap={audioMap} sequenceMap={sequenceMap} imageMap={galleryImages} />
-      <RealmsPortraitGrid worlds={featuredWorlds} cardImages={cardImages} galleryImages={galleryImages} />
+      <RealmsPageHub
+        worlds={featuredWorlds}
+        cardImages={cardImages}
+        galleryImages={galleryImages}
+        audioMap={audioMap}
+        sequenceMap={sequenceMap}
+      />
     </PageShell>
   )
 }

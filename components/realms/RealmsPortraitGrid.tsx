@@ -37,10 +37,10 @@ function OrnateRule() {
   )
 }
 
-// ── Portrait card — top area opens gallery, bottom button enters world ─────────
+// ── Portrait card — image activates player, Enter button enters world ─────────
 
 function RealmCard({
-  world, cardImage, galleryImages, hovered, onEnter, onOpenGallery,
+  world, cardImage, galleryImages, hovered, onEnter, onOpenGallery, onActivate,
 }: {
   world: Partial<IpWorld>
   cardImage?: string | null
@@ -48,6 +48,7 @@ function RealmCard({
   hovered: boolean
   onEnter: () => void
   onOpenGallery: () => void
+  onActivate?: () => void
 }) {
   const color = world.color_primary ?? GOLD
   const router = useRouter()
@@ -82,11 +83,11 @@ function RealmCard({
         transition={{ duration: 0.25 }}
       />
 
-      {/* TOP ZONE — click to navigate to full realm page */}
+      {/* TOP ZONE — click to activate player */}
       <div
         className="relative flex-1 cursor-pointer"
         style={{ minHeight: 0 }}
-        onClick={() => router.push(`/realms/${world.slug}`)}
+        onClick={onActivate}
       >
         {cardImage && (
           <img src={cardImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center" />
@@ -99,6 +100,13 @@ function RealmCard({
         {/* Corner marks */}
         <div className="absolute top-2 left-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}80`, borderLeft: `1px solid ${color}80` }} />
         <div className="absolute top-2 right-2 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}60`, borderRight: `1px solid ${color}60` }} />
+        {/* Activate hint on hover */}
+        {hovered && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 pointer-events-none">
+            <span className="text-white/80 text-base">▶</span>
+            <span className="text-[7px] tracking-widest uppercase" style={{ color: `${color}cc` }}>Activate</span>
+          </div>
+        )}
         {/* Title */}
         <div className="absolute bottom-0 inset-x-0 px-2.5 pb-1.5">
           <p
@@ -110,22 +118,25 @@ function RealmCard({
         </div>
       </div>
 
-      {/* BOTTOM ZONE — Enter World button */}
+      {/* BOTTOM ZONE — gold Enter button */}
       <button
-        onClick={() => router.push(`/realms/${world.slug}`)}
-        className="shrink-0 w-full flex items-center justify-center gap-1 py-1.5 transition-all"
+        onClick={(e) => { e.stopPropagation(); router.push(`/realms/${world.slug}`) }}
+        className="shrink-0 w-full flex items-center justify-center py-1 transition-all rounded-none"
         style={{
-          background: hovered ? `${color}28` : 'rgba(6,4,12,0.9)',
-          borderTop: `1px solid ${color}45`,
-          color: hovered ? color : 'rgba(255,255,255,0.65)',
-          fontSize: 8,
-          letterSpacing: '0.15em',
+          background: hovered
+            ? 'linear-gradient(135deg, #6b4411 0%, #c9973a 35%, #f5d06e 55%, #c9973a 75%, #6b4411 100%)'
+            : `${color}18`,
+          borderTop: `1px solid ${hovered ? '#c9973a' : color + '30'}`,
+          color: hovered ? '#07050f' : `${color}80`,
+          fontSize: 9,
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
           fontFamily: 'Cinzel, serif',
-          fontWeight: 600,
+          fontWeight: 700,
+          boxShadow: hovered ? '0 0 8px #c9973a50' : 'none',
         }}
       >
-        Enter World →
+        Enter
       </button>
     </motion.div>
   )
@@ -134,6 +145,7 @@ function RealmCard({
 // ── Info strip ────────────────────────────────────────────────────────────────
 
 function InfoStrip({ world }: { world: Partial<IpWorld> | null }) {
+  const router = useRouter()
   const color = world?.color_primary ?? GOLD
   return (
     <div
@@ -165,10 +177,25 @@ function InfoStrip({ world }: { world: Partial<IpWorld> | null }) {
           )}
           <span className="shrink-0 text-[8px]" style={{ color: `${GOLD}50` }}>◆</span>
           <p className="flex-1 text-xs truncate" style={{ color: 'rgba(255,255,255,0.88)' }}>{world.short_description}</p>
+          <button
+            onClick={() => router.push(`/realms/${world.slug}`)}
+            className="shrink-0 px-4 py-1 rounded font-cinzel font-bold transition-all"
+            style={{
+              background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 35%, #f5d06e 55%, #c9973a 75%, #6b4411 100%)',
+              color: '#07050f',
+              fontSize: 9,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              boxShadow: '0 0 8px #c9973a50',
+              border: '1px solid #c9973a',
+            }}
+          >
+            Enter
+          </button>
         </>
       ) : (
         <p className="text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.35)' }}>
-          Hover a realm · click image to open gallery · Enter World to explore
+          Hover a realm · click image to activate · Enter to explore
         </p>
       )}
     </div>
@@ -181,9 +208,10 @@ interface Props {
   worlds: Partial<IpWorld>[]
   cardImages: Record<string, string | null>
   galleryImages?: Record<string, string[]>
+  onActivate?: (slug: string) => void
 }
 
-export default function RealmsPortraitGrid({ worlds, cardImages, galleryImages = {} }: Props) {
+export default function RealmsPortraitGrid({ worlds, cardImages, galleryImages = {}, onActivate }: Props) {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null)
   const [gallerySlug, setGallerySlug]   = useState<string | null>(null)
   const router = useRouter()
@@ -227,6 +255,7 @@ export default function RealmsPortraitGrid({ worlds, cardImages, galleryImages =
                     hovered={hoveredSlug === w.slug}
                     onEnter={() => setHoveredSlug(w.slug ?? null)}
                     onOpenGallery={() => setGallerySlug(w.slug ?? null)}
+                    onActivate={() => w.slug && onActivate?.(w.slug)}
                   />
                 ))}
               </div>

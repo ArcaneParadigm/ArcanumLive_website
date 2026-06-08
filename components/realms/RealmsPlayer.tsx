@@ -313,18 +313,22 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
             </Link>
           </div>
         )}
-        <h1
-          className={`font-cinzel font-bold tracking-widest leading-none ${compact ? 'text-2xl mb-1' : 'text-3xl md:text-4xl mb-2'}`}
-          style={{
-            background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 22%, #f5d06e 50%, #c9973a 78%, #6b4411 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          }}
-        >
-          Realms
-        </h1>
-        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.82)' }}>
-          Choose a realm · Music plays continuously across all worlds
-        </p>
+        {!compact && (
+          <>
+            <h1
+              className="font-cinzel font-bold tracking-widest leading-none text-3xl md:text-4xl mb-2"
+              style={{
+                background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 22%, #f5d06e 50%, #c9973a 78%, #6b4411 100%)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}
+            >
+              Realms
+            </h1>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.82)' }}>
+              Choose a realm · Music plays continuously across all worlds
+            </p>
+          </>
+        )}
       </div>
 
       {/* ── Imagery band ── */}
