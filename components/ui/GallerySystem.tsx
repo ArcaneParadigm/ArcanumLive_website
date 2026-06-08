@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import KenBurnsSlideshow from '@/components/screensaver/KenBurnsSlideshow'
 import { playDeepGong } from '@/lib/utils/crystalSound'
@@ -207,7 +208,7 @@ export default function GallerySystem({
                     return (
                       <button
                         key={img.id}
-                        onClick={(e) => { e.stopPropagation(); setActiveIdx(realIdx) }}
+                        onClick={(e) => { e.stopPropagation(); setActiveIdx(realIdx); setLightbox(realIdx) }}
                         className="shrink-0 rounded overflow-hidden transition-all duration-300"
                         style={{
                           width: 54,
@@ -307,12 +308,15 @@ export default function GallerySystem({
       </div>
 
       {/* ══════════════════════════════════════════
-          FULLSCREEN LIGHTBOX
+          FULLSCREEN LIGHTBOX — rendered via portal so it sits above ALL page
+          stacking contexts (lore sections, sticky headers, etc.)
       ══════════════════════════════════════════ */}
+      {mounted && createPortal(
       <AnimatePresence>
         {lightbox !== null && lbImage && (
           <motion.div
-            className="fixed inset-0 z-[200] flex flex-col bg-black/95 backdrop-blur-lg"
+            className="fixed inset-0 flex flex-col bg-black/95 backdrop-blur-lg"
+            style={{ zIndex: 9999 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -435,6 +439,7 @@ export default function GallerySystem({
           </motion.div>
         )}
       </AnimatePresence>
+      , document.body)}
     </>
   )
 }
