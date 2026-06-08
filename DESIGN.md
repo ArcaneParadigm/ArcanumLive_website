@@ -2,41 +2,44 @@
 
 ## Color & Typography Standards
 
-### Text Brightness Requirement
-**All text must have a minimum brightness of 75% opacity (0.75 alpha channel).**
+### Text Brightness Hierarchy
 
-This applies to:
-- Navigation labels
-- Body copy
-- Labels and annotations
-- Helper text and descriptions
-- Any readable text across the platform
+**Three tiers — use the correct tier, do NOT default everything to the minimum:**
 
-Example:
+| Tier | Usage | Minimum opacity |
+|------|-------|----------------|
+| **Title** | Page titles, section headings, card titles | `1.0` (100%) — full white or full gold |
+| **Body / Secondary** | Body copy, descriptions, labels, nav items, captions | `0.85` minimum — `rgba(255,255,255,0.85)` or higher |
+| **Hint / Helper** | Keyboard hints, fine-print annotations, watermarks | `0.75` minimum — absolute floor, never go lower |
+
+**75% is the FLOOR for the lowest-priority text only. It is NOT the default.**  
+Body text, secondary labels, descriptions → 85%+. Titles → 100%.
+
 ```css
-color: rgba(255, 255, 255, 0.75); /* ✓ Valid */
-color: rgba(255, 255, 255, 0.5);  /* ✗ Too dull */
+/* ✓ Title */        color: rgba(255,255,255,1.0);
+/* ✓ Body/label */   color: rgba(255,255,255,0.88);
+/* ✓ Hint/fine */    color: rgba(255,255,255,0.75);
+/* ✗ Too dim */      color: rgba(255,255,255,0.5);
 ```
 
-In Tailwind:
-```jsx
-style={{ color: 'rgba(255,255,255,0.75)' }} /* Minimum brightness */
-```
+In Tailwind: `text-white` (100%), `text-white/90` (body), `text-white/75` (hint floor only)
 
 ### Color Palette
 
 **Gold (Primary Accent)**
 - Hex: `#c9973a`
 - Usage: Navigation separators, borders, highlights, interactive states
+- Gold text opacity follows same tier rule: titles `#c9973a` (100%), labels `#c9973acc` (80%+)
 
 **Dark Background**
 - Hex: `#08060e`
 - Usage: Page backgrounds, dark surfaces
 
 **Text Colors**
-- Primary text: `rgba(255,255,255,0.85)` to `rgba(255,255,255,1.0)` — high brightness
-- Secondary text: `rgba(255,255,255,0.75)` minimum — medium brightness (do not go lower)
-- Disabled/subtle: Use gold tints instead of dim white (`rgba(201,151,58,0.4)`)
+- Titles: `rgba(255,255,255,1.0)` or full gold — always 100%
+- Body / secondary: `rgba(255,255,255,0.85)` to `rgba(255,255,255,0.95)`
+- Hints / fine print: `rgba(255,255,255,0.75)` — absolute minimum, hint text only
+- Never use faded white below 75% for any readable text
 
 ## Component Guidelines
 
@@ -75,7 +78,8 @@ style={{ color: 'rgba(255,255,255,0.75)' }} /* Minimum brightness */
 ## Brightness Audit Checklist
 
 When adding new text elements, verify:
-- [ ] Text color is at least 0.75 opacity or higher
-- [ ] Disabled/secondary text uses muted gold instead of faded white
-- [ ] All labels meet readability standard
+- [ ] Titles are 100% opacity (full white or full gold)
+- [ ] Body copy / labels / descriptions are ≥85% opacity
+- [ ] Hints / fine-print / keyboard hints are ≥75% opacity
+- [ ] Nothing is set to the 75% floor unless it genuinely is fine-print/hint tier
 - [ ] High contrast maintained on dark backgrounds

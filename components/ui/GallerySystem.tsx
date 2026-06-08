@@ -179,7 +179,7 @@ export default function GallerySystem({
 
           {/* Caption bottom-left */}
           {active && active.caption && (
-            <div className="absolute bottom-3 left-4 text-white/80 text-xs tracking-widest uppercase pointer-events-none">
+            <div className="absolute bottom-3 left-4 text-white/90 text-xs tracking-widest uppercase pointer-events-none">
               {active.caption}
             </div>
           )}
@@ -330,17 +330,17 @@ export default function GallerySystem({
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
               <div className="flex items-center gap-3">
                 {label && (
-                  <span className="text-xs tracking-widest uppercase" style={{ color: `${accentColor}70` }}>
+                  <span className="text-xs tracking-widest uppercase" style={{ color: `${accentColor}` }}>
                     {label}
                   </span>
                 )}
-                <span className="text-white/75 text-xs">
+                <span className="text-white/90 text-xs">
                   {(lightbox ?? 0) + 1} / {images.length}
                 </span>
               </div>
               <button
                 onClick={() => setLightbox(null)}
-                className="text-white/80 hover:text-white text-xl transition-colors w-8 h-8 flex items-center justify-center"
+                className="text-white/90 hover:text-white text-xl transition-colors w-8 h-8 flex items-center justify-center"
               >
                 ✕
               </button>
@@ -351,7 +351,7 @@ export default function GallerySystem({
               {/* Prev */}
               <button
                 onClick={() => setLightbox((i) => ((i ?? 0) - 1 + images.length) % images.length)}
-                className="absolute left-4 z-10 w-10 h-10 rounded-full border flex items-center justify-center text-white/80 hover:text-white transition-all hover:scale-110"
+                className="absolute left-4 z-10 w-10 h-10 rounded-full border flex items-center justify-center text-white/90 hover:text-white transition-all hover:scale-110"
                 style={{ borderColor: `${accentColor}40`, background: 'rgba(8,6,14,0.7)' }}
               >
                 ‹
@@ -383,9 +383,9 @@ export default function GallerySystem({
                       }}
                     >
                       <div className="text-center">
-                        <p className="text-white/80 text-xs tracking-widest uppercase mb-2">Image {(lightbox ?? 0) + 1}</p>
+                        <p className="text-white/90 text-xs tracking-widest uppercase mb-2">Image {(lightbox ?? 0) + 1}</p>
                         {lbImage.caption && (
-                          <p className="text-white/80 text-sm">{lbImage.caption}</p>
+                          <p className="text-white/90 text-sm">{lbImage.caption}</p>
                         )}
                       </div>
                     </div>
@@ -396,7 +396,7 @@ export default function GallerySystem({
               {/* Next */}
               <button
                 onClick={() => setLightbox((i) => ((i ?? 0) + 1) % images.length)}
-                className="absolute right-4 z-10 w-10 h-10 rounded-full border flex items-center justify-center text-white/80 hover:text-white transition-all hover:scale-110"
+                className="absolute right-4 z-10 w-10 h-10 rounded-full border flex items-center justify-center text-white/90 hover:text-white transition-all hover:scale-110"
                 style={{ borderColor: `${accentColor}40`, background: 'rgba(8,6,14,0.7)' }}
               >
                 ›
@@ -405,7 +405,7 @@ export default function GallerySystem({
 
             {/* Caption */}
             {lbImage.caption && (
-              <div className="text-center pb-3 text-white/80 text-sm tracking-wide">
+              <div className="text-center pb-3 text-white/90 text-sm tracking-wide">
                 {lbImage.caption}
               </div>
             )}
@@ -429,7 +429,7 @@ export default function GallerySystem({
                     <img src={img.src} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-[9px]" style={{ color: `${accentColor}50` }}>{i + 1}</span>
+                      <span className="text-[9px]" style={{ color: `${accentColor}` }}>{i + 1}</span>
                     </div>
                   )}
                 </button>
