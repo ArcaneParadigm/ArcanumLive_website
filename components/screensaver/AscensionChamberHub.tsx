@@ -318,7 +318,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
               </span>
             )}
           </div>
-          <div className="flex flex-wrap gap-3 max-h-[560px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex flex-wrap gap-3" style={{ padding: '16px 12px' }}>
             {featuredWorlds.map(w => (
               <RealmCard
                 key={w.slug}

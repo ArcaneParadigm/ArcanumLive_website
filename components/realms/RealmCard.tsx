@@ -28,9 +28,9 @@ export default function RealmCard({ world, isActive, onActivate, cardImage, onHo
         aspectRatio: '2/3',
         border: `1px solid ${isActive ? color + 'ee' : color + '40'}`,
         boxShadow: isActive
-          ? `0 0 40px ${color}90, 0 0 16px ${color}70, 0 0 4px ${color}cc, inset 0 0 20px ${color}18`
+          ? `0 0 60px ${color}cc, 0 0 28px ${color}99, 0 0 10px ${color}ff, 0 0 3px ${color}, inset 0 0 28px ${color}28`
           : hov
-            ? `0 0 18px ${color}55, 0 0 6px ${color}30`
+            ? `0 0 22px ${color}66, 0 0 8px ${color}40`
             : 'none',
         background: `radial-gradient(ellipse at 50% 20%, ${color}${isActive ? '30' : '22'}, #07050f 75%)`,
       }}
