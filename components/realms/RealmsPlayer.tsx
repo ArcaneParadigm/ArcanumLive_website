@@ -108,7 +108,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   useEffect(() => {
     if (!activeSlug) return
     const idx = sequence.findIndex(e => PLAYLISTS[e.worldIdx].world.slug === activeSlug)
-    if (idx >= 0) { setSeqIdx(idx); setTrackIdx(0); setProgress(0); setActivationCount(c => c + 1) }
+    if (idx >= 0) { setSeqIdx(idx); setTrackIdx(0); setProgress(0); setActivationCount(c => c + 1); setPlaying(true) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlug])
 
