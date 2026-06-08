@@ -111,7 +111,7 @@ Card world uses `WorldAudioPlayer` directly with same `discoverRealmAudio(slug)`
 
 ### How character images work
 - All character images go in `public/realms/[slug]/characters/`
-- **Target: 11 images**
+- **Target: 20 images** (wider strip needs more to fill — use 20)
 - **Selection rule**: characters centered/prominent in frame — fills ≥40% frame height, clear subject, not background crowd/environment shots
 
 ### When given a batch of images to sort
