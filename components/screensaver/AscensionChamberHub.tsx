@@ -47,12 +47,13 @@ function presetColor(index: number): string {
 // ── Realm card for Ascension Chamber ─────────────────────────────────────────
 
 function AscensionRealmCard({
-  world, isActive, onActivate, cardImage,
+  world, isActive, onActivate, cardImage, onHover,
 }: {
   world: { slug?: string; title?: string; short_description?: string; color_primary?: string }
   isActive: boolean
   onActivate: () => void
   cardImage?: string | null
+  onHover?: (slug: string | null) => void
 }) {
   const color = world.color_primary ?? GOLD
   const router = useRouter()
@@ -74,8 +75,8 @@ function AscensionRealmCard({
       }}
       animate={{ scale: hov || isActive ? 1.05 : 1, y: hov ? -4 : 0 }}
       transition={{ duration: 0.15 }}
-      onMouseEnter={() => { setHov(true); playCrystalBowl(color, 0.018) }}
-      onMouseLeave={() => setHov(false)}
+      onMouseEnter={() => { setHov(true); playCrystalBowl(color, 0.018); onHover?.(world.slug ?? null) }}
+      onMouseLeave={() => { setHov(false); onHover?.(null) }}
     >
       {/* Image fills almost the whole card — clicking activates player */}
       <div className="flex-1 relative cursor-pointer" style={{ minHeight: 0 }} onClick={onActivate}>
@@ -95,8 +96,9 @@ function AscensionRealmCard({
           </div>
         )}
         {hov && !isActive && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
             <span className="text-white/80 text-base">▶</span>
+            <span className="text-[7px] tracking-widest uppercase" style={{ color: `${color}cc` }}>Activate</span>
           </div>
         )}
         {/* Neon top edge when active */}
@@ -307,6 +309,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
   const [activeAlbum,  setActiveAlbum]  = useState<string | null>(null)
   const [activePreset, setActivePreset] = useState<string>('')
   const [activeRealm,  setActiveRealm]  = useState<string | null>(null)
+  const [hoveredRealm, setHoveredRealm] = useState<string | null>(null)
 
   const realmPresets   = getRealmPresets()
   const curatedPresets = featuredScreensaverPresets.map((p) => ({
@@ -422,9 +425,60 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
                 isActive={activeRealm === w.slug}
                 onActivate={() => setActiveRealm(w.slug ?? null)}
                 cardImage={w.slug ? (cardImages[w.slug] ?? null) : null}
+                onHover={(slug) => setHoveredRealm(slug)}
               />
             ))}
           </div>
+
+          {/* ── Detail bar — shows hovered or active realm info ── */}
+          {(() => {
+            const detailSlug = hoveredRealm ?? activeRealm
+            const w = detailSlug ? featuredWorlds.find(fw => fw.slug === detailSlug) : null
+            if (!w) return null
+            const color = w.color_primary ?? GOLD
+            return (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={detailSlug}
+                  className="mt-3 flex items-center gap-4 px-4 py-2.5 rounded-xl"
+                  style={{ background: 'rgba(7,5,15,0.85)', border: `1px solid ${color}30`, backdropFilter: 'blur(10px)' }}
+                  initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Title */}
+                  <span className="font-cinzel font-bold text-sm shrink-0" style={{ color }}>
+                    {w.title}
+                  </span>
+                  {/* Theme badge */}
+                  {w.theme_style && (
+                    <span className="text-[8px] tracking-[0.3em] uppercase px-2 py-0.5 rounded shrink-0"
+                      style={{ background: `${color}18`, color: `${color}cc`, border: `1px solid ${color}40` }}>
+                      {w.theme_style}
+                    </span>
+                  )}
+                  {/* Dot separator */}
+                  <span className="text-white/20 shrink-0">·</span>
+                  {/* Description */}
+                  <p className="text-white/60 text-[11px] flex-1 truncate">{w.short_description}</p>
+                  {/* Gold Enter button */}
+                  <button
+                    onClick={() => { if (w.slug) window.location.href = `/realms/${w.slug}` }}
+                    className="shrink-0 px-4 py-1 rounded-md text-[10px] font-bold tracking-widest uppercase transition-all"
+                    style={{
+                      fontFamily: 'Cinzel, serif',
+                      background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 35%, #f5d06e 55%, #c9973a 75%, #6b4411 100%)',
+                      color: '#07050f',
+                      border: '1px solid #c9973a80',
+                      boxShadow: '0 0 10px #c9973a40',
+                    }}
+                  >
+                    Enter
+                  </button>
+                </motion.div>
+              </AnimatePresence>
+            )
+          })()}
+
         </div>
       </div>
 
