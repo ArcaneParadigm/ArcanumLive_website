@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { featuredWorlds } from '@/lib/data/worlds'
 import type { VisualMode } from '@/types'
+import SequencePlayer from '@/components/screensaver/SequencePlayer'
 
 export interface DiscoveredTrack {
   id: string
@@ -14,6 +15,7 @@ export interface DiscoveredTrack {
 
 interface RealmsPlayerProps {
   audioMap?: Record<string, DiscoveredTrack[]>
+  sequenceMap?: Record<string, string[]>
   compact?: boolean
   activeSlug?: string
 }
@@ -82,7 +84,7 @@ const BG_CYCLE_MS = 4200
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function RealmsPlayer({ audioMap, compact, activeSlug }: RealmsPlayerProps) {
+export default function RealmsPlayer({ audioMap, sequenceMap = {}, compact, activeSlug }: RealmsPlayerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PLAYLISTS = useMemo(() => buildPlaylists(audioMap), [])
 
@@ -324,12 +326,25 @@ export default function RealmsPlayer({ audioMap, compact, activeSlug }: RealmsPl
 
       {/* ── Imagery band ── */}
       <div className="relative z-10 w-full" style={{ aspectRatio: '21/7', minHeight: 240 }}>
-        <AnimatePresence mode="sync">
-          <motion.div key={`img-${worldIdx}`} className="absolute inset-0"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}
-            style={{ background: `linear-gradient(160deg, ${accent}35 0%, #08060e 50%, ${accent}12 100%)` }}
-          />
-        </AnimatePresence>
+
+        {/* Sequence player — fills band when active realm has frames */}
+        {(() => {
+          const slug = currentPlaylist.world.slug ?? ''
+          const frames = sequenceMap[slug] ?? []
+          return frames.length > 0 ? (
+            <div className="absolute inset-0">
+              <SequencePlayer frames={frames} fps={12} fadeDur={0.4} className="w-full h-full" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 60%, #08060e 100%)' }} />
+            </div>
+          ) : (
+            <AnimatePresence mode="sync">
+              <motion.div key={`img-${worldIdx}`} className="absolute inset-0"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}
+                style={{ background: `linear-gradient(160deg, ${accent}35 0%, #08060e 50%, ${accent}12 100%)` }}
+              />
+            </AnimatePresence>
+          )
+        })()}
 
         {/* Corner brackets */}
         <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2" style={{ borderColor: `${accent}50` }} />

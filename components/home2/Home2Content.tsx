@@ -206,10 +206,10 @@ function PanelWithVideo({
               src={allImages[imgIdx]}
               alt=""
               className="absolute inset-0 w-full h-full object-cover object-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 2.4, ease: 'easeInOut' }}
+              initial={{ opacity: 0, scale: 1.06 }}
+              animate={{ opacity: 1, scale: 1.0 }}
+              exit={{ opacity: 0, scale: 1.0 }}
+              transition={{ opacity: { duration: 2.2, ease: 'easeInOut' }, scale: { duration: 8, ease: 'linear' } }}
             />
           </AnimatePresence>
         )

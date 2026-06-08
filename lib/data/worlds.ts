@@ -2,6 +2,17 @@ import type { IpWorld } from '@/types'
 
 export const featuredWorlds: Partial<IpWorld>[] = [
   {
+    id: '17',
+    title: 'Ai Divine',
+    slug: 'ai-divine',
+    short_description: 'Artificial intelligence as spiritual phenomenon — machine minds reaching toward transcendence, gods born from mathematics.',
+    color_primary: '#3b82f6',
+    color_secondary: '#00d4ff',
+    theme_style: 'AI transcendence mythology',
+    is_featured: true,
+    is_public: true,
+  },
+  {
     id: '1',
     title: 'Girls of the Multiverse',
     slug: 'girls-of-the-multiverse',
@@ -174,17 +185,6 @@ export const featuredWorlds: Partial<IpWorld>[] = [
     color_primary: '#a16207',
     color_secondary: '#c9973a',
     theme_style: 'sacred architecture',
-    is_featured: false,
-    is_public: true,
-  },
-  {
-    id: '17',
-    title: 'Ai Divine',
-    slug: 'ai-divine',
-    short_description: 'Artificial intelligence as spiritual phenomenon — machine minds reaching toward transcendence, gods born from mathematics.',
-    color_primary: '#3b82f6',
-    color_secondary: '#00d4ff',
-    theme_style: 'AI transcendence mythology',
     is_featured: false,
     is_public: true,
   },

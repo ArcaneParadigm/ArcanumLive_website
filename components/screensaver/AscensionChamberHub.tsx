@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import RealmsPlayer from '@/components/realms/RealmsPlayer'
-import SequencePlayer from '@/components/screensaver/SequencePlayer'
 import { screensaverModes, featuredScreensaverPresets } from '@/lib/data/screensaver'
 import { featuredWorlds } from '@/lib/data/worlds'
 import { musicCategories, featuredAlbums } from '@/lib/data/music'
@@ -327,29 +326,10 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
 
   const hoveredMode = activeMode ? screensaverModes.find(m => m.href.includes(activeMode)) : null
 
-  const activeSequence = activeRealm ? (sequenceMap[activeRealm] ?? []) : []
-
   return (
     <div className="min-h-screen relative" style={{ background: '#07050f' }}>
 
-      {/* ── Sequence background — plays when active realm has frames ── */}
-      {activeSequence.length > 0 && (
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <SequencePlayer
-            frames={activeSequence}
-            fps={12}
-            fadeDur={0.22}
-            opacity={0.38}
-            className="w-full h-full"
-          />
-          {/* Dark vignette so UI stays readable */}
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(7,5,15,0.72) 100%)',
-          }} />
-        </div>
-      )}
-
-      {/* ── Content (above sequence layer) ── */}
+      {/* ── Content ── */}
       <div className="relative z-10">
 
       {/* ── Slim header ── */}
@@ -376,7 +356,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
       </div>
 
       {/* ── Player ── */}
-      <RealmsPlayer audioMap={audioMap} compact activeSlug={activeRealm ?? undefined} />
+      <RealmsPlayer audioMap={audioMap} sequenceMap={sequenceMap} compact activeSlug={activeRealm ?? undefined} />
 
       {/* ── Visual modes ── */}
       <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(168,85,247,0.12)', background: '#07050f' }}>
