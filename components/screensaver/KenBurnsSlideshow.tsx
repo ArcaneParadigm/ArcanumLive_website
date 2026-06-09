@@ -36,6 +36,7 @@ export default function KenBurnsSlideshow({
   const [variant, setVariant] = useState(0)
   const [speed, setSpeed]     = useState(secPerImage)
   const [restartKey, setRestartKey] = useState(0)
+  const [isPortrait, setIsPortrait] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   function applySpeed(s: number) {
@@ -43,6 +44,9 @@ export default function KenBurnsSlideshow({
     setVariant(Math.floor(Math.random() * KB_VARIANTS.length))
     setRestartKey(k => k + 1)  // force current image to remount with new duration
   }
+
+  // Reset portrait state before new image loads so object-fit is correct from first frame
+  useEffect(() => { setIsPortrait(false) }, [idx])
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -63,13 +67,17 @@ export default function KenBurnsSlideshow({
 
   return (
     <div className={className ?? ''} style={style}>
-    <div style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '100%' }}>
+    <div style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '100%', background: isPortrait ? '#000' : undefined }}>
       <AnimatePresence mode="sync">
         <motion.img
           key={`${idx}-${images[idx]}-${restartKey}`}
           src={images[idx]}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className={`absolute inset-0 w-full h-full ${isPortrait ? 'object-contain' : 'object-cover object-center'}`}
+          onLoad={(e) => {
+            const img = e.currentTarget
+            setIsPortrait(img.naturalHeight > img.naturalWidth)
+          }}
           initial={{ opacity: 0, scale: kbv.initial.scale, x: kbv.initial.x, y: kbv.initial.y }}
           animate={{ opacity: 1,  scale: kbv.animate.scale, x: kbv.animate.x, y: kbv.animate.y }}
           exit={{ opacity: 0 }}

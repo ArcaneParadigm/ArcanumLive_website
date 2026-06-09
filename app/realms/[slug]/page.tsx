@@ -310,33 +310,20 @@ export default async function WorldDetailPage({ params }: Props) {
         </Link>
       </div>
 
-      {/* ── HEADER — centered, compact ── */}
-      <section className="relative pt-6 pb-4 overflow-hidden text-center" style={{ background: '#08060e' }}>
-        {heroImage && (
-          <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" style={{ opacity: 0.35 }} />
-        )}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: heroImage
-            ? `linear-gradient(to bottom, rgba(8,6,14,0.6) 0%, rgba(8,6,14,0.4) 50%, rgba(8,6,14,0.85) 100%)`
-            : `radial-gradient(ellipse at 50% 0%, ${accent}20 0%, transparent 55%)` }}
-        />
-        <div className="relative z-10 px-6">
+      {/* ── HEADER — minimal strip ── */}
+      <section className="relative pt-3 pb-2 overflow-hidden text-center" style={{ background: '#08060e' }}>
+        <div className="relative z-10 px-6 flex items-center justify-center gap-3">
           {world.theme_style && (
-            <span className="inline-block text-[8px] font-medium tracking-[0.35em] uppercase px-2 py-0.5 rounded mb-2" style={BADGE}>
+            <span className="inline-block text-[8px] font-medium tracking-[0.35em] uppercase px-2 py-0.5 rounded" style={BADGE}>
               {world.theme_style}
             </span>
           )}
           <h1
-            className="font-cinzel text-2xl md:text-3xl font-bold tracking-widest leading-tight mb-2"
-            style={{ ...GOLD_GRADIENT, filter: `drop-shadow(0 0 16px ${accent}40)` }}
+            className="font-cinzel text-lg font-bold tracking-widest leading-tight"
+            style={{ ...GOLD_GRADIENT, filter: `drop-shadow(0 0 12px ${accent}40)` }}
           >
             {worldTitle}
           </h1>
-          {world.short_description && (
-            <p className="text-silver-mid/85 text-xs leading-relaxed max-w-lg mx-auto">
-              {world.short_description}
-            </p>
-          )}
         </div>
       </section>
 

@@ -30,7 +30,7 @@ const footerLinks: Record<string, FooterLinkItem[]> = {
     { label: 'Licensing', href: '/contact' },
     { label: 'Venue Inquiries', href: '/contact' },
     { label: 'Commissions', href: '/contact' },
-    { label: 'ArcaneRealities.com', href: 'https://arcane-realities.com', external: true },
+    { label: 'ArcaneRealities.com', href: 'https://arcanerealities.com', external: true },
   ],
   store: [
     { label: 'TV Art', href: 'https://www.etsy.com/shop/ArcanumTvArt', external: true },

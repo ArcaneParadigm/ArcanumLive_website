@@ -23,7 +23,7 @@ export default function RealmGallerySection({ images, accentColor, label }: Prop
         <GallerySystem
           images={images}
           accentColor={accentColor}
-          aspectRatio="21/9"
+          aspectRatio="16/9"
           label={label}
           fullWidth
           kenBurns
