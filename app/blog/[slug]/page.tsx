@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import PageShell from '@/components/layout/PageShell'
 import { blogPosts } from '@/lib/data/blog'
-import { discoverRealmCardImage, discoverRealmHeroImage } from '@/lib/utils/realmImages'
+import { discoverRealmCardImage, discoverRealmHeroImage } from '@/lib/utils/realmMeta'
 import { featuredWorlds } from '@/lib/data/worlds'
 
 interface Props { params: Promise<{ slug: string }> }

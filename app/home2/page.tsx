@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
-import { discoverPageArt, discoverPageOverlay, discoverRealmCardImage } from '@/lib/utils/realmImages'
+import { discoverPageArt, discoverPageOverlay } from '@/lib/utils/realmImages'
+import { discoverRealmCardImage } from '@/lib/utils/realmMeta'
 import { featuredWorlds } from '@/lib/data/worlds'
 import Home2Nav from '@/components/home2/Home2Nav'
 import Home2Hero from '@/components/home2/Home2Hero'

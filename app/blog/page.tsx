@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import BlogHub from '@/components/blog/BlogHub'
 import PageShell from '@/components/layout/PageShell'
 import { blogPosts } from '@/lib/data/blog'
-import { discoverRealmCardImage } from '@/lib/utils/realmImages'
+import { discoverRealmCardImage } from '@/lib/utils/realmMeta'
 
 export const metadata: Metadata = {
   title: 'Lore Archive — Mythic Dispatches, Gnosis & Esoteric Writing',

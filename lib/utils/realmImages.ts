@@ -61,24 +61,9 @@ export interface DiscoveredAudioTrack {
   duration?: string
 }
 
-/**
- * Returns the card image URL for a realm by convention (card.jpg).
- * No filesystem check — avoids Next.js tracing public/realms/** into every bundle.
- * All realm cards are .jpg. Browser handles 404 gracefully if none exists.
- */
-export function discoverRealmCardImage(slug: string): string | null {
-  if (!slug) return null
-  return `/realms/${slug}/card.jpg`
-}
-
-/**
- * Returns the hero image URL for a realm by convention (hero.jpg).
- * No filesystem check — avoids Next.js tracing public/realms/** into every bundle.
- * Returns null (no hero) — hero is an optional enhancement, not required.
- */
-export function discoverRealmHeroImage(_slug: string): string | null {
-  return null
-}
+// discoverRealmCardImage and discoverRealmHeroImage have moved to realmMeta.ts
+// (fs-free module, safe to import in prerendered pages without bundle blowup)
+export { discoverRealmCardImage, discoverRealmHeroImage } from '@/lib/utils/realmMeta'
 
 export function discoverRealmImages(slug: string): DiscoveredImages {
   const base = path.join(process.cwd(), 'public', 'realms', slug)
