@@ -62,30 +62,21 @@ export interface DiscoveredAudioTrack {
 }
 
 /**
- * Looks for a card.jpg/png/webp in public/realms/[slug]/ — used for the home2 rail thumbnail.
- * Returns the URL string or null if not found.
+ * Returns the card image URL for a realm by convention (card.jpg).
+ * No filesystem check — avoids Next.js tracing public/realms/** into every bundle.
+ * All realm cards are .jpg. Browser handles 404 gracefully if none exists.
  */
 export function discoverRealmCardImage(slug: string): string | null {
-  const base = path.join(process.cwd(), 'public', 'realms', slug)
-  const exts = ['jpg', 'jpeg', 'png', 'webp', 'avif']
-  for (const ext of exts) {
-    const file = path.join(base, `card.${ext}`)
-    if (fs.existsSync(file)) return `/realms/${slug}/card.${ext}`
-  }
-  return null
+  if (!slug) return null
+  return `/realms/${slug}/card.jpg`
 }
 
 /**
- * Looks for a hero.jpg/png/webp in public/realms/[slug]/ — used as the hero banner
- * on the realm detail page. Returns the URL string or null if not found.
+ * Returns the hero image URL for a realm by convention (hero.jpg).
+ * No filesystem check — avoids Next.js tracing public/realms/** into every bundle.
+ * Returns null (no hero) — hero is an optional enhancement, not required.
  */
-export function discoverRealmHeroImage(slug: string): string | null {
-  const base = path.join(process.cwd(), 'public', 'realms', slug)
-  const exts = ['jpg', 'jpeg', 'png', 'webp', 'avif']
-  for (const ext of exts) {
-    const file = path.join(base, `hero.${ext}`)
-    if (fs.existsSync(file)) return `/realms/${slug}/hero.${ext}`
-  }
+export function discoverRealmHeroImage(_slug: string): string | null {
   return null
 }
 
