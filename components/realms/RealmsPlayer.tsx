@@ -5,7 +5,21 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { featuredWorlds } from '@/lib/data/worlds'
 import type { VisualMode } from '@/types'
+import dynamic from 'next/dynamic'
 import KenBurnsSlideshow from '@/components/screensaver/KenBurnsSlideshow'
+import { useLandscapeMobile } from '@/lib/hooks/useLandscapeMobile'
+import { ALBUMS } from '@/lib/data/albums'
+
+const AlbumPlayer = dynamic(() => import('@/components/music/AlbumPlayer'), { ssr: false })
+
+// Realms that have a dedicated album on the Sonic page
+const REALM_TO_ALBUM: Record<string, string> = {
+  'beyond-the-rim':  'songs-from-the-rim-1',
+  'fae-forever':     'sidhe-fairy-songs-1',
+  'ai-divine':       'songs-from-the-rim-ai-divine',
+  'ascension':       'songs-from-the-rim-ascension-city',
+  'galactica':       'movie-aether-into-the-multiverse',
+}
 
 export interface DiscoveredTrack {
   id: string
@@ -86,6 +100,7 @@ const BG_CYCLE_MS = 4200
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}, compact, activeSlug }: RealmsPlayerProps) {
+  const landscapeMobile = useLandscapeMobile()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PLAYLISTS = useMemo(() => buildPlaylists(audioMap), [])
 
@@ -108,7 +123,13 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   useEffect(() => {
     if (!activeSlug) return
     const idx = sequence.findIndex(e => PLAYLISTS[e.worldIdx].world.slug === activeSlug)
-    if (idx >= 0) { setSeqIdx(idx); setTrackIdx(0); setProgress(0); setActivationCount(c => c + 1); setPlaying(true) }
+    if (idx >= 0) {
+      const hasMusic = PLAYLISTS[sequence[idx].worldIdx].tracks.some(t => t.url)
+      setSeqIdx(idx); setTrackIdx(0); setProgress(0)
+      setActivationCount(c => c + 1)
+      setAlbumStopToken(t => t + 1)
+      setPlaying(hasMusic)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlug])
 
@@ -117,9 +138,14 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
   const [playing, setPlaying]         = useState(false)
   const [loop, setLoop]               = useState(false)
   const [showPlaylist, setShowPlaylist] = useState(false)
+  const [showAlbums, setShowAlbums]   = useState(false)
   const [progress, setProgress]       = useState(0)
   const [mounted, setMounted]         = useState(false)
   const [bgColorIdx, setBgColorIdx]   = useState(0)
+  const [volume, setVolume]           = useState(0.8)
+  const [overrideCardMusic, setOverrideCardMusic] = useState(false)
+  const [albumCommand, setAlbumCommand] = useState<{ albumId: string; trackIdx: number; token: number } | undefined>()
+  const [albumStopToken, setAlbumStopToken] = useState(0)
 
   const audioRef    = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -169,7 +195,16 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
     }
   }
 
-  const selectSeqEntry = (i: number) => { setSeqIdx(i); setTrackIdx(0); setProgress(0) }
+  const selectSeqEntry = (i: number) => {
+    setSeqIdx(i); setTrackIdx(0); setProgress(0)
+    setAlbumStopToken(t => t + 1)
+    setPlaying(true)
+    if (overrideCardMusic) {
+      const slug = PLAYLISTS[sequence[i]?.worldIdx ?? 0].world.slug ?? ''
+      const albumId = REALM_TO_ALBUM[slug]
+      if (albumId) setAlbumCommand({ albumId, trackIdx: 0, token: Date.now() })
+    }
+  }
 
   useEffect(() => {
     if (playing) {
@@ -192,7 +227,14 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
     else audioRef.current.pause()
   }, [playing, worldIdx, trackIdx, currentTrack.url])
 
-  const togglePlay = () => setPlaying(p => !p)
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume
+  }, [volume])
+
+  const togglePlay = () => {
+    if (!playing) setAlbumStopToken(t => t + 1)
+    setPlaying(p => !p)
+  }
   const seekTo = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
@@ -295,10 +337,10 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
       />
 
       {/* ── Header ── */}
-      <div className={`relative z-10 ${compact ? 'pt-2 pb-2' : 'pt-[10px] pb-2'} text-center px-6`}>
+      <div className={`relative z-10 ${compact ? 'pt-2 pb-1' : 'pt-0.5 pb-1'} text-center px-6`}>
         {!compact && (
-          <div className="flex items-center justify-between mb-1">
-            <Link href="/home2" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
+          <div className="flex items-center justify-between">
+            <Link href="/" className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity"
               style={{ color: 'rgba(255,255,255,0.82)' }}>
               ← Home
             </Link>
@@ -315,15 +357,16 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
         {!compact && (
           <>
             <h1
-              className="font-cinzel font-bold tracking-widest leading-none text-3xl md:text-4xl mb-1"
+              className="font-cinzel font-bold tracking-widest leading-none text-2xl md:text-3xl"
               style={{
+                marginTop: '-5px',
                 background: 'linear-gradient(135deg, #6b4411 0%, #c9973a 22%, #f5d06e 50%, #c9973a 78%, #6b4411 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               }}
             >
               Realms
             </h1>
-            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.82)' }}>
+            <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.82)' }}>
               Choose a realm · Music plays continuously across all worlds
             </p>
           </>
@@ -331,7 +374,8 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
       </div>
 
       {/* ── Imagery band ── */}
-      <div className="relative z-10 w-full" style={{ aspectRatio: '16/9', minHeight: 240 }}>
+      <div className="relative z-10 px-1 py-1">
+      <div className="relative mx-auto rounded-xl overflow-hidden" style={landscapeMobile ? { height: 'calc(100vh - 80px)', width: '100%' } : { aspectRatio: '16/9', width: 'min(100%, calc((100vh - 165px) * 16 / 9))', minHeight: 200 }}>
 
         {/* Imagery: Ken Burns gallery → gradient fallback */}
         {(() => {
@@ -365,6 +409,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           style={{ background: 'linear-gradient(to top, #08060e, transparent)' }}
         />
 
+      </div>
       </div>
 
       {/* ── SEQUENCER ── */}
@@ -553,6 +598,13 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
 
           {/* Right controls */}
           <div className="flex items-center gap-3">
+            {/* Volume */}
+            <div className="hidden sm:flex items-center gap-1.5">
+              <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>🔊</span>
+              <input type="range" min={0} max={1} step={0.01} value={volume}
+                onChange={e => setVolume(Number(e.target.value))}
+                className="w-14 h-1 appearance-none bg-white/15 rounded-full cursor-pointer accent-gold" />
+            </div>
             <button
               onClick={() => setLoop(l => !l)}
               className="text-[10px] tracking-widest uppercase px-3 py-1 rounded-full border transition-all"
@@ -563,7 +615,16 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
               }}
             >↻ Loop</button>
             <button
-              onClick={() => setShowPlaylist(s => !s)}
+              onClick={() => { setShowAlbums(s => !s); setShowPlaylist(false) }}
+              className="text-[10px] tracking-widest uppercase px-3 py-1 rounded-full border transition-all"
+              style={{
+                borderColor: showAlbums ? '#d946ef70' : 'rgba(255,255,255,0.3)',
+                color: showAlbums ? '#d946ef' : 'rgba(255,255,255,0.78)',
+                background: showAlbums ? '#d946ef15' : 'transparent',
+              }}
+            >♪ Albums</button>
+            <button
+              onClick={() => { setShowPlaylist(s => !s); setShowAlbums(false) }}
               className="text-[10px] tracking-widest uppercase transition-colors"
               style={{ color: showPlaylist ? accent : 'rgba(255,255,255,0.78)' }}
             >≡ Tracks</button>
@@ -592,7 +653,7 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
               {currentPlaylist.tracks.map((track, i) => {
                 const isActive = i === trackIdx
                 return (
-                  <button key={track.id} onClick={() => { setTrackIdx(i); setProgress(0) }}
+                  <button key={track.id} onClick={() => { setTrackIdx(i); setProgress(0); setAlbumStopToken(t => t + 1); setPlaying(true) }}
                     className="w-full flex items-center gap-3 px-5 py-3 text-left transition-all hover:bg-white/4"
                     style={{ background: isActive ? `${accent}12` : undefined }}>
                     <div className="w-5 text-center shrink-0">
@@ -620,6 +681,29 @@ export default function RealmsPlayer({ audioMap, sequenceMap = {}, imageMap = {}
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── Albums panel — always mounted so audio persists when panel is closed ── */}
+      <motion.div
+        className="absolute inset-x-0 bottom-0 z-30 rounded-t-2xl overflow-hidden"
+        animate={{ y: showAlbums ? 0 : '100%' }}
+        initial={{ y: '100%' }}
+        transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+        style={{ background: 'rgba(8,6,14,0.97)', backdropFilter: 'blur(20px)', border: '1px solid #d946ef25', maxHeight: 560 }}
+      >
+        <div className="flex items-center justify-between px-5 py-3 border-b sticky top-0"
+          style={{ borderColor: '#d946ef20', background: 'rgba(8,6,14,0.99)' }}>
+          <p className="font-cinzel text-sm font-bold" style={{ color: '#d946ef' }}>Sonic Albums</p>
+          <button onClick={() => setShowAlbums(false)} className="text-white/30 hover:text-white text-lg w-8 h-8 flex items-center justify-center">↓</button>
+        </div>
+        <div className="overflow-y-auto px-3 py-3" style={{ maxHeight: 490 }}>
+          <AlbumPlayer
+            albums={ALBUMS}
+            command={albumCommand}
+            stopToken={albumStopToken}
+            onPlay={() => setPlaying(false)}
+          />
+        </div>
+      </motion.div>
     </div>
   )
 }

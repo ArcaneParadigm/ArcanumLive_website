@@ -434,11 +434,13 @@ function ScreensaverBanner() {
 
           <div className="relative z-10 flex flex-col lg:flex-row items-stretch gap-6 p-6" style={{ minHeight: 300 }}>
             {/* Left text */}
-            <div className="flex flex-col justify-center" style={{ minWidth: 210 }}>
-              <p className="text-[8px] tracking-[0.4em] uppercase mb-2" style={{ color: `${VIOLET}80` }}>Living Visualizer</p>
-              <h2 className="font-cinzel text-base font-bold leading-tight mb-2" style={{ color: '#e8dcc8' }}>Launch Ascension Chamber</h2>
-              <DoubleRule color={VIOLET} width={130} />
-              <p className="text-white/90 text-xs leading-relaxed mb-4">Transform your screen into a living portal.</p>
+            <div className="flex flex-col justify-between" style={{ minWidth: 210, minHeight: 248 }}>
+              <div>
+                <p className="text-[8px] tracking-[0.4em] uppercase mb-2" style={{ color: `${VIOLET}80` }}>Living Visualizer</p>
+                <h2 className="font-cinzel text-base font-bold leading-tight mb-2" style={{ color: '#e8dcc8' }}>Launch Ascension Chamber</h2>
+                <DoubleRule color={VIOLET} width={130} />
+                <p className="text-white/90 text-xs leading-relaxed">Transform your screen into a living portal.</p>
+              </div>
               <div style={{ width: 180 }}>
                 <BtnGold label="Enter the Chamber" href="/ascension" />
               </div>
@@ -654,11 +656,11 @@ function FullBleedPanel({
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(6,4,12,0.45) 0%, rgba(6,4,12,0.1) 22%, transparent 42%)' }} />
       <Corners color={color} />
 
-      <div className="relative z-10 px-6 py-6 flex flex-col justify-between" style={{ minHeight: 280, width: 260 }}>
-        <div>
+      <div className="absolute inset-0 z-10 px-6 py-6 flex flex-col justify-between" style={{ minHeight: 280 }}>
+        <div style={{ maxWidth: 260 }}>
           <h2 className="font-cinzel text-lg font-bold leading-tight mb-2" style={{ color: '#e8dcc8', textShadow: '0 0 24px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1)' }}>{title}</h2>
           <DoubleRule color={color} width={140} />
-          <p className="text-white/90 text-xs leading-relaxed mb-5" style={{ textShadow: '0 0 16px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,0.9)' }}>{desc}</p>
+          <p className="text-white/90 text-xs leading-relaxed" style={{ textShadow: '0 0 16px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,0.9)' }}>{desc}</p>
         </div>
         <div className="flex flex-col gap-2" style={{ width: 200 }}>
           <BtnGold label={btnA.label} href={btnA.href} />
@@ -1043,7 +1045,7 @@ function SiteFooter() {
         <div className="flex flex-col md:grid gap-6 md:gap-0" style={{ gridTemplateColumns: '150px 1fr 1fr 1fr 220px', columnGap: '24px' }}>
           {/* Logo + tagline + socials */}
           <div>
-            <Link href="/home2">
+            <Link href="/">
               <div className="mb-3 rounded-lg flex items-center justify-center cursor-pointer"
                 style={{ width: 130, height: 40, background: `${GOLD}12`, border: `1px solid ${GOLD}25` }}>
                 <span className="font-cinzel text-xs font-bold tracking-widest" style={{ color: GOLD }}>THE ARCANUM</span>

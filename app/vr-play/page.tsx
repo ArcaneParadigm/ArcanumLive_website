@@ -189,18 +189,18 @@ export default function VRPlayPage() {
 
         {/* Stats bar */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}
-          className="flex justify-center gap-8 mb-10 py-4 rounded-xl"
+          className="grid grid-cols-5 md:flex md:justify-center md:gap-8 mb-10 py-4 rounded-xl"
           style={{ border: `1px solid ${CYAN}20`, background: `${CYAN}06` }}>
           {[
             { label: 'Games', value: '2' },
             { label: 'Clips', value: `${CLIPS.length}` },
-            { label: 'Specialty', value: 'VR Archery' },
-            { label: 'Platform', value: 'Meta Quest' },
+            { label: 'Specialty', value: 'VR\nArchery' },
+            { label: 'Platform', value: 'Meta\nQuest' },
             { label: 'Rank', value: 'Elite' },
           ].map(s => (
-            <div key={s.label} className="text-center">
-              <p className="font-cinzel text-lg font-bold" style={{ color: CYAN }}>{s.value}</p>
-              <p className="text-[8px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.4)' }}>{s.label}</p>
+            <div key={s.label} className="text-center px-1">
+              <p className="font-cinzel text-sm md:text-lg font-bold leading-tight whitespace-pre-line" style={{ color: CYAN }}>{s.value}</p>
+              <p className="text-[7px] md:text-[8px] tracking-widest uppercase mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{s.label}</p>
             </div>
           ))}
         </motion.div>

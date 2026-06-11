@@ -8,7 +8,6 @@ const BASE = 'https://arcanum.live'
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
-    { url: `${BASE}/home2`, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/dome-shows`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE}/vr-films`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE}/ai-films`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },

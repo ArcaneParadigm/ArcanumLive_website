@@ -243,7 +243,7 @@ export default function AscensionChamberHub({ audioMap, cardImages = {}, sequenc
 
       {/* ── Slim header ── */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between px-6 pt-3 pb-1">
-        <Link href="/home2"
+        <Link href="/"
           className="font-cinzel text-[10px] italic tracking-widest hover:opacity-100 transition-opacity md:flex-1 mb-1 md:mb-0"
           style={{ color: 'rgba(255,255,255,0.82)' }}>
           ← Home

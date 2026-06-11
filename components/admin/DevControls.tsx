@@ -3,13 +3,16 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { setHoverVolumeMultiplier, getHoverVolumeMultiplier } from '@/lib/utils/crystalSound'
+import DevGridOverlay from './DevGridOverlay'
 
 const GOLD = '#c9973a'
 const LS_KEY = 'arcanum_dev_hover_vol'
+const LS_GRID = 'arcanum_dev_grid'
 
 export default function DevControls() {
   const [open, setOpen] = useState(false)
   const [hoverVol, setHoverVol] = useState(1.0)
+  const [gridVisible, setGridVisible] = useState(false)
 
   // Load persisted value on mount
   useEffect(() => {
@@ -17,7 +20,14 @@ export default function DevControls() {
     const v = saved !== null ? parseFloat(saved) : 1.0
     setHoverVol(v)
     setHoverVolumeMultiplier(v)
+    setGridVisible(localStorage.getItem(LS_GRID) === '1')
   }, [])
+
+  function handleGridToggle() {
+    const next = !gridVisible
+    setGridVisible(next)
+    localStorage.setItem(LS_GRID, next ? '1' : '0')
+  }
 
   function handleVolChange(v: number) {
     setHoverVol(v)
@@ -28,6 +38,8 @@ export default function DevControls() {
   const pct = Math.round(hoverVol * 100)
 
   return (
+    <>
+    <DevGridOverlay visible={gridVisible} />
     <div className="fixed bottom-5 right-5 z-[9999] select-none">
       {/* Gear button */}
       <motion.button
@@ -142,13 +154,41 @@ export default function DevControls() {
               {/* Divider */}
               <div className="h-px" style={{ background: `linear-gradient(to right, transparent, ${GOLD}25, transparent)` }} />
 
+              {/* Grid overlay toggle */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] tracking-widest uppercase font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>Grid Overlay</p>
+                  <p className="text-[9px] mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>5vw/5vh lines · cursor coords</p>
+                </div>
+                <button
+                  onClick={handleGridToggle}
+                  className="relative w-10 h-5 rounded-full transition-all duration-200 flex-shrink-0"
+                  style={{
+                    background: gridVisible ? `${GOLD}` : 'rgba(255,255,255,0.12)',
+                    border: `1px solid ${gridVisible ? GOLD : 'rgba(255,255,255,0.2)'}`,
+                  }}
+                >
+                  <span
+                    className="absolute top-0.5 w-4 h-4 rounded-full transition-all duration-200"
+                    style={{
+                      left: gridVisible ? 'calc(100% - 18px)' : '2px',
+                      background: gridVisible ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.4)',
+                    }}
+                  />
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px" style={{ background: `linear-gradient(to right, transparent, ${GOLD}25, transparent)` }} />
+
               <p className="text-[9px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                Settings persist across pages via localStorage. More controls coming soon.
+                Settings persist across pages via localStorage.
               </p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+    </>
   )
 }

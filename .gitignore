@@ -37,3 +37,9 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Claude Code worktrees (contain nested .git dirs — not submodules)
+.claude/worktrees/
+
+# Audio files — host on CDN, not git
+public/audio/

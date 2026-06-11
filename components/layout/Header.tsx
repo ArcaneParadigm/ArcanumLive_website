@@ -54,7 +54,7 @@ export default function Header() {
         style={{ background: `linear-gradient(to right, transparent, ${GOLD}40 20%, ${GOLD}60 50%, ${GOLD}40 80%, transparent)` }} />
 
       {/* Logo → home2 */}
-      <Link href="/home2">
+      <Link href="/">
         <motion.span
           className="font-cinzel text-lg font-bold tracking-wider select-none z-10 cursor-pointer"
           style={{

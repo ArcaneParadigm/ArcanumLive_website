@@ -120,11 +120,11 @@ export default function RealmsPortraitGrid({ worlds, cardImages, galleryImages =
   const galleryWorld  = gallerySlug ? worlds.find(w => w.slug === gallerySlug) : null
 
   return (
-    <div className="px-6 pt-6 pb-10" style={{ background: '#08060e' }}>
+    <div className="px-6 pt-2 pb-10" style={{ background: '#08060e' }}>
       <div className="max-w-7xl mx-auto">
 
         <div className="text-center mb-2">
-          <p className="text-[9px] tracking-[0.5em] uppercase mb-2" style={{ color: `${GOLD}90` }}>Select a Realm</p>
+          <p className="text-[9px] tracking-[0.5em] uppercase mb-2" style={{ color: GOLD }}>Select a Realm</p>
           <h2 className="font-cinzel text-2xl font-bold tracking-[0.3em]"
             style={{
               background: 'linear-gradient(135deg, #8a6020 0%, #c9973a 30%, #f5d06e 55%, #c9973a 75%, #8a6020 100%)',

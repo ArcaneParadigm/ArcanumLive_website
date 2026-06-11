@@ -35,7 +35,7 @@ export default function Home2Nav() {
           borderBottom: `1px solid ${GOLD}30`,
           borderLeft:   `1px solid ${GOLD}40`,
           borderRight:  `1px solid ${GOLD}40`,
-          boxShadow: `inset 0 1px 0 ${GOLD}18, inset 0 -1px 0 ${GOLD}10, inset 0 0 60px rgba(201,151,58,0.06), 0 2px 24px rgba(0,0,0,0.6)`,
+          boxShadow: `inset 0 1px 0 ${GOLD}cc, inset 0 -1px 0 ${GOLD}b3, inset 0 0 60px rgba(201,151,58,0.25), 0 2px 24px rgba(0,0,0,0.6)`,
         }}
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -55,10 +55,21 @@ export default function Home2Nav() {
           <path d="M22 0 L22 14 L14 22 L0 22" stroke={`${GOLD}45`} strokeWidth="1" fill="none"/>
         </svg>
         <div className="absolute top-0 left-8 right-8 h-px pointer-events-none"
-          style={{ background: `linear-gradient(to right, transparent, ${GOLD}40 20%, ${GOLD}60 50%, ${GOLD}40 80%, transparent)` }} />
+          style={{ background: `linear-gradient(to right, transparent, ${GOLD}b3 20%, ${GOLD}d9 50%, ${GOLD}b3 80%, transparent)` }} />
+
+        {/* Purple light sweep */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `linear-gradient(90deg, transparent 0%, rgba(139,46,226,0.8) 20%, rgba(139,46,226,1.0) 35%, rgba(0,0,0,0.95) 50%, rgba(139,46,226,1.0) 65%, rgba(139,46,226,0.8) 80%, transparent 100%)`,
+            opacity: 1.0,
+          }}
+          animate={{ x: ['-100%', '100%'] }}
+          transition={{ duration: 37.5, repeat: Infinity, ease: 'easeInOut' }}
+        />
 
         {/* Logo */}
-        <Link href="/home2">
+        <Link href="/">
           <motion.span
             className="font-cinzel text-lg font-bold tracking-wider select-none z-10 cursor-pointer"
             style={{

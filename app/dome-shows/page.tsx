@@ -1,9 +1,11 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Home2Nav from '@/components/home2/Home2Nav'
+import GallerySystem from '@/components/ui/GallerySystem'
+import type { GalleryImage } from '@/components/ui/GallerySystem'
 
 const GOLD = '#c9973a'
 const NEON = '#c9973a'
@@ -19,6 +21,7 @@ interface DomeShow {
   color: string
   youtubeId?: string
   festivals: Festival[]
+  laurelImages?: string[]
   gallery: string[]
   watchUrl?: string
   rentUrl?: string
@@ -36,7 +39,10 @@ const SHOWS: DomeShow[] = [
     festivals: [
       { name: 'Fulldome Festival Jena', award: 'Official Selection 2025' },
     ],
-    gallery: [],
+    gallery: [
+      ...Array.from({ length: 12 }, (_, i) => `/images/dome-shows/aether/Aether_equirec__${String(i * 2).padStart(3, '0')}.jpg`),
+      ...Array.from({ length: 21 }, (_, i) => `/images/dome-shows/aether/Aether_dome_${String(i).padStart(3, '0')}.jpg`),
+    ],
     rentUrl: 'https://vimeo.com/ondemand/aether360',
   },
   {
@@ -46,13 +52,13 @@ const SHOWS: DomeShow[] = [
     desc: '45 mins. Among them stands Soulblade, Gaia\'s stalwart champion, embarking on the grand odyssey known as "Aeon — Into the Multiverse," the genesis of our quest to save our world.\n\nThis prelude to Ai Divine marks the dawn of Soulblade\'s epic journey, a noble quest to reclaim Gaia\'s lost heart shard.\n\nThe Cosmic Alignment begins — magical energies cascade from an asteroid belt adorned with mystical mana crystals falling to the planet, beckoning Gaia forth from her long slumber.',
     color: '#c9973a',
     youtubeId: 'UA1ZoEJn6F8',
-    festivals: [
-      { name: 'Dome Fest West', award: 'Official Selection 2023' },
-      { name: 'Dome Fest West', award: 'Official Selection 2024' },
-      { name: 'IMERSA', award: 'Official Selection' },
-      { name: 'Jean Berlin VR Visual Music Festival', award: 'Official Selection 2024' },
-      { name: 'EPHEMERA + EYR', award: 'Official Selection 2024' },
-      { name: 'IMACON Film Festival', award: 'Official Selection 2024' },
+    festivals: [],
+    laurelImages: [
+      '/images/laurels/aeon-dome-fest-west.png',
+      '/images/laurels/dome-fest-west-audience-choice-2022.png',
+      '/images/laurels/imersa-2022.png',
+      '/images/laurels/jena-official-selection.png',
+      '/images/laurels/macon-2024.png',
     ],
     gallery: [],
     rentUrl: 'https://vimeo.com/ondemand/aeon',
@@ -65,6 +71,12 @@ const SHOWS: DomeShow[] = [
     color: '#a855f7',
     youtubeId: '0fWRJaLLHxg',
     festivals: [],
+    laurelImages: [
+      '/images/laurels/dome-fest-west-2022.png',
+      '/images/laurels/fulldome-uk-2023.png',
+      '/images/laurels/efemera-uvm-2024.png',
+      '/images/laurels/jena-official-selection.png',
+    ],
     gallery: [],
     rentUrl: 'https://vimeo.com/ondemand/aidivine',
   },
@@ -83,7 +95,7 @@ const SHOWS: DomeShow[] = [
     title: 'Set the Controls',
     slug: 'set-the-controls',
     tagline: 'For the Heart of the Sun',
-    desc: 'A psychedelic voyage toward the solar core — frequencies, plasma storms, and sacred geometry converge in an audio-reactive fulldome journey inspired by the legendary Pink Floyd track.',
+    desc: 'A psychedelic voyage toward the solar core — frequencies, plasma storms, and sacred geometry converge in an audio-reactive fulldome journey inspired by the legendary Pink Floyd track.\n\nSet the Controls completed a 3-month run at Area 15 in Las Vegas — the leading immersive venue in the United States — installed in its dedicated immersive room. Audiences experienced the film as a continuous ambient installation, the solar core pulsing through the space in an unending loop.',
     color: '#f5d06e',
     youtubeId: 'Lu0N9fmOxZ4',
     festivals: [],
@@ -98,7 +110,16 @@ const SHOWS: DomeShow[] = [
     color: '#ff0044',
     youtubeId: 'g__8mFojTsc',
     festivals: [],
-    gallery: [],
+    gallery: [
+      '/images/dome-shows/terrordome/dungeon_0.jpg',
+      '/images/dome-shows/terrordome/dungeon_1.jpg',
+      '/images/dome-shows/terrordome/dungeon_2.jpg',
+      '/images/dome-shows/terrordome/dungeon_3.jpg',
+      '/images/dome-shows/terrordome/horror_4.jpg',
+      '/images/dome-shows/terrordome/horror_5.jpg',
+      '/images/dome-shows/terrordome/horror_6.jpg',
+      '/images/dome-shows/terrordome/horror_7.jpg',
+    ],
     wip: true,
   },
   {
@@ -142,44 +163,6 @@ function FestivalBadge({ fest, color }: { fest: Festival; color: string }) {
   )
 }
 
-// ── Gallery strip ─────────────────────────────────────────────────────────────
-
-function GalleryStrip({ images, color, title }: { images: string[]; color: string; title: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-  function scroll(dir: 1 | -1) {
-    ref.current?.scrollBy({ left: dir * 320, behavior: 'smooth' })
-  }
-
-  // If no images, show placeholder slots
-  const slots = images.length > 0 ? images : Array.from({ length: 8 }, (_, i) => `__placeholder_${i}`)
-
-  return (
-    <div className="relative">
-      <button onClick={() => scroll(-1)}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-7 h-7 rounded-full flex items-center justify-center text-sm cursor-pointer"
-        style={{ background: '#12091e', border: `1px solid ${color}`, color, boxShadow: `0 0 12px ${color}70, 0 0 24px ${color}30` }}>‹</button>
-      <div ref={ref} className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-        {slots.map((src, i) => (
-          <div key={i} className="shrink-0 rounded-lg overflow-hidden relative"
-            style={{ width: 'clamp(120px, 20vw, 160px)', height: 'clamp(67px, 11vw, 90px)', border: `1px solid ${color}`, background: `radial-gradient(ellipse at 50% 40%, ${color}18, #08060e 70%)`, flexShrink: 0, boxShadow: `0 0 12px ${color}40, 0 0 24px ${color}18`, aspectRatio: '16/9' }}>
-            {src.startsWith('__placeholder') ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span style={{ fontSize: 'clamp(14px, 2vw, 18px)', color: `${color}60` }}>◎</span>
-              </div>
-            ) : (
-              <img src={src} alt={`${title} gallery ${i + 1}`} className="w-full h-full object-cover" />
-            )}
-            <div className="absolute top-1 left-1" style={{ width: 'clamp(2px, 0.5vw, 4px)', height: 'clamp(2px, 0.5vw, 4px)', borderTop: `1px solid ${color}`, borderLeft: `1px solid ${color}` }} />
-            <div className="absolute bottom-1 right-1" style={{ width: 'clamp(2px, 0.5vw, 4px)', height: 'clamp(2px, 0.5vw, 4px)', borderBottom: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
-          </div>
-        ))}
-      </div>
-      <button onClick={() => scroll(1)}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-7 h-7 rounded-full flex items-center justify-center text-sm cursor-pointer"
-        style={{ background: '#12091e', border: `1px solid ${color}`, color, boxShadow: `0 0 12px ${color}70, 0 0 24px ${color}30` }}>›</button>
-    </div>
-  )
-}
 
 // ── Show strip panel ──────────────────────────────────────────────────────────
 
@@ -293,9 +276,13 @@ function ShowStrip({ show, index }: { show: DomeShow; index: number }) {
             <div className="absolute bottom-2 right-2 w-4 h-4 pointer-events-none" style={{ borderBottom: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
           </div>
 
-          {/* Festival badges */}
-          {show.festivals.length > 0 && (
-            <div className="flex gap-2 flex-wrap">
+          {/* Festival laurels / badges */}
+          {(show.laurelImages?.length || show.festivals.length > 0) && (
+            <div className="flex gap-3 flex-wrap items-center justify-center">
+              {show.laurelImages?.map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={i} src={src} alt="Festival Laurel" style={{ height: 72, width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.15))' }} />
+              ))}
               {show.festivals.map((f, i) => (
                 <FestivalBadge key={i} fest={f} color={color} />
               ))}
@@ -304,14 +291,30 @@ function ShowStrip({ show, index }: { show: DomeShow; index: number }) {
         </div>
       </div>
 
-      {/* Bottom: gallery strip */}
+      {/* Bottom: gallery */}
       <div className="px-6 pb-5">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
           <span className="text-[8px] tracking-[0.4em] uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>Gallery</span>
           <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, transparent, ${color})` }} />
         </div>
-        <GalleryStrip images={show.gallery} color={color} title={show.title} />
+        {show.gallery.length > 0 ? (
+          <GallerySystem
+            images={show.gallery.map((src, i): GalleryImage => ({ id: String(i), src, alt: `${show.title} ${i + 1}` }))}
+            accentColor={color}
+            aspectRatio="16/9"
+            label={`${show.title} Gallery`}
+          />
+        ) : (
+          <div className="flex gap-2 overflow-x-hidden">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="shrink-0 rounded-lg flex items-center justify-center"
+                style={{ width: 'clamp(120px,20vw,160px)', aspectRatio: '16/9', border: `1px solid ${color}40`, background: `radial-gradient(ellipse at 50% 40%, ${color}10, #08060e 70%)` }}>
+                <span style={{ color: `${color}40`, fontSize: 16 }}>◎</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Side accent line */}
@@ -327,13 +330,13 @@ export default function DomeShowsPage() {
     <div className="min-h-screen" style={{ background: '#08060e' }}>
       <Home2Nav />
 
-      <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="max-w-6xl mx-auto px-6 pt-3 pb-6">
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
-          className="text-center mb-12">
-          <p className="text-[9px] tracking-[0.6em] uppercase mb-3" style={{ color: GOLD }}>Fulldome Cinema & 360° Films</p>
-          <h1 className="font-cinzel text-4xl md:text-5xl font-bold mb-4"
+          className="text-center mb-4">
+          <p className="text-[9px] tracking-[0.6em] uppercase mb-1" style={{ color: GOLD }}>Fulldome Cinema & 360° Films</p>
+          <h1 className="font-cinzel text-4xl md:text-5xl font-bold mb-1"
             style={{
               background: `linear-gradient(135deg, #6b4411 0%, ${GOLD} 22%, #f5d06e 50%, ${GOLD} 78%, #6b4411 100%)`,
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
@@ -341,13 +344,25 @@ export default function DomeShowsPage() {
             }}>
             Dome Shows
           </h1>
-          <p className="text-white/50 text-sm max-w-lg mx-auto leading-relaxed">
+          <p className="text-white/50 text-xs max-w-lg mx-auto leading-relaxed">
             World-premiere fulldome productions — available for venues, planetariums, and immersive installations.
           </p>
-          <div className="flex items-center gap-4 mt-6 max-w-xs mx-auto">
-            <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,151,58,0.5))' }} />
-            <span style={{ color: GOLD }}>✦</span>
-            <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, rgba(201,151,58,0.5), transparent)' }} />
+          <div className="relative flex items-center justify-end mt-2">
+            <div className="absolute inset-x-0 flex items-center justify-center gap-4 pointer-events-none">
+              <div style={{ width: 80, height: 1, background: 'linear-gradient(90deg, transparent, rgba(201,151,58,0.5))' }} />
+              <span style={{ color: GOLD }}>✦</span>
+              <div style={{ width: 80, height: 1, background: 'linear-gradient(90deg, rgba(201,151,58,0.5), transparent)' }} />
+            </div>
+            <Link href="/dome-shows/client"
+              className="relative inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[9px] font-bold tracking-widest uppercase"
+              style={{
+                border: `1px solid ${GOLD}40`,
+                color: GOLD,
+                background: `${GOLD}0a`,
+                letterSpacing: '0.2em',
+              }}>
+              ✦ Client Access
+            </Link>
           </div>
         </motion.div>
 

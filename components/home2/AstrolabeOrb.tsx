@@ -91,7 +91,7 @@ export default function AstrolabeOrb({
     const h = canvas.offsetHeight || 400
     renderer.setSize(w, h)
 
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100)
     camera.position.set(0, 0, 9.0)
 
     const scene = new THREE.Scene()

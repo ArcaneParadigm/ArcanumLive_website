@@ -62,11 +62,11 @@ export default function AstrolabeControls({
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="absolute bottom-4 right-4 z-30 select-none">
-      {/* Toggle button */}
+    <div className="absolute bottom-[128px] md:bottom-4 right-0 md:right-4 z-30 select-none">
+      {/* Toggle button — vertical pill on mobile, horizontal on desktop */}
       <motion.button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] tracking-[0.25em] uppercase font-medium"
+        className="flex flex-col md:flex-row items-center gap-0.5 md:gap-1.5 px-2 py-3 md:px-3 md:py-1.5 rounded-l-lg md:rounded-lg text-[9px] tracking-[0.25em] uppercase font-medium"
         style={{
           background: open ? `${GOLD}20` : 'rgba(8,6,14,0.7)',
           border: `1px solid ${open ? GOLD : 'rgba(201,151,58,0.3)'}`,
@@ -76,7 +76,9 @@ export default function AstrolabeControls({
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
       >
-        <span style={{ fontSize: 10 }}>⚙</span> Controls
+        <span style={{ fontSize: 10 }}>⚙</span>
+        <span className="md:hidden" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)', letterSpacing: '0.2em', fontSize: 8 }}>Controls</span>
+        <span className="hidden md:inline">Controls</span>
       </motion.button>
 
       <AnimatePresence>
