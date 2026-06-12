@@ -210,24 +210,12 @@ export default function MusicPageClient() {
           </button>
         </div>
 
-        {/* ── Lyrics sync controls — above screensaver, desktop only ── */}
-        {lyricsUrl && lyricsOpen && (
-          <div className="hidden sm:flex items-center justify-end gap-1 mb-1 px-1">
-            <span className="text-white/30 text-[10px] mr-1">sync</span>
-            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-15s</button>
-            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 5))}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-5s</button>
-            {lyricsOffset !== 0 && <span className="text-white/30 text-[10px] w-7 text-center">+{lyricsOffset}s</span>}
-            <button onClick={() => setLyricsOffset(o => o + 5)}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+5s</button>
-            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+15s</button>
-          </div>
-        )}
-
         {/* ── Screensaver panel ── */}
-        <div className="px-1 py-1 mb-3">
-        <div className="rounded-2xl overflow-hidden border border-white/10 relative mx-auto"
+        <div className="px-1 py-1 mb-3 flex items-stretch gap-1">
+        <div className="rounded-2xl overflow-hidden border border-white/10 relative"
           style={landscapeMobile
-            ? { height: 'calc(100vh - 72px)', width: '100%' }
-            : { aspectRatio: '16/9', width: 'min(100%, calc((100vh - 165px) * 16 / 9))', minHeight: 200 }
+            ? { height: 'calc(100vh - 72px)', width: '100%', flex: '1 1 auto' }
+            : { aspectRatio: '16/9', width: 'min(calc(100% - 36px), calc((100vh - 165px) * 16 / 9))', minHeight: 200, flexShrink: 0 }
           }>
 
           {activeSlug && screensaverImages.length > 0 ? (
@@ -253,19 +241,17 @@ export default function MusicPageClient() {
             </div>
           )}
         </div>
-        </div>
 
-        {/* ── Lyrics sync controls — desktop only, right of screensaver ── */}
+        {/* ── Lyrics sync pill — vertical, right of screensaver, desktop only ── */}
         {lyricsUrl && lyricsOpen && (
-          <div className="hidden sm:flex items-center justify-end gap-1 mb-1 px-1">
-            <span className="text-white/30 text-[10px] mr-1">sync</span>
-            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-15s</button>
-            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 5))}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-5s</button>
-            {lyricsOffset !== 0 && <span className="text-white/30 text-[10px] w-7 text-center">+{lyricsOffset}s</span>}
-            <button onClick={() => setLyricsOffset(o => o + 5)}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+5s</button>
-            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+15s</button>
+          <div className="hidden sm:flex flex-col items-center justify-center gap-2 py-2 px-1 rounded-lg border border-white/8 bg-white/3 self-stretch">
+            <span className="text-white/25 text-[9px] tracking-widest uppercase" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }}>sync lyrics</span>
+            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-white/50 hover:text-white/90 text-[10px] px-1 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors w-8 text-center">+15</button>
+            {lyricsOffset !== 0 && <span className="text-amber-400/60 text-[9px] tabular-nums text-center">{lyricsOffset}s</span>}
+            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-white/50 hover:text-white/90 text-[10px] px-1 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors w-8 text-center">-15</button>
           </div>
         )}
+        </div>
 
         {/* ── Mobile lyrics panel (below screensaver, sm and under) ── */}
         {lyricsUrl && lyricsOpen && (
