@@ -121,7 +121,8 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
           return isNote ? (
             <p
               key={i}
-              className="text-white/35 text-xs leading-snug text-center italic font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] max-w-xs mx-auto"
+              className="text-amber-400/60 text-xs leading-snug text-center italic font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] mx-auto"
+              style={{ maxWidth: '50%' }}
             >
               {line}
             </p>
