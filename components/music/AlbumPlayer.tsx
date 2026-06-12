@@ -67,15 +67,18 @@ interface LyricsPanelProps {
 
 function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
   const [lines, setLines] = useState<string[]>([])
+  const [offset, setOffset] = useState(0)
   const innerRef = useRef<HTMLDivElement>(null)
   const outerRef = useRef<HTMLDivElement>(null)
+
+  // Reset offset when track changes
+  useEffect(() => { setOffset(0) }, [lyricsUrl])
 
   useEffect(() => {
     if (!lyricsUrl) { setLines([]); return }
     fetch(lyricsUrl)
       .then(r => r.text())
       .then(text => {
-        // Strip everything up to and including the "--- Prompt ---" divider
         const promptIdx = text.indexOf('--- Prompt ---')
         const raw = promptIdx >= 0 ? text.slice(promptIdx + 14) : text
         const cleaned = raw
@@ -83,7 +86,8 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
           .replace(/^ID:.*$/gim, '')
           .replace(/^Tags:.*$/gim, '')
           .replace(/^---.*$/gm, '')
-          .replace(/^\[.*?\]$/gm, '')   // strip [Verse], [Chorus], [Bridge] etc
+          .replace(/^\[.*?\]$/gm, '')        // strip [Verse], [Chorus] etc
+          .replace(/^\(\*.*?\*\)\s*$/gm, '') // strip (*production notes*)
           .trim()
         const parsed = cleaned.split('\n').map(l => l.trim()).filter(Boolean)
         setLines(parsed)
@@ -91,25 +95,23 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
       .catch(() => setLines([]))
   }, [lyricsUrl])
 
-  // Smooth scroll: set translateY once per timeupdate (~4×/sec)
-  // Transition slightly longer than tick interval so it glides without lag
   useEffect(() => {
     const inner = innerRef.current
     const outer = outerRef.current
     if (!inner || !outer || !duration || lines.length === 0) return
     const overflow = inner.scrollHeight - outer.clientHeight
     if (overflow <= 0) return
-    const progress = Math.min(currentTime / duration, 1)
+    // Offset delays when scrolling starts; lyrics hold at top until offset passes
+    const adj = Math.max(0, currentTime - offset)
+    const effective = Math.max(1, duration - offset)
+    const progress = Math.min(adj / effective, 1)
     inner.style.transform = `translateY(-${progress * overflow}px)`
-  }, [currentTime, duration, lines])
+  }, [currentTime, duration, lines, offset])
 
   if (!lyricsUrl || lines.length === 0) return null
 
   return (
-    <div
-      ref={outerRef}
-      className="absolute inset-0 overflow-hidden pointer-events-none"
-    >
+    <div ref={outerRef} className="absolute inset-0 overflow-hidden">
       <div
         ref={innerRef}
         className="px-8 py-12 space-y-2"
@@ -123,8 +125,34 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
             {line}
           </p>
         ))}
-        {/* Spacer so final lines don't get cut */}
         <div className="h-32" />
+      </div>
+
+      {/* Lyrics timing offset controls — bottom-right corner */}
+      <div className="absolute bottom-3 right-3 flex items-center gap-1 pointer-events-auto">
+        <button
+          onClick={() => setOffset(o => Math.max(0, o - 15))}
+          className="text-white/50 hover:text-white/90 text-xs px-1.5 py-0.5 rounded bg-black/40 hover:bg-black/60 transition-colors"
+          title="Lyrics earlier (-15s)"
+        >-15s</button>
+        <button
+          onClick={() => setOffset(o => Math.max(0, o - 5))}
+          className="text-white/50 hover:text-white/90 text-xs px-1.5 py-0.5 rounded bg-black/40 hover:bg-black/60 transition-colors"
+          title="Lyrics earlier (-5s)"
+        >-5s</button>
+        {offset !== 0 && (
+          <span className="text-white/40 text-xs tabular-nums w-8 text-center">+{offset}s</span>
+        )}
+        <button
+          onClick={() => setOffset(o => o + 5)}
+          className="text-white/50 hover:text-white/90 text-xs px-1.5 py-0.5 rounded bg-black/40 hover:bg-black/60 transition-colors"
+          title="Lyrics later (+5s)"
+        >+5s</button>
+        <button
+          onClick={() => setOffset(o => o + 15)}
+          className="text-white/50 hover:text-white/90 text-xs px-1.5 py-0.5 rounded bg-black/40 hover:bg-black/60 transition-colors"
+          title="Lyrics later (+15s)"
+        >+15s</button>
       </div>
     </div>
   )
