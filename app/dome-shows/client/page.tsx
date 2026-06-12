@@ -39,7 +39,7 @@ const SHOWS: DomeShow[] = [
     desc: 'A luminous journey through the fifth element — the living breath of the cosmos. Aether weaves sacred geometry, ancient light codes, and astral landscapes into a breathtaking fulldome experience.',
     color: '#00e5ff',
     trailerYoutubeId: 'tvliE1yCUwE',
-    fullMovieYoutubeId: undefined,
+    fullMovieYoutubeId: 'MMe3uCV_v6o',
     festivals: [
       { name: 'Fulldome Festival Jena', award: 'Official Selection 2025' },
     ],
@@ -304,15 +304,19 @@ function VideoSlot({ youtubeId, label, color, size }: {
         }}
       >
         {youtubeId ? (
-          <iframe
-            ref={iframeRef}
-            className="absolute inset-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            allowFullScreen
-            title={label}
-            style={{ border: 'none' }}
-          />
+          <>
+            <iframe
+              ref={iframeRef}
+              className="absolute inset-0 w-full h-full"
+              src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowFullScreen
+              title={label}
+              style={{ border: 'none' }}
+            />
+            {/* Block "Watch on YouTube" link in top-right of player */}
+            <div className="absolute top-0 right-0 z-10" style={{ width: '35%', height: '18%', cursor: 'default' }} />
+          </>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
             <div className="rounded-full flex items-center justify-center"
