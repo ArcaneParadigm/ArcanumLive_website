@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import type { Album, AlbumTrack } from '@/lib/data/albums'
+import { AUDIO_CDN } from '@/lib/data/audioCdnUrls'
 
 interface NowPlaying {
   albumId: string
@@ -338,13 +339,19 @@ export default function AlbumPlayer({ albums, onProgress, command, onAlbumEnd, o
   const currentAlbum = nowPlaying ? albums.find(a => a.id === nowPlaying.albumId) : null
   const currentTrack = currentAlbum?.tracks[nowPlaying?.trackIdx ?? 0] ?? null
 
-  const audioSrc = currentAlbum && currentTrack
+  const localAudioPath = currentAlbum && currentTrack
     ? `/audio/albums/${currentAlbum.slug}/${currentTrack.file}.mp3`
+    : null
+  const audioSrc = localAudioPath
+    ? (AUDIO_CDN[localAudioPath] ?? localAudioPath)
     : null
 
   // Lyrics file is always named [track.file].txt (if it exists the fetch succeeds, else null)
-  const lyricsUrl = currentAlbum && currentTrack
+  const localLyricsPath = currentAlbum && currentTrack
     ? `/audio/albums/${currentAlbum.slug}/lyrics/${currentTrack.file}.txt`
+    : null
+  const lyricsUrl = localLyricsPath
+    ? (AUDIO_CDN[localLyricsPath] ?? localLyricsPath)
     : null
 
   // External command: jump to a specific album+track and play
