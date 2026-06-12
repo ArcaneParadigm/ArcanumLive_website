@@ -210,6 +210,18 @@ export default function MusicPageClient() {
           </button>
         </div>
 
+        {/* ── Lyrics sync controls — above screensaver, desktop only ── */}
+        {lyricsUrl && lyricsOpen && (
+          <div className="hidden sm:flex items-center justify-end gap-1 mb-1 px-1">
+            <span className="text-white/30 text-[10px] mr-1">sync</span>
+            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-15s</button>
+            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 5))}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-5s</button>
+            {lyricsOffset !== 0 && <span className="text-white/30 text-[10px] w-7 text-center">+{lyricsOffset}s</span>}
+            <button onClick={() => setLyricsOffset(o => o + 5)}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+5s</button>
+            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+15s</button>
+          </div>
+        )}
+
         {/* ── Screensaver panel ── */}
         <div className="px-1 py-1 mb-3">
         <div className="rounded-2xl overflow-hidden border border-white/10 relative mx-auto"
