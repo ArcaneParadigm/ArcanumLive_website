@@ -39,7 +39,7 @@ const SHOWS: DomeShow[] = [
     desc: 'A luminous journey through the fifth element — the living breath of the cosmos. Aether weaves sacred geometry, ancient light codes, and astral landscapes into a breathtaking fulldome experience.',
     color: '#00e5ff',
     trailerYoutubeId: 'tvliE1yCUwE',
-    fullMovieYoutubeId: 'MMe3uCV_v6o',
+    fullMovieYoutubeId: undefined,
     festivals: [
       { name: 'Fulldome Festival Jena', award: 'Official Selection 2025' },
     ],
