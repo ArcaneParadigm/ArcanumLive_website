@@ -46,10 +46,10 @@ function NavItem({ link, showPipe }: { link: { label: string; href: string }; sh
             <motion.div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(180,10,10,0.55) 55deg, rgba(220,30,30,0.35) 80deg, transparent 130deg)',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(160,8,8,0.0) 15%, rgba(200,15,15,0.45) 40%, rgba(220,25,25,0.55) 50%, rgba(200,15,15,0.45) 60%, rgba(160,8,8,0.0) 85%, transparent 100%)',
               }}
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
+              animate={{ x: ['-120%', '120%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.4 }}
             />
           )}
           <span className="relative z-10">{link.label}</span>
