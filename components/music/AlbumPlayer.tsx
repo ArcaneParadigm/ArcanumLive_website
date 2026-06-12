@@ -87,7 +87,6 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
           .replace(/^Tags:.*$/gim, '')
           .replace(/^---.*$/gm, '')
           .replace(/^\[.*?\]$/gm, '')        // strip [Verse], [Chorus] etc
-          .replace(/^\(\*.*?\*\)\s*$/gm, '') // strip (*production notes*)
           .trim()
         const parsed = cleaned.split('\n').map(l => l.trim()).filter(Boolean)
         setLines(parsed)
@@ -117,14 +116,24 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
         className="px-8 py-12 space-y-2"
         style={{ transition: 'transform 0.6s linear', willChange: 'transform' }}
       >
-        {lines.map((line, i) => (
-          <p
-            key={i}
-            className="text-white/90 text-base md:text-lg leading-relaxed text-center font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
-          >
-            {line}
-          </p>
-        ))}
+        {lines.map((line, i) => {
+          const isNote = /^\(\*.*\*\)$/.test(line.trim())
+          return isNote ? (
+            <p
+              key={i}
+              className="text-white/35 text-xs leading-snug text-center italic font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] max-w-xs mx-auto"
+            >
+              {line}
+            </p>
+          ) : (
+            <p
+              key={i}
+              className="text-white/90 text-base md:text-lg leading-relaxed text-center font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
+            >
+              {line}
+            </p>
+          )
+        })}
         <div className="h-32" />
       </div>
 
