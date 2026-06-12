@@ -130,6 +130,7 @@ function LyricsPanel({ lyricsUrl, duration, currentTime }: LyricsPanelProps) {
 
       {/* Lyrics timing offset controls — bottom-right corner */}
       <div className="absolute bottom-3 right-3 flex items-center gap-1 pointer-events-auto">
+        <span className="text-white/30 text-xs mr-1">sync</span>
         <button
           onClick={() => setOffset(o => Math.max(0, o - 15))}
           className="text-white/50 hover:text-white/90 text-xs px-1.5 py-0.5 rounded bg-black/40 hover:bg-black/60 transition-colors"
