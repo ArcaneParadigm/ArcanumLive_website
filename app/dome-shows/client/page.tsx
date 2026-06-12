@@ -315,7 +315,7 @@ function VideoSlot({ youtubeId, label, color, size }: {
               style={{ border: 'none' }}
             />
             {/* Block "Watch on YouTube" link in top-right of player */}
-            <div className="absolute top-0 right-0 z-10" style={{ width: '35%', height: '18%', cursor: 'default' }} />
+            <div className="absolute top-0 right-0 z-10" style={{ width: '18%', height: '9%', cursor: 'default' }} />
           </>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
