@@ -280,13 +280,6 @@ function VideoSlot({ youtubeId, label, color, size }: {
 }) {
   const isSmall = size === 'small'
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  function goFullscreen() {
-    const el = containerRef.current
-    if (!el) return
-    if (el.requestFullscreen) el.requestFullscreen()
-  }
 
   return (
     <div className={`flex flex-col gap-1 ${isSmall ? 'w-full' : 'flex-1'}`}>
@@ -294,7 +287,6 @@ function VideoSlot({ youtubeId, label, color, size }: {
         {label}
       </p>
       <div
-        ref={containerRef}
         className="relative w-full rounded-xl overflow-hidden"
         style={{
           aspectRatio: '16/9',
@@ -314,8 +306,7 @@ function VideoSlot({ youtubeId, label, color, size }: {
               title={label}
               style={{ border: 'none' }}
             />
-            {/* Block "Watch on YouTube" — top title bar + bottom-right logo */}
-            <div className="absolute top-0 inset-x-0 z-10" style={{ height: '12%', cursor: 'default' }} />
+            {/* Block "Watch on YouTube" bottom-right logo */}
             <div className="absolute bottom-0 right-0 z-10" style={{ width: '22%', height: '14%', cursor: 'default' }} />
           </>
         ) : (
@@ -336,21 +327,6 @@ function VideoSlot({ youtubeId, label, color, size }: {
         )}
         <div className="absolute top-1.5 left-1.5 w-3 h-3 pointer-events-none" style={{ borderTop: `1px solid ${color}`, borderLeft: `1px solid ${color}` }} />
         <div className="absolute bottom-1.5 right-1.5 w-3 h-3 pointer-events-none" style={{ borderBottom: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
-        {/* Fullscreen button — large slots only */}
-        {!isSmall && youtubeId && (
-          <button
-            onClick={goFullscreen}
-            className="absolute top-2 right-2 z-10 flex items-center gap-1 px-2 py-1 rounded text-[8px] tracking-widest uppercase font-bold transition-all"
-            style={{
-              background: 'rgba(8,6,14,0.75)',
-              border: `1px solid ${color}50`,
-              color,
-              backdropFilter: 'blur(6px)',
-            }}
-          >
-            ⛶ Fullscreen
-          </button>
-        )}
       </div>
     </div>
   )
