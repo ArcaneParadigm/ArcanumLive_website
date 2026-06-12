@@ -501,7 +501,7 @@ export default function ClientDomeShowsPage() {
     <div className="min-h-screen" style={{ background: '#08060e' }}>
       <Home2Nav />
 
-      <div className="max-w-6xl mx-auto px-6 pt-3 pb-6">
+      <div className="max-w-[1600px] mx-auto px-6 pt-3 pb-6">
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
