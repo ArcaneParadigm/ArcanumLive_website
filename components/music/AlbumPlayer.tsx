@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import type { Album, AlbumTrack } from '@/lib/data/albums'
 import { AUDIO_CDN } from '@/lib/data/audioCdnUrls'
 
@@ -185,12 +186,20 @@ function TrackRow({ track, albumSlug, trackIdx, isActive, isPlaying, onSelect, t
   return (
     <button
       onClick={onSelect}
-      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-left transition-all duration-150 hover:brightness-125"
+      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-left transition-all duration-150 hover:brightness-125 overflow-hidden relative"
       style={{
         border: `1px solid ${isActive ? `${trackColor}80` : `${trackColor}35`}`,
         background: isActive ? `${trackColor}22` : `${trackColor}08`,
       }}
     >
+      {isActive && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: `linear-gradient(90deg, transparent 0%, ${trackColor}18 35%, ${trackColor}35 50%, ${trackColor}18 65%, transparent 100%)` }}
+          animate={{ x: ['-100%', '100%'] }}
+          transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
       {/* Track number / playing indicator */}
       <div className="w-6 flex-shrink-0 text-center">
         {isActive && isPlaying ? (
@@ -283,6 +292,13 @@ function AlbumSection({ album, nowPlaying, isPlaying, onSelectTrack, defaultOpen
           boxShadow: `inset 0 1px 0 ${headerColor}40, inset 0 -1px 0 ${headerColor}30`,
         }}
       >
+        {/* Sweep */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: `linear-gradient(90deg, transparent 0%, ${headerColor}18 30%, ${headerColor}38 50%, ${headerColor}18 70%, transparent 100%)` }}
+          animate={{ x: ['-100%', '100%'] }}
+          transition={{ duration: 34, repeat: Infinity, ease: 'easeInOut' }}
+        />
         {/* Hot left edge bar */}
         <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
           style={{ background: `linear-gradient(to bottom, ${headerColor}ff, ${headerColor}99, ${headerColor}ff)` }} />
@@ -295,7 +311,7 @@ function AlbumSection({ album, nowPlaying, isPlaying, onSelectTrack, defaultOpen
 
         {/* Album title + subtitle */}
         <div className="flex-1 min-w-0">
-          <div className={`font-semibold text-sm truncate ${isActive ? 'text-gold' : 'text-white'}`}>
+          <div className="font-semibold text-sm truncate text-gold">
             {album.title}
           </div>
           {album.subtitle && (
@@ -508,7 +524,7 @@ export default function AlbumPlayer({ albums, onProgress, command, onAlbumEnd, o
 
       {/* ── Now Playing bar ── */}
       <div
-        className="rounded-2xl overflow-hidden mb-4"
+        className="rounded-2xl overflow-hidden mb-4 relative"
         style={{
           background: nowPlaying
             ? `linear-gradient(to right, ${npColor}55 0%, ${npColor}28 18%, rgba(8,6,14,0.95) 50%, ${npColor}18 82%, ${npColor}45 100%)`
@@ -518,6 +534,15 @@ export default function AlbumPlayer({ albums, onProgress, command, onAlbumEnd, o
         }}
       >
 
+        {/* Sweep */}
+        {nowPlaying && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-2xl overflow-hidden"
+            style={{ background: `linear-gradient(90deg, transparent 0%, ${npColor}15 30%, ${npColor}30 50%, ${npColor}15 70%, transparent 100%)` }}
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        )}
         {/* Controls */}
         <div className="px-5 py-4">
           {/* Track info */}
@@ -525,8 +550,8 @@ export default function AlbumPlayer({ albums, onProgress, command, onAlbumEnd, o
             <div className="min-w-0 flex-1">
               {currentTrack ? (
                 <>
-                  <div className="text-white font-semibold text-sm truncate">{currentTrack.title}</div>
-                  <div className="text-white/40 text-xs mt-0.5 truncate">{currentAlbum?.title}</div>
+                  <div className="text-amber-300 font-semibold text-sm truncate">{currentTrack.title}</div>
+                  <div className="text-amber-400/70 text-xs mt-0.5 truncate">{currentAlbum?.title}</div>
                 </>
               ) : (
                 <div className="text-white/30 text-sm">Select a track to begin</div>

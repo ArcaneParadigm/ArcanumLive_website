@@ -85,7 +85,7 @@ function LyricsOverlay({ lyricsUrl, duration, currentTime, offset = 0, className
         {lines.map((line, i) => {
           const isNote = /^\(\*.*\*\)$/.test(line.trim())
           return isNote ? (
-            <p key={i} className="text-amber-400/60 text-xs leading-snug text-right italic font-light drop-shadow-[0_1px_6px_rgba(0,0,0,1)] ml-auto" style={{ maxWidth: '50%' }}>
+            <p key={i} className="text-amber-300 text-xs leading-snug text-right italic font-light drop-shadow-[0_1px_6px_rgba(0,0,0,1)] ml-auto" style={{ maxWidth: '50%' }}>
               {line}
             </p>
           ) : (
@@ -211,11 +211,11 @@ export default function MusicPageClient() {
         </div>
 
         {/* ── Screensaver panel ── */}
-        <div className="px-1 py-1 mb-3 flex items-stretch gap-1">
-        <div className="rounded-2xl overflow-hidden border border-white/10 relative"
+        <div className="px-1 py-1 mb-3 relative">
+        <div className="rounded-2xl overflow-hidden border border-white/10 relative mx-auto"
           style={landscapeMobile
-            ? { height: 'calc(100vh - 72px)', width: '100%', flex: '1 1 auto' }
-            : { aspectRatio: '16/9', width: 'min(calc(100% - 36px), calc((100vh - 165px) * 16 / 9))', minHeight: 200, flexShrink: 0 }
+            ? { height: 'calc(100vh - 72px)', width: '100%' }
+            : { aspectRatio: '16/9', width: 'min(100%, calc((100vh - 165px) * 16 / 9))', minHeight: 200 }
           }>
 
           {activeSlug && screensaverImages.length > 0 ? (
@@ -240,15 +240,16 @@ export default function MusicPageClient() {
               <LyricsOverlay lyricsUrl={lyricsUrl} duration={duration} currentTime={currentTime} offset={lyricsOffset} className="absolute inset-0" />
             </div>
           )}
+
         </div>
 
-        {/* ── Lyrics sync pill — vertical, right of screensaver, desktop only ── */}
+        {/* Sync pill — outside panel, absolute top-right of wrapper, no border/bg, desktop only */}
         {lyricsUrl && lyricsOpen && (
-          <div className="hidden sm:flex flex-col items-center justify-center gap-2 py-2 px-1 rounded-lg border border-white/8 bg-white/3 self-stretch">
-            <span className="text-white/25 text-[9px] tracking-widest uppercase" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }}>sync lyrics</span>
-            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-white/50 hover:text-white/90 text-[10px] px-1 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors w-8 text-center">+15</button>
-            {lyricsOffset !== 0 && <span className="text-amber-400/60 text-[9px] tabular-nums text-center">{lyricsOffset}s</span>}
-            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-white/50 hover:text-white/90 text-[10px] px-1 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors w-8 text-center">-15</button>
+          <div className="hidden sm:flex absolute top-2 right-[-2px] z-20 flex-col items-center gap-1.5">
+            <span className="text-amber-400/80 text-[9px] tracking-widest uppercase" style={{ writingMode: 'vertical-rl' }}>sync lyrics</span>
+            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-amber-400/80 hover:text-amber-300 text-[10px] w-7 text-center transition-colors">+15</button>
+            {lyricsOffset !== 0 && <span className="text-amber-400/70 text-[9px] tabular-nums">{lyricsOffset}s</span>}
+            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-amber-400/80 hover:text-amber-300 text-[10px] w-7 text-center transition-colors">-15</button>
           </div>
         )}
         </div>
