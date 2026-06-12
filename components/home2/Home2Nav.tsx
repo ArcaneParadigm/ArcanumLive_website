@@ -20,6 +20,45 @@ const NAV_LINKS = [
   { label: 'Channels',    href: '/channels' },
 ]
 
+function NavItem({ link, showPipe }: { link: { label: string; href: string }; showPipe: boolean }) {
+  const [hov, setHov] = useState(false)
+  return (
+    <span className="flex items-center">
+      {showPipe && <div style={{ width: 2, height: 20, background: `${GOLD}77`, flexShrink: 0, alignSelf: 'center' }} />}
+      <Link href={link.href}>
+        <motion.span
+          className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer px-2 py-3.5 mx-[1px] flex items-center rounded relative overflow-hidden"
+          style={{
+            color: 'rgba(255,255,255,0.85)',
+            border: '1px solid transparent',
+          }}
+          whileHover={{
+            color: '#f0d878',
+            background: 'linear-gradient(180deg, rgba(201,151,58,0.45) 0%, rgba(201,151,58,0.15) 18%, rgba(201,151,58,0.10) 45%, rgba(201,151,58,0.04) 70%, rgba(0,0,0,0.20) 100%)',
+            boxShadow: `inset 0 1px 0 rgba(201,151,58,0.90), inset 0 2px 6px rgba(201,151,58,0.18), inset 0 -1px 0 rgba(0,0,0,0.40), inset 0 -3px 6px rgba(0,0,0,0.18), inset 1px 0 0 rgba(201,151,58,0.18), inset -1px 0 0 rgba(201,151,58,0.18), 0 0 12px rgba(201,151,58,0.15)`,
+            border: '1px solid rgba(201,151,58,0.35)',
+          }}
+          transition={{ duration: 0.15 }}
+          onMouseEnter={() => { setHov(true); playCrystalBowl(GOLD, 0.015) }}
+          onMouseLeave={() => setHov(false)}
+        >
+          {hov && (
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(180,10,10,0.55) 55deg, rgba(220,30,30,0.35) 80deg, transparent 130deg)',
+              }}
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
+            />
+          )}
+          <span className="relative z-10">{link.label}</span>
+        </motion.span>
+      </Link>
+    </span>
+  )
+}
+
 export default function Home2Nav() {
   const [soundOn, setSoundOn] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -61,7 +100,7 @@ export default function Home2Nav() {
         <motion.div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: `linear-gradient(90deg, transparent 0%, rgba(139,46,226,0.8) 20%, rgba(139,46,226,1.0) 35%, rgba(0,0,0,0.95) 50%, rgba(139,46,226,1.0) 65%, rgba(139,46,226,0.8) 80%, transparent 100%)`,
+            background: `linear-gradient(90deg, transparent 0%, rgba(72,20,120,0.35) 20%, rgba(72,20,120,0.5) 35%, rgba(0,0,0,0.4) 50%, rgba(72,20,120,0.5) 65%, rgba(72,20,120,0.35) 80%, transparent 100%)`,
             opacity: 1.0,
           }}
           animate={{ x: ['-100%', '100%'] }}
@@ -86,19 +125,9 @@ export default function Home2Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6 z-10">
-          {NAV_LINKS.map(link => (
-            <Link key={link.label} href={link.href}>
-              <motion.span
-                className="text-[11px] tracking-[0.18em] uppercase whitespace-nowrap select-none cursor-pointer"
-                style={{ color: 'rgba(255,255,255,0.85)' }}
-                whileHover={{ color: '#e8dcc8' }}
-                transition={{ duration: 0.15 }}
-                onMouseEnter={() => playCrystalBowl(GOLD, 0.015)}
-              >
-                {link.label}
-              </motion.span>
-            </Link>
+        <nav className="hidden md:flex items-center z-10">
+          {NAV_LINKS.map((link, i) => (
+            <NavItem key={link.label} link={link} showPipe={i > 0} />
           ))}
         </nav>
 
