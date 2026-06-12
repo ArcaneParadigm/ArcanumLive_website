@@ -37,10 +37,11 @@ interface LyricsOverlayProps {
   lyricsUrl: string | null
   duration: number
   currentTime: number
+  offset?: number
   className?: string
 }
 
-function LyricsOverlay({ lyricsUrl, duration, currentTime, className = '' }: LyricsOverlayProps) {
+function LyricsOverlay({ lyricsUrl, duration, currentTime, offset = 0, className = '' }: LyricsOverlayProps) {
   const [lines, setLines] = useState<string[]>([])
   const innerRef = useRef<HTMLDivElement>(null)
   const outerRef = useRef<HTMLDivElement>(null)
@@ -70,8 +71,10 @@ function LyricsOverlay({ lyricsUrl, duration, currentTime, className = '' }: Lyr
     if (!inner || !outer || !duration || lines.length === 0) return
     const overflow = inner.scrollHeight - outer.clientHeight
     if (overflow <= 0) return
-    inner.style.transform = `translateY(-${Math.min(currentTime / duration, 1) * overflow}px)`
-  }, [currentTime, duration, lines])
+    const adj = Math.max(0, currentTime - offset)
+    const effective = Math.max(1, duration - offset)
+    inner.style.transform = `translateY(-${Math.min(adj / effective, 1) * overflow}px)`
+  }, [currentTime, duration, lines, offset])
 
   if (!lyricsUrl || lines.length === 0) return null
 
@@ -79,11 +82,18 @@ function LyricsOverlay({ lyricsUrl, duration, currentTime, className = '' }: Lyr
     <div ref={outerRef} className={`overflow-hidden pointer-events-none ${className}`}>
       <div ref={innerRef} className="px-5 py-6 space-y-2"
         style={{ transition: 'transform 0.6s linear', willChange: 'transform' }}>
-        {lines.map((line, i) => (
-          <p key={i} className="text-white text-sm leading-relaxed text-right drop-shadow-[0_1px_6px_rgba(0,0,0,1)]">
-            {line}
-          </p>
-        ))}
+        {lines.map((line, i) => {
+          const isNote = /^\(\*.*\*\)$/.test(line.trim())
+          return isNote ? (
+            <p key={i} className="text-amber-400/60 text-xs leading-snug text-right italic font-light drop-shadow-[0_1px_6px_rgba(0,0,0,1)] ml-auto" style={{ maxWidth: '50%' }}>
+              {line}
+            </p>
+          ) : (
+            <p key={i} className="text-white text-sm leading-relaxed text-right drop-shadow-[0_1px_6px_rgba(0,0,0,1)]">
+              {line}
+            </p>
+          )
+        })}
         <div className="h-16" />
       </div>
       <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
@@ -118,6 +128,7 @@ export default function MusicPageClient() {
   const [lyricsUrl, setLyricsUrl] = useState<string | null>(null)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
+  const [lyricsOffset, setLyricsOffset] = useState(0)
   const [playCommand, setPlayCommand] = useState<{ albumId: string; trackIdx: number; token: number }>(
     { albumId: firstAlbum.id, trackIdx: 0, token: Date.now() }
   )
@@ -226,11 +237,23 @@ export default function MusicPageClient() {
             <div
               className={`absolute inset-y-0 right-0 z-10 pointer-events-none ${landscapeMobile ? 'block' : 'hidden sm:block'}`}
               style={{ width: landscapeMobile ? '40%' : '33.333%' }}>
-              <LyricsOverlay lyricsUrl={lyricsUrl} duration={duration} currentTime={currentTime} className="absolute inset-0" />
+              <LyricsOverlay lyricsUrl={lyricsUrl} duration={duration} currentTime={currentTime} offset={lyricsOffset} className="absolute inset-0" />
             </div>
           )}
         </div>
         </div>
+
+        {/* ── Lyrics sync controls — desktop only, right of screensaver ── */}
+        {lyricsUrl && lyricsOpen && (
+          <div className="hidden sm:flex items-center justify-end gap-1 mb-1 px-1">
+            <span className="text-white/30 text-[10px] mr-1">sync</span>
+            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 15))} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-15s</button>
+            <button onClick={() => setLyricsOffset(o => Math.max(0, o - 5))}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">-5s</button>
+            {lyricsOffset !== 0 && <span className="text-white/30 text-[10px] w-7 text-center">+{lyricsOffset}s</span>}
+            <button onClick={() => setLyricsOffset(o => o + 5)}  className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+5s</button>
+            <button onClick={() => setLyricsOffset(o => o + 15)} className="text-white/40 hover:text-white/80 text-[10px] px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10 transition-colors">+15s</button>
+          </div>
+        )}
 
         {/* ── Mobile lyrics panel (below screensaver, sm and under) ── */}
         {lyricsUrl && lyricsOpen && (
@@ -320,6 +343,7 @@ export default function MusicPageClient() {
             command={playCommand}
             onAlbumEnd={handleAlbumEnd}
             onProgress={({ lyricsUrl: url, currentTime: t, duration: d }) => {
+              if (url !== lyricsUrl) setLyricsOffset(0)
               setLyricsUrl(url)
               setCurrentTime(t)
               setDuration(d)
