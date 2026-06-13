@@ -1,4 +1,6 @@
-﻿// Auto-generated from Vercel Blob upload. Do not edit manually.
+﻿// Cloudflare R2 bucket public URL: https://pub-60f472f31f41411191f50a1fe8af74d8.r2.dev
+// Future audio uploads go to R2 — add entries here as: '/audio/albums/...': `${R2_CDN}/arcanum/audio/albums/...`
+// Auto-generated Vercel Blob entries below. Do not edit manually.
 export const AUDIO_CDN: Record<string, string> = {
   '/audio/albums/movie-aether-into-the-multiverse/9  Aether Multiverse SG ver 1 _t3 full a add music b.mp3': 'https://rripgv191jutcyxj.public.blob.vercel-storage.com/arcanum/audio/albums/movie-aether-into-the-multiverse/9%20%20Aether%20Multiverse%20SG%20ver%201%20_t3%20full%20a%20add%20music%20b.mp3',
   '/audio/albums/movie-aether-into-the-multiverse/5 Aether_ The Breath of the Cosmos  v2.mp3': 'https://rripgv191jutcyxj.public.blob.vercel-storage.com/arcanum/audio/albums/movie-aether-into-the-multiverse/5%20Aether_%20The%20Breath%20of%20the%20Cosmos%20%20v2.mp3',
